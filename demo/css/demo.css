@@ -92,3 +92,6 @@ a.download:hover {
 #tutorial p {
     display: block;
 }
+h3 em {
+    font-size: 18px;
+}
