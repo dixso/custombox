@@ -244,6 +244,7 @@
                     }
                 };
                 xhr.open('GET', obj.settings.url, true);
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                 xhr.send(null);
             }
         },
