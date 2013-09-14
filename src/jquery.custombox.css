@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v0.1b - 2013-09-05
+ *  jQuery Custombox v0.1b - 2013-09-14
  *  jQuery Modal Window Effects.
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
  *
@@ -128,6 +128,42 @@
 
 /*
  -------------------------------------------------
+Slide and stick to top
+ -------------------------------------------------
+ */
+.custombox-slide-top {
+    top: 0;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+.custombox-slide-top .custombox-modal-content {
+    -webkit-transform: translateY(-200%);
+    -moz-transform: translateY(-200%);
+    -ms-transform: translateY(-200%);
+    -o-transform: translateY(-200%);
+    transform: translateY(-200%);
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    -o-transition: all .3s;
+    transition: all .3s;
+    opacity: 0;
+}
+.custombox-show.custombox-slide-top .custombox-modal-content {
+    -webkit-transform: translateY(0%);
+    -moz-transform: translateY(0%);
+    -ms-transform: translateY(0%);
+    -o-transform: translateY(0%);
+    transform: translateY(0%);
+    border-radius: 0 0 3px 3px;
+    opacity: 1;
+}
+
+/*
+ -------------------------------------------------
  Slide from the right
  -------------------------------------------------
  */
@@ -173,6 +209,34 @@ Slide from the bottom
     -moz-transform: translateY(0);
     -ms-transform: translateY(0);
     transform: translateY(0);
+    opacity: 1;
+}
+
+/*
+ -------------------------------------------------
+Slide and stick to center
+ -------------------------------------------------
+ */
+.custombox-slide-center .custombox-modal-content {
+    -webkit-transform: translateY(-200%);
+    -moz-transform: translateY(-200%);
+    -ms-transform: translateY(-200%);
+    -o-transform: translateY(-200%);
+    transform: translateY(-200%);
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    -o-transition: all .3s;
+    transition: all .3s;
+    opacity: 0;
+}
+.custombox-show.custombox-slide-center .custombox-modal-content {
+    -webkit-transform: translateY(0%);
+    -moz-transform: translateY(0%);
+    -ms-transform: translateY(0%);
+    -o-transform: translateY(0%);
+    transform: translateY(0%);
+    border-radius: 0 0 3px 3px;
     opacity: 1;
 }
 
@@ -281,42 +345,6 @@ Side fall
     -ms-transform: translate(0%) translateZ(0) rotate(0deg);
     -o-transform: translate(0%) translateZ(0) rotate(0deg);
     transform: translate(0%) translateZ(0) rotate(0deg);
-    opacity: 1;
-}
-
-/*
- -------------------------------------------------
-Slide and stick to top
- -------------------------------------------------
- */
-.custombox-slide-top {
-    top: 0;
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    transform: translateX(-50%);
-}
-.custombox-slide-top .custombox-modal-content {
-    -webkit-transform: translateY(-200%);
-    -moz-transform: translateY(-200%);
-    -ms-transform: translateY(-200%);
-    -o-transform: translateY(-200%);
-    transform: translateY(-200%);
-    -webkit-transition: all .3s;
-    -moz-transition: all .3s;
-    -ms-transition: all .3s;
-    -o-transition: all .3s;
-    transition: all .3s;
-    opacity: 0;
-}
-.custombox-show.custombox-slide-top .custombox-modal-content {
-    -webkit-transform: translateY(0%);
-    -moz-transform: translateY(0%);
-    -ms-transform: translateY(0%);
-    -o-transform: translateY(0%);
-    transform: translateY(0%);
-    border-radius: 0 0 3px 3px;
     opacity: 1;
 }
 

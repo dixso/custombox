@@ -57,15 +57,15 @@ $(function() {
 
     /*
      ----------------------------
-     Fadein
+     Slide
      ----------------------------
      */
-    var slide_position = ['top','right','bottom'];
+    var slide_position = ['top','right','bottom','center'];
 
     $('#slide').on('click', function () {
         $.fn.custombox( this, {
             effect:     'slide',
-            position:   slide_position[Math.floor((Math.random()*3))]
+            position:   slide_position[Math.floor( Math.random() * slide_position.length )]
         });
         return false;
     });

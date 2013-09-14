@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v0.1b - 2013-09-05
+ *  jQuery Custombox v0.1b - 2013-09-14
  *  jQuery Modal Window Effects.
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
  *
@@ -34,7 +34,7 @@
             width:          null,           // Set a fixed total width.
             height:         null,           // Set a fixed total height.
             effect:         'fadein',       // fadein | slide | newspaper | fall | sidefall | flip | sign | superscaled | slit | rotate | letmein | makeway | slip.
-            position:       null,           // Only with effects: slide, flip and rotate. (top, right, bottom and left) | (vertical or horizontal).
+            position:       null,           // Only with effects: slide, flip and rotate. (top, right, bottom, left and center) | (vertical or horizontal).
             speed:          600,            // Sets the speed of the transitions, in milliseconds.
             open:           null,           // Callback that fires right before begins to open.
             complete:       null,           // Callback that fires right after loaded content is displayed.
