@@ -91,6 +91,17 @@
                 // Add generic class custombox.
                 obj._addClass( document.getElementsByTagName( 'html' )[0], 'html' );
 
+                // Check if scrollbar is visible.
+                var body = document.body,
+                    html = document.documentElement;
+
+                var bodyHeight = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight),
+                    windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+
+                if ( bodyHeight > windowHeight ) {
+                    obj._addClass( document.getElementsByTagName( 'body' )[0], 'scrollbar' );
+                }
+
                 // Check 'href'.
                 if ( obj.settings.url === null ) {
                     obj.settings.url = obj.element.getAttribute('href');
@@ -249,19 +260,21 @@
             }
         },
         _close: function () {
-            var obj = this;
-            obj._removeClass( document.getElementsByClassName(cb + '-modal')[0], cb + '-show' );
-            obj._removeClass( document.getElementsByTagName( 'html' )[0], cb + '-perspective' );
+            var obj = this,
+                d = document;
+                obj._removeClass( d.getElementsByClassName(cb + '-modal')[0], cb + '-show' );
+                obj._removeClass( d.getElementsByTagName( 'html' )[0], cb + '-perspective' );
 
             setTimeout( function () {
-                obj._removeClass( document.getElementsByTagName( 'html' )[0], cb + '-html' );
+                obj._removeClass( d.getElementsByTagName( 'html' )[0], cb + '-html' );
+                obj._removeClass( d.getElementsByTagName( 'body' )[0], cb + '-scrollbar' );
 
                 // Remove modal.
-                obj._remove(document.getElementsByClassName(cb + '-modal')[0]);
+                obj._remove( d.getElementsByClassName(cb + '-modal')[0] );
 
                 // Remove overlay.
                 if ( obj.settings.overlay ) {
-                    obj._remove(document.getElementsByClassName(cb + '-overlay')[0]);
+                    obj._remove(d.getElementsByClassName(cb + '-overlay')[0]);
                 }
 
                 // Check if callback 'close'.
