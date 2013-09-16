@@ -71,7 +71,7 @@
 .custombox-html {
     overflow-y: hidden;
 }
-.custombox-html body {
+.custombox-scrollbar {
     position: relative;
     overflow: hidden;
     margin-right: 15px;
