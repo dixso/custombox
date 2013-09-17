@@ -70,10 +70,15 @@
 // preventing against multiple instantiations with jQuery.
 $.fn[ cb ] = function ( options ) {
     var args = arguments;
+
     if ( options === undefined || typeof options === 'object' ) {
-        $(options).each( function () {
-            $.data( this, cb, new Plugin( this, args[1] ) );
-        });
+        if ( args.length > 1 ) {
+            $(options).each( function () {
+                $.data( this, cb, new Plugin( this, args[1] ) );
+            });
+        } else {
+            new Plugin( null, args[0] );
+        }
     } else if ( typeof options === 'string' && options === 'close' ) {
         $.data( this, cb, new Plugin( args[0], args[1] ) );
     }
@@ -85,7 +90,7 @@ $.fn[ cb ] = function ( options ) {
 // A really lightweight plugin wrapper around the constructor,
 // preventing against multiple instantiations.
 window[ cb ] = function ( options ) {
-    new Plugin( arguments[0], arguments[1] );
+    new Plugin( ( arguments[1] ? arguments[0] : null ), arguments[1] );
 };
 </pre>
                 <p>Call the plugin when the body is on load:</p>
