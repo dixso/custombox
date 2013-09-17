@@ -22,6 +22,7 @@
     var cb = 'custombox',
         defaults = {
             url:            null,           // Set the URL, ID or Class.
+            cache:          false,          // If set to false, it will force requested pages not to be cached by the browser only when send by AJAX.
             escKey:         true,           // Allows the user to close the modal by pressing 'ESC'.
             eClose:         null,           // Element ID or Class for to be close the modal.
             zIndex:         9999,           // Overlay z-index.
@@ -254,7 +255,7 @@
                         }
                     }
                 };
-                xhr.open('GET', obj.settings.url, true);
+                xhr.open('GET', obj.settings.url + ( !obj.settings.cache ? '?_=' + new Date().getTime() : '' ), true);
                 xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                 xhr.send(null);
             }
@@ -410,10 +411,15 @@
     // preventing against multiple instantiations with jQuery.
     $.fn[ cb ] = function ( options ) {
         var args = arguments;
+
         if ( options === undefined || typeof options === 'object' ) {
-            $(options).each( function () {
-                $.data( this, cb, new Plugin( this, args[1] ) );
-            });
+            if ( args.length > 1 ) {
+                $(options).each( function () {
+                    $.data( this, cb, new Plugin( this, args[1] ) );
+                });
+            } else {
+                new Plugin( null, args[0] );
+            }
         } else if ( typeof options === 'string' && options === 'close' ) {
             $.data( this, cb, new Plugin( args[0], args[1] ) );
         }
