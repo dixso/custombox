@@ -247,10 +247,41 @@ $(function() {
 
     /*
      ----------------------------
-     Custom - Error :(
+     Auto start - Ajax
      ----------------------------
      */
     $('#example3').on('click', function () {
+        var clock = 5,
+            countdownId = 0,
+            eCountdown = document.getElementById('countdown');
+
+        eCountdown.style.display = 'inline';
+
+        var countdown = setInterval( function() {
+            if(clock > 0) {
+                clock = clock - 1;
+                eCountdown.innerHTML = clock;
+            } else {
+                eCountdown.innerHTML = "Initiating...";
+                $.fn.custombox({
+                    url:    'demo/xhr/ajax.html',
+                    close:  function () {
+                                eCountdown.style.display = 'none';
+                    }
+                });
+                // Stop timer
+                clearInterval(countdown);
+            }
+        }, 1000);
+        return false;
+    });
+
+    /*
+     ----------------------------
+     Custom - Error :(
+     ----------------------------
+     */
+    $('#example4').on('click', function () {
         $.fn.custombox( this, {
             effect: 'slit',
             error: 'OPS! File not found'
@@ -263,7 +294,7 @@ $(function() {
      Custom - Callbacks
      ----------------------------
      */
-    $('#example4').on('click', function () {
+    $('#example5').on('click', function () {
         $.fn.custombox( this, {
             open: function () {
                 alert('open');
