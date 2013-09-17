@@ -95,3 +95,6 @@ a.download:hover {
 h3 em {
     font-size: 18px;
 }
+#countdown {
+    display: none;
+}

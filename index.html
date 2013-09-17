@@ -276,8 +276,16 @@ $(function () {
                 </div><!-- ajax -->
 
                 <div class="panel">
+                    <h4>Auto start</h4>
+                    <p>- <a href="demo/xhr/ajax.html" id="example3" title="Example with ajax">Example <em class="glyphicon glyphicon-hand-left"></em></a> <span id="countdown">5</span></p>
+                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">$.fn.custombox({
+    url: 'demo/xhr/ajax.html'
+});</pre>
+                </div><!-- auto start -->
+
+                <div class="panel">
                     <h4>Error :(</h4>
-                    <p>- <a href="noexist.html" id="example3" title="Example error">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
+                    <p>- <a href="noexist.html" id="example4" title="Example error">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
                     <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">$('#example3').on('click', function () {
     $.fn.custombox( this, {
         effect: 'slit'
@@ -288,7 +296,7 @@ $(function () {
 
                 <div class="panel">
                     <h4>Callbacks</h4>
-                    <p>- <a href="demo/xhr/ajax.html" id="example4" title="Example error">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
+                    <p>- <a href="demo/xhr/ajax.html" id="example5" title="Example error">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
                     <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">$('#example4').on('click', function () {
     $.fn.custombox( this, {
         open: function () {

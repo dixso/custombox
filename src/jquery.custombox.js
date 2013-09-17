@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v0.1b - 2013-09-14
+ *  jQuery Custombox v0.1b - 2013-09-17
  *  jQuery Modal Window Effects.
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
  *
