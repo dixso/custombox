@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v0.1b - 2013-09-17
+ *  jQuery Custombox v0.1b - 2013-09-19
  *  jQuery Modal Window Effects.
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
  *
@@ -50,9 +50,6 @@
 
         // Merge objects.
         this.settings = this._extend( {}, defaults, options );
-
-        this._defaults = defaults;
-        this._name = cb;
 
         if ( typeof this.element === 'object' ) {
             // Private method.
@@ -138,6 +135,7 @@
                         'transition-duration':  obj.settings.speed / 1000 + 's'
                     });
 
+                // Insert modal to the content.
                 modal.appendChild(content);
 
                 // Insert modal just after the body.
@@ -195,6 +193,8 @@
                         modal.innerHTML = obj.settings.error;
                     }
 
+                    // [0] => modal
+                    // [1] => content
                     var tmp = obj._box.create( obj );
 
                     // Insert content to the modal.
@@ -227,6 +227,13 @@
 
                         // Show modal.
                         tmp[0].className += ' ' + cb + '-show';
+
+                        var script = tmp[1].getElementsByTagName('script');
+
+                        // Execute the scripts.
+                        for ( var i = 0, len = script.length; i < len; i++ ) {
+                            new Function( script[i].text )();
+                        }
 
                         setTimeout( function () {
                             // Check if callback 'complete'.
