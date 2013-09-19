@@ -309,6 +309,4 @@ $(function() {
         return false;
     });
 
-
-
 });
