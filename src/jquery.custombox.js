@@ -419,6 +419,14 @@
     $.fn[ cb ] = function ( options ) {
         var args = arguments;
 
+        // Check time to avoid double click.
+        if ( options.dataset[cb] !== undefined && parseInt(options.dataset[cb]) + 1 > Math.round( new Date().getTime() / 1000 )) {
+            return;
+        }
+
+        // Set time to avoid double click.
+        options.setAttribute('data-' + cb, Math.round( new Date().getTime() / 1000 ) );
+
         if ( options === undefined || typeof options === 'object' ) {
             if ( args.length > 1 ) {
                 $(options).each( function () {
