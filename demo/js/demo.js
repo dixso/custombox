@@ -319,4 +319,20 @@ $(function() {
         return false;
     });
 
+    /*
+     ----------------------------
+     Custom effect
+     ----------------------------
+     */
+    $('#example7').on('click', function () {
+        $.fn.custombox( this, {
+            effect: 'fadein',
+            overlayColor: '#FFF',
+            overlayOpacity: 1,
+            customClass: 'justme',
+            speed: 200
+        });
+        return false;
+    });
+
 });

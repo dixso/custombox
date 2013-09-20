@@ -353,7 +353,24 @@ $(function () {
     return false;
 });
 </pre>
-                </div><!-- callbacks -->
+                </div><!-- other style -->
+
+
+                <div class="panel">
+                    <h4>Custom effect</h4>
+                    <p>- <a href="#modal" id="example7" title="Custom effect">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
+                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">$('#example7').on('click', function () {
+    $.fn.custombox( this, {
+        effect: 'fadein',
+        overlayColor: '#FFF',
+        overlayOpacity: 1,
+        customClass: 'justme',
+        speed: 200
+    });
+    return false;
+});
+</pre>
+                </div><!-- custom effect-->
 
                 <h3><em class="glyphicon glyphicon-search"></em> Support:</h3>
                 <div class="well">
