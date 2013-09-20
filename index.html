@@ -318,7 +318,7 @@ $(function () {
                 <div class="panel">
                     <h4>Error :(</h4>
                     <p>- <a href="noexist.html" id="example4" title="Example error">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">$('#example3').on('click', function () {
+                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">$('#example4').on('click', function () {
     $.fn.custombox( this, {
         effect: 'slit'
     });
@@ -329,7 +329,7 @@ $(function () {
                 <div class="panel">
                     <h4>Callbacks</h4>
                     <p>- <a href="demo/xhr/ajax.html" id="example5" title="Callbacks">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">$('#example4').on('click', function () {
+                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">$('#example5').on('click', function () {
     $.fn.custombox( this, {
         open: function () {
             alert('open');
@@ -348,20 +348,11 @@ $(function () {
                 <div class="panel">
                     <h4>Other style</h4>
                     <p>- <a href="#modal2" id="example6" title="Other style">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">$('#example4').on('click', function () {
-    $.fn.custombox( this, {
-        open: function () {
-            alert('open');
-        },
-        complete: function () {
-            alert('complete');
-        },
-        close: function () {
-            alert('close');
-        }
-    });
+                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">$('#example6').on('click', function () {
+    $.fn.custombox(this);
     return false;
-});</pre>
+});
+</pre>
                 </div><!-- callbacks -->
 
                 <h3><em class="glyphicon glyphicon-search"></em> Support:</h3>
