@@ -69,18 +69,19 @@
 // A really lightweight plugin wrapper around the constructor,
 // preventing against multiple instantiations with jQuery.
 $.fn[ cb ] = function ( options ) {
-    var args = arguments;
-
-    // Check time to avoid double click.
-    if ( options.dataset[cb] !== undefined && parseInt(options.dataset[cb]) + 1 > Math.round( new Date().getTime() / 1000 )) {
-        return;
-    }
-
-    // Set time to avoid double click.
-    options.setAttribute('data-' + cb, Math.round( new Date().getTime() / 1000 ) );
+    var args = arguments,
+        isElement = typeof HTMLElement === 'object' ? options instanceof HTMLElement : options && typeof options === 'object' && options !== null && options.nodeType === 1 && typeof options.nodeName === 'string';
 
     if ( options === undefined || typeof options === 'object' ) {
-        if ( args.length > 1 ) {
+        if ( isElement ) {
+            // Check time to avoid double click.
+            if ( options.dataset[cb] !== undefined && parseInt(options.dataset[cb]) + 1 > Math.round( new Date().getTime() / 1000 )) {
+                return;
+            }
+
+            // Set time to avoid double click.
+            options.setAttribute('data-' + cb, Math.round( new Date().getTime() / 1000 ) );
+
             $(options).each( function () {
                 $.data( this, cb, new Plugin( this, args[1] ) );
             });
@@ -98,15 +99,25 @@ $.fn[ cb ] = function ( options ) {
 // A really lightweight plugin wrapper around the constructor,
 // preventing against multiple instantiations.
 window[ cb ] = function ( options ) {
-    // Check time to avoid double click.
-    if ( options.dataset[cb] !== undefined && parseInt(options.dataset[cb]) + 1 > Math.round( new Date().getTime() / 1000 )) {
-        return;
+    var isElement = typeof HTMLElement === 'object' ? options instanceof HTMLElement : options && typeof options === 'object' && options !== null && options.nodeType === 1 && typeof options.nodeName === 'string';
+
+    if ( options === undefined || typeof options === 'object' ) {
+        if ( isElement ) {
+            // Check time to avoid double click.
+            if ( options.dataset[cb] !== undefined && parseInt(options.dataset[cb]) + 1 > Math.round( new Date().getTime() / 1000 )) {
+                return;
+            }
+
+            // Set time to avoid double click.
+            options.setAttribute('data-' + cb, Math.round( new Date().getTime() / 1000 ) );
+
+            new Plugin( arguments[0], arguments[1] );
+        } else {
+            new Plugin( null, arguments[0] );
+        }
+    } else if ( typeof options === 'string' && options === 'close' ) {
+        new Plugin( arguments[0], arguments[1] );
     }
-
-    // Set time to avoid double click.
-    options.setAttribute('data-' + cb, Math.round( new Date().getTime() / 1000 ) );
-
-    new Plugin( ( arguments[1] ? arguments[0] : null ), arguments[1] );
 };
 </pre>
                 <p>Call the plugin when the body is on load:</p>
