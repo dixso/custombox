@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v0.1b - 2013-09-19
+ *  jQuery Custombox v0.1b - 2013-09-20
  *  jQuery Modal Window Effects.
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
  *
@@ -102,7 +102,9 @@
 
                 // Check 'href'.
                 if ( obj.settings.url === null ) {
-                    obj.settings.url = obj.element.getAttribute('href');
+                    if ( obj.element !== null ) {
+                        obj.settings.url = obj.element.getAttribute('href');
+                    }
                 }
 
                 if ( typeof obj.settings.url === 'string' ) {
@@ -417,18 +419,19 @@
     // A really lightweight plugin wrapper around the constructor,
     // preventing against multiple instantiations with jQuery.
     $.fn[ cb ] = function ( options ) {
-        var args = arguments;
-
-        // Check time to avoid double click.
-        if ( options.dataset[cb] !== undefined && parseInt(options.dataset[cb]) + 1 > Math.round( new Date().getTime() / 1000 )) {
-            return;
-        }
-
-        // Set time to avoid double click.
-        options.setAttribute('data-' + cb, Math.round( new Date().getTime() / 1000 ) );
+        var args = arguments,
+            isElement = typeof HTMLElement === 'object' ? options instanceof HTMLElement : options && typeof options === 'object' && options !== null && options.nodeType === 1 && typeof options.nodeName === 'string';
 
         if ( options === undefined || typeof options === 'object' ) {
-            if ( args.length > 1 ) {
+            if ( isElement ) {
+                // Check time to avoid double click.
+                if ( options.dataset[cb] !== undefined && parseInt(options.dataset[cb]) + 1 > Math.round( new Date().getTime() / 1000 )) {
+                    return;
+                }
+
+                // Set time to avoid double click.
+                options.setAttribute('data-' + cb, Math.round( new Date().getTime() / 1000 ) );
+
                 $(options).each( function () {
                     $.data( this, cb, new Plugin( this, args[1] ) );
                 });
