@@ -34,7 +34,7 @@
             customClass:    null,           // Custom class to modal.
             width:          null,           // Set a fixed total width.
             height:         null,           // Set a fixed total height.
-            effect:         'fadein',       // fadein | slide | newspaper | fall | sidefall | flip | sign | superscaled | slit | rotate | letmein | makeway | slip.
+            effect:         'fadein',       // fadein | slide | newspaper | fall | sidefall | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | blur.
             position:       null,           // Only with effects: slide, flip and rotate. (top, right, bottom, left and center) | (vertical or horizontal).
             speed:          600,            // Sets the speed of the transitions, in milliseconds.
             open:           null,           // Callback that fires right before begins to open.
@@ -152,7 +152,7 @@
             },
             effect: function ( obj ) {
                 var position = ['slide','flip','rotate'],
-                    perspective = ['letmein','makeway','slip'],
+                    perspective = ['letmein','makeway','slip','blur'],
                     effect = cb + '-' + obj.settings.effect;
 
                 // Position.
@@ -166,8 +166,10 @@
                 for ( var x = 0, len2 = perspective.length; x < len2; x++ ) {
                     if ( perspective[x] === obj.settings.effect ) {
 
-                        // Add class.
-                        obj._addClass( document.getElementsByTagName( 'html' )[0], 'perspective' );
+                        if ( obj.settings.effect !== 'blur' ) {
+                            // Add class.
+                            obj._addClass( document.getElementsByTagName( 'html' )[0], 'perspective' );
+                        }
 
                         var div = document.createElement('div');
                             div.className = cb + '-container';

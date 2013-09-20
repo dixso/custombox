@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v0.1b - 2013-09-14
+ *  jQuery Custombox v0.1b - 2013-09-20
  *  jQuery Modal Window Effects.
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
  *
@@ -345,6 +345,40 @@ Side fall
     -ms-transform: translate(0%) translateZ(0) rotate(0deg);
     -o-transform: translate(0%) translateZ(0) rotate(0deg);
     transform: translate(0%) translateZ(0) rotate(0deg);
+    opacity: 1;
+}
+
+/*
+ -------------------------------------------------
+Blur
+ -------------------------------------------------
+ */
+.custombox-show.custombox-blur ~ .custombox-container * {
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    color: transparent;
+}
+.custombox-blur .custombox-modal-content {
+    -webkit-transform: translateY(-5%);
+    -moz-transform: translateY(-5%);
+    -ms-transform: translateY(-5%);
+    -o-transform: translateY(-5%);
+    transform: translateY(-5%);
+    opacity: 0;
+}
+.custombox-blur .custombox-modal-content,
+.custombox-show.custombox-blur ~ .custombox-container {
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+.custombox-show.custombox-blur .custombox-modal-content {
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -o-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
     opacity: 1;
 }
 
