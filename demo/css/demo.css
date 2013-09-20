@@ -118,3 +118,10 @@ h3 em {
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+.justme .modal-content {
+    box-shadow: none;
+    border: none;
+}
+.justme .modal-header {
+    border: none;
+}
