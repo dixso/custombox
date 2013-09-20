@@ -98,3 +98,17 @@ h3 em {
 #countdown {
     display: none;
 }
+#modal2 {
+    width: 600px;
+    height: 300px;
+    background: #FFF;
+    border-radius: 300px / 150px;
+    text-align: center;
+    position: relative;
+}
+#modal2 p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

@@ -309,4 +309,14 @@ $(function() {
         return false;
     });
 
+    /*
+     ----------------------------
+     Other style
+     ----------------------------
+     */
+    $('#example6').on('click', function () {
+        $.fn.custombox(this);
+        return false;
+    });
+
 });
