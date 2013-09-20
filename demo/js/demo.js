@@ -222,6 +222,17 @@ $(function() {
 
     /*
      ----------------------------
+     Blur
+     ----------------------------
+     */
+    $('#blur').on('click', function () {
+        $.fn.custombox( this, {
+            effect: 'blur'
+        });
+        return false;
+    });
+    /*
+     ----------------------------
      Custom - Without overlay
      ----------------------------
      */
@@ -247,7 +258,7 @@ $(function() {
 
     /*
      ----------------------------
-     Auto start - Ajax
+     Custom - Auto start
      ----------------------------
      */
     $('#example3').on('click', function () {
@@ -311,7 +322,7 @@ $(function() {
 
     /*
      ----------------------------
-     Other style
+     Custom - Other style
      ----------------------------
      */
     $('#example6').on('click', function () {
