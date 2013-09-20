@@ -328,7 +328,26 @@ $(function () {
 
                 <div class="panel">
                     <h4>Callbacks</h4>
-                    <p>- <a href="demo/xhr/ajax.html" id="example5" title="Example error">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
+                    <p>- <a href="demo/xhr/ajax.html" id="example5" title="Callbacks">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
+                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">$('#example4').on('click', function () {
+    $.fn.custombox( this, {
+        open: function () {
+            alert('open');
+        },
+        complete: function () {
+            alert('complete');
+        },
+        close: function () {
+            alert('close');
+        }
+    });
+    return false;
+});</pre>
+                </div><!-- callbacks -->
+
+                <div class="panel">
+                    <h4>Other style</h4>
+                    <p>- <a href="#modal2" id="example6" title="Other style">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
                     <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">$('#example4').on('click', function () {
     $.fn.custombox( this, {
         open: function () {
@@ -371,6 +390,10 @@ $(function () {
                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
             </div>
         </div>
+    </div>
+
+    <div id="modal2" style="display: none;">
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
     </div>
 
     <!-- External JS -->
