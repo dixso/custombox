@@ -34,7 +34,7 @@ $(function() {
     var $sidebar = $(document.getElementById('sidebar')),
         sidebar_width = $sidebar.width();
 
-    if ( $window.width() > 1170 ) {
+    if ( $window.width() > 1170 && $sidebar.height() < $window.height() ) {
         $window.on('scroll', function () {
             var $this = $(this);
             if( $this.scrollTop() > 155 && $this.width() > 980 ) {
