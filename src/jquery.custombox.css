@@ -357,6 +357,13 @@ Blur
     text-shadow: 0 0 5px rgba(0,0,0,0.5);
     color: transparent;
 }
+.custombox-show.custombox-blur ~ .custombox-container img {
+    -webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -o-filter: blur(10px);
+    -ms-filter: blur(10px);
+    filter: blur(10px);
+}
 .custombox-blur .custombox-modal-content {
     -webkit-transform: translateY(-5%);
     -moz-transform: translateY(-5%);
