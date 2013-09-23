@@ -28,20 +28,22 @@ $(function() {
     var $sidebar = $(document.getElementById('sidebar')),
         sidebar_width = $sidebar.width();
 
-    $(window).on('scroll', function () {
-        var $this = $(this);
-        if( $this.scrollTop() > 155 && $this.width() > 980 ) {
-            $(document.getElementById('tooltip')).hide();
-            $sidebar.css({
-                position:   'fixed',
-                top:        '20px',
-                width:      sidebar_width + 'px'
-            });
-        } else if ( $this.scrollTop() <= 155 ) {
-            $(document.getElementById('tooltip')).show();
-            $sidebar.removeAttr('style');
-        }
-    });
+    if ( $(window).width() > 1170 ) {
+        $(window).on('scroll', function () {
+            var $this = $(this);
+            if( $this.scrollTop() > 155 && $this.width() > 980 ) {
+                $(document.getElementById('tooltip')).hide();
+                $sidebar.css({
+                    position:   'fixed',
+                    top:        '20px',
+                    width:      sidebar_width + 'px'
+                });
+            } else if ( $this.scrollTop() <= 155 ) {
+                $(document.getElementById('tooltip')).show();
+                $sidebar.removeAttr('style');
+            }
+        });
+    }
 
     /*
      ----------------------------
