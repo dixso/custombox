@@ -25,7 +25,7 @@
             cache:          false,          // If set to false, it will force requested pages not to be cached by the browser only when send by AJAX.
             escKey:         true,           // Allows the user to close the modal by pressing 'ESC'.
             eClose:         null,           // Element ID or Class for to be close the modal.
-            zIndex:         9999,           // Overlay z-index.
+            zIndex:         9999,           // Overlay z-index: Number or auto.
             overlay:        true,           // Show the overlay.
             overlayColor:   '#000',         // Overlay color.
             overlayOpacity: 0.8,            // The overlay opacity level. Range: 0 to 1.
@@ -47,6 +47,11 @@
     function Plugin ( element, options ) {
 
         this.element = element;
+
+        // Get the max zIndex.
+        if ( typeof this.element === 'object' && isNaN( options.zIndex ) && options.zIndex === 'auto' ) {
+            options.zIndex = this._zIndex();
+        }
 
         // Merge objects.
         this.settings = this._extend( {}, defaults, options );
@@ -75,7 +80,7 @@
                 class:              'overlay'
             }, {
                 'background-color': 'rgba(' + rgba.r + ',' + rgba.g + ', ' + rgba.b + ',' + this.settings.overlayOpacity + ')',
-                'z-index':          ( isNaN( this.settings.zIndex ) ? 9999 : this.settings.zIndex ),
+                'z-index':          parseFloat(this.settings.zIndex) + 1,
                 'transition':       'all ' + this.settings.overlaySpeed / 1000 + 's'
             }));
         },
@@ -128,7 +133,7 @@
                         id:                     'modal',
                         class:                  'modal ' + obj._box.effect( obj ) + ( obj.settings.customClass ? ' ' + obj.settings.customClass : '' )
                     }, {
-                        'z-index':              ( isNaN( obj.settings.zIndex ) ? 10000 : obj.settings.zIndex + 1 )
+                        'z-index':              parseFloat(obj.settings.zIndex) + 2
                     }),
                     content = obj._create({
                         id:                     'modal-content',
@@ -407,6 +412,17 @@
             if ( element !== undefined ) {
                 element.parentNode.removeChild(element);
             }
+        },
+        _zIndex: function () {
+            var elems = document.getElementsByTagName('*'),
+                zIndexMax = 0;
+            for ( var i = 0, etotal = elems.length; i < etotal; i++ ) {
+                var zindex = document.defaultView.getComputedStyle(elems[i],null).getPropertyValue('z-index');
+                if ( zindex > zIndexMax && zindex !== 'auto' ) {
+                    zIndexMax = zindex;
+                }
+            }
+            return zIndexMax;
         },
         /*
          ----------------------------

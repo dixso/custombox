@@ -48,6 +48,9 @@ code {
 .clearfix {
     display: inline-block;
 }
+.list-group-item.active {
+    z-index: 1;
+}
 .nogutter {
     border: 1px solid #CCC;
     border-radius: 4px;
@@ -70,6 +73,7 @@ code {
     right: -50px;
     top: -65px;
     left: auto;
+    z-index: 2;
 }
 a.download {
     font-size: 22px;
