@@ -6,6 +6,12 @@ $(function() {
      Tooltip
      ----------------------------
      */
+    var $window = $(window);
+
+    if ( $window.width() < 360 ) {
+        $(document.getElementById('tooltip')).css('right', 0);
+    }
+
     $(document.getElementById('tooltip')).animate({
         top:    '-45px',
         opacity: 1
@@ -28,8 +34,8 @@ $(function() {
     var $sidebar = $(document.getElementById('sidebar')),
         sidebar_width = $sidebar.width();
 
-    if ( $(window).width() > 1170 ) {
-        $(window).on('scroll', function () {
+    if ( $window.width() > 1170 ) {
+        $window.on('scroll', function () {
             var $this = $(this);
             if( $this.scrollTop() > 155 && $this.width() > 980 ) {
                 $(document.getElementById('tooltip')).hide();
