@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v0.1b - 2013-09-20
+ *  jQuery Custombox v0.1b - 2013-09-23
  *  jQuery Modal Window Effects.
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
  *
@@ -391,7 +391,7 @@
         },
         _addClass: function ( element, eClass ) {
             if ( !this._hasClass( element, eClass ) ) {
-                element.className = ( element.className.length ? element.className + ' ' + cb + '-' + eClass : cb + '-' + eClass );
+                element.className = ( element.className.length && element.className !== ' ' ? element.className + ' ' + cb + '-' + eClass : cb + '-' + eClass );
             }
         },
         _removeClass: function ( element, eClass ) {
