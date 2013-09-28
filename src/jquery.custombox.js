@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v0.1b - 2013-09-23
+ *  jQuery Custombox v0.1b - 2013-09-28
  *  jQuery Modal Window Effects.
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
  *
@@ -49,7 +49,7 @@
         this.element = element;
 
         // Get the max zIndex.
-        if ( typeof this.element === 'object' && isNaN( options.zIndex ) && options.zIndex === 'auto' ) {
+        if ( typeof this.element === 'object' && typeof options === 'object' && isNaN( options.zIndex ) && options.zIndex === 'auto' ) {
             options.zIndex = this._zIndex();
         }
 
