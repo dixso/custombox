@@ -334,7 +334,7 @@ $(function() {
      ----------------------------
      */
     $('#example6').on('click', function () {
-        $.fn.custombox(this);
+        $.fn.custombox( this );
         return false;
     });
 
