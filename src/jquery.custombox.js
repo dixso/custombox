@@ -88,7 +88,7 @@
 
             document.getElementsByTagName('body')[0].appendChild(this._create({
                 id:     'overlay',
-                eClass: 'overlay' + ( this._isIE() ? ' ie' : '' )
+                eClass: 'overlay'
             }, styles));
         },
         _box: {
@@ -106,10 +106,37 @@
                     html = document.documentElement;
 
                 var bodyHeight = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight),
-                    windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+                    windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
 
                 if ( bodyHeight > windowHeight ) {
-                    obj._addClass( document.getElementsByTagName( 'body' )[0], 'scrollbar' );
+
+                    var outer = obj._create({},{
+                        visibility: 'hidden',
+                        width: '100px'
+                    });
+
+                    body.appendChild(outer);
+
+                    var widthNoScroll = outer.offsetWidth;
+
+                    // Force scrollbars
+                    outer.style.overflow = "scroll";
+
+                    // Add inner div.
+                    var inner = obj._create({},{
+                        width: '100%'
+                    });
+
+                    outer.appendChild(inner);
+
+                    var widthWithScroll = inner.offsetWidth;
+
+                    // Remove divs
+                    outer.parentNode.removeChild(outer);
+
+                    // Hide scrollbar.
+                    obj._addClass( body, 'scrollbar' );
+                    body.style.marginRight = widthNoScroll - widthWithScroll + 'px';
                 }
 
                 // Check 'href'.
@@ -146,11 +173,11 @@
 
                 var modal = obj._create({
                         id:                     'modal',
-                        eClass:                  'modal ' + obj._box.effect( obj ) + ( obj.settings.customClass ? ' ' + obj.settings.customClass : '' ) + ( obj._isIE() ? ' ie' : '' )
+                        eClass:                 'modal ' + obj._box.effect( obj ) + ( obj.settings.customClass ? ' ' + obj.settings.customClass : '' )
                     }, styles),
                     content = obj._create({
                         id:                     'modal-content',
-                        eClass:                  'modal-content' + ( obj._isIE() ? ' ie' : '' )
+                        eClass:                 'modal-content'
                     }, {
                         'transition-duration':  obj.settings.speed / 1000 + 's'
                     });
@@ -302,8 +329,10 @@
                 obj._removeClass( d.getElementsByTagName( 'html' )[0], cb + '-perspective' );
 
             setTimeout( function () {
+                // Remove classes.
                 obj._removeClass( d.getElementsByTagName( 'html' )[0], cb + '-html' );
                 obj._removeClass( d.getElementsByTagName( 'body' )[0], cb + '-scrollbar' );
+                d.getElementsByTagName( 'body' )[0].style.marginRight = null;
 
                 // Remove modal.
                 obj._remove( ( obj._isIE() ? d.querySelectorAll('.' + cb + '-modal')[0] : d.getElementsByClassName(cb + '-modal')[0] ) );

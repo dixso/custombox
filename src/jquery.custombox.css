@@ -74,7 +74,6 @@
 .custombox-scrollbar {
     position: relative;
     overflow: hidden;
-    margin-right: 15px;
 }
 .custombox-show {
     visibility: visible;
