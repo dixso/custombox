@@ -12,10 +12,12 @@ $(function() {
         $(document.getElementById('tooltip')).css('right', 0);
     }
 
-    $(document.getElementById('tooltip')).animate({
-        top:    '-45px',
-        opacity: 1
-    }, 600);
+    if( navigator.appVersion.indexOf("MSIE 8.") == -1 ) {
+        $(document.getElementById('tooltip')).animate({
+            top:    '-45px',
+            opacity: 1
+        }, 600);
+    }
 
     /*
      ----------------------------
