@@ -111,10 +111,8 @@ h3 em {
  Modal Example 1
  ----------------------------
  */
-#modal {
-    width: 600px;
-}
 .modal-example-content {
+    width: 600px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     background-color: #FFF;
     border: 1px solid rgba(0, 0, 0, 0.2);
@@ -161,10 +159,10 @@ h3 em {
  Modal Example 3
  ----------------------------
  */
-.justme .modal-content {
+.justme .modal-example-content {
     box-shadow: none;
     border: none;
 }
-.justme .modal-header {
+.justme .modal-example-header {
     border: none;
 }
