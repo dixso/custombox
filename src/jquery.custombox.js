@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v0.1b - 2013-09-28
+ *  jQuery Custombox v0.1b - 2013-09-30
  *  jQuery Modal Window Effects.
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
  *
@@ -50,7 +50,7 @@
 
         // Get the max zIndex.
         if ( typeof this.element === 'object' && typeof options === 'object' && isNaN( options.zIndex ) && options.zIndex === 'auto' ) {
-            options.zIndex = this._zIndex();
+            options.zIndex = ( this._isIE() ? defaults.zIndex : this._zIndex() );
         }
 
         // Merge objects.
@@ -73,16 +73,23 @@
          ----------------------------
          */
         _overlay: function() {
-            var rgba = this._hexToRgb(this.settings.overlayColor);
+            var rgba = this._hexToRgb(this.settings.overlayColor),
+                styles = {};
+            // Only IE 8
+            if ( navigator.appVersion.indexOf('MSIE 8.') != -1 ) {
+                styles.backgroundColor = this.settings.overlayColor;
+                styles.zIndex =  parseFloat(this.settings.zIndex) + 1;
+                styles.filter = 'alpha(opacity=' + this.settings.overlayOpacity * 100 + ')';
+            } else {
+                styles['background-color'] = 'rgba(' + rgba.r + ',' + rgba.g + ', ' + rgba.b + ',' + this.settings.overlayOpacity + ')';
+                styles['z-index'] =  parseFloat(this.settings.zIndex) + 1;
+                styles['transition'] = 'all ' + this.settings.overlaySpeed / 1000 + 's';
+            }
 
             document.getElementsByTagName('body')[0].appendChild(this._create({
-                id:                 'overlay',
-                class:              'overlay'
-            }, {
-                'background-color': 'rgba(' + rgba.r + ',' + rgba.g + ', ' + rgba.b + ',' + this.settings.overlayOpacity + ')',
-                'z-index':          parseFloat(this.settings.zIndex) + 1,
-                'transition':       'all ' + this.settings.overlaySpeed / 1000 + 's'
-            }));
+                id:     'overlay',
+                eClass: 'overlay' + ( this._isIE() ? ' ie' : '' )
+            }, styles));
         },
         _box: {
             init: function ( obj ) {
@@ -129,15 +136,21 @@
                 }
             },
             create: function ( obj ) {
+                var styles = {};
+
+                if ( obj._isIE() ) {
+                    styles.zIndex =  parseFloat(obj.settings.zIndex) + 2;
+                } else {
+                    styles['z-index'] =  parseFloat(obj.settings.zIndex) + 2;
+                }
+
                 var modal = obj._create({
                         id:                     'modal',
-                        class:                  'modal ' + obj._box.effect( obj ) + ( obj.settings.customClass ? ' ' + obj.settings.customClass : '' )
-                    }, {
-                        'z-index':              parseFloat(obj.settings.zIndex) + 2
-                    }),
+                        eClass:                  'modal ' + obj._box.effect( obj ) + ( obj.settings.customClass ? ' ' + obj.settings.customClass : '' ) + ( obj._isIE() ? ' ie' : '' )
+                    }, styles),
                     content = obj._create({
                         id:                     'modal-content',
-                        class:                  'modal-content'
+                        eClass:                  'modal-content' + ( obj._isIE() ? ' ie' : '' )
                     }, {
                         'transition-duration':  obj.settings.speed / 1000 + 's'
                     });
@@ -228,6 +241,12 @@
                         modal.style.height = tmpSize.height + 'px';
                     }
 
+                    // Only IE 8.
+                    if ( navigator.appVersion.indexOf('MSIE 8.') != -1 ) {
+                        modal.style.marginLeft = - modal.offsetWidth / 2 + 'px';
+                        modal.style.marginTop = - modal.offsetHeight / 2 + 'px';
+                    }
+
                     // Show modal.
                     setTimeout( function () {
 
@@ -279,7 +298,7 @@
         _close: function () {
             var obj = this,
                 d = document;
-                obj._removeClass( d.getElementsByClassName(cb + '-modal')[0], cb + '-show' );
+                obj._removeClass( ( obj._isIE() ? d.querySelectorAll('.' + cb + '-modal')[0] : d.getElementsByClassName(cb + '-modal')[0] ), cb + '-show' );
                 obj._removeClass( d.getElementsByTagName( 'html' )[0], cb + '-perspective' );
 
             setTimeout( function () {
@@ -287,11 +306,11 @@
                 obj._removeClass( d.getElementsByTagName( 'body' )[0], cb + '-scrollbar' );
 
                 // Remove modal.
-                obj._remove( d.getElementsByClassName(cb + '-modal')[0] );
+                obj._remove( ( obj._isIE() ? d.querySelectorAll('.' + cb + '-modal')[0] : d.getElementsByClassName(cb + '-modal')[0] ) );
 
                 // Remove overlay.
                 if ( obj.settings.overlay ) {
-                    obj._remove(d.getElementsByClassName(cb + '-overlay')[0]);
+                    obj._remove( ( obj._isIE() ? d.querySelectorAll('.' + cb + '-overlay')[0] : d.getElementsByClassName(cb + '-overlay')[0] ) );
                 }
 
                 // Check if callback 'close'.
@@ -304,10 +323,18 @@
             var obj = this;
 
             // Listener overlay.
-            if ( typeof document.getElementsByClassName(cb + '-overlay')[0] !== 'undefined' && obj.settings.overlayClose ) {
-                document.getElementsByClassName( cb + '-overlay' )[0].addEventListener('click', function () {
-                    obj._close();
-                }, false );
+            if ( obj._isIE() ) {
+                if ( typeof document.querySelectorAll('.' + cb + '-overlay')[0] !== 'undefined' && obj.settings.overlayClose ) {
+                    document.querySelectorAll('.' + cb + '-overlay')[0].attachEvent('onclick', function () {
+                        obj._close();
+                    });
+                }
+            } else {
+                if ( typeof document.getElementsByClassName(cb + '-overlay')[0] !== 'undefined' && obj.settings.overlayClose ) {
+                    document.getElementsByClassName(cb + '-overlay')[0].addEventListener('click', function () {
+                        obj._close();
+                    }, false );
+                }
             }
 
             // Listener on tab key esc.
@@ -342,7 +369,7 @@
             }
             return arguments[0];
         },
-        _create: function ( attr, style, element ) {
+        _create: function ( attr, styles, element ) {
             var div = ( element === undefined || element === null ? document.createElement('div') : element );
 
             if (  attr !== null ) {
@@ -352,26 +379,28 @@
                 }
 
                 // Add the class.
-                if ( attr.class !== null ) {
-                    this._addClass( div, attr.class );
+                if ( attr.eClass !== null ) {
+                    this._addClass( div, attr.eClass );
                 }
             }
 
-            if ( style !== null ) {
+            if ( styles !== null ) {
 
                 // Loop with styles (obj).
-                for ( var obj in style ) {
-                    if ( style.hasOwnProperty(obj) ) {
-                        // Insert styles.
-                        div.style.setProperty( obj, style[obj], null );
+                for ( var obj in styles ) {
+                    if ( styles.hasOwnProperty(obj) ) {
+                        // Insert browser dependent styles.
+                        if ( this._isIE() ) {
+                            div.style[obj] = styles[obj];
+                        } else {
+                            div.style.setProperty( obj, styles[obj], null );
+                        }
 
-                        if ( obj === 'transition-duration' ) {
-
-                            var prefix = [ '-webkit-', '-moz-', '-o-', '-cb-' ];
-
+                        if ( obj === 'transition-duration' && !this._isIE() ) {
+                            var prefix = [ '-webkit-', '-moz-', '-o-', '-ms-' ];
                             // Insert prefix.
                             for ( var x = 0, pre = prefix.length; x < pre; x++ ) {
-                                div.style.setProperty( prefix[x] + obj, style[obj], null );
+                                div.style.setProperty( prefix[x] + obj, styles[obj], null );
                             }
                         }
                     }
@@ -424,6 +453,9 @@
             }
             return zIndexMax;
         },
+        _isIE: function () {
+            return navigator.appVersion.indexOf('MSIE 9.') != -1 || navigator.appVersion.indexOf('MSIE 8.') != -1;
+        },
         /*
          ----------------------------
          Public methods
@@ -442,24 +474,39 @@
 
         if ( options === undefined || typeof options === 'object' ) {
             if ( isElement ) {
-                // Check time to avoid double click.
-                if ( options.dataset[cb] !== undefined && parseInt(options.dataset[cb]) + 1 > Math.round( new Date().getTime() / 1000 )) {
-                    return;
+
+                if ( navigator.appName === 'Microsoft Internet Explorer' ) {
+                    //Write a new regEx to find the version number
+                    var re = new RegExp("MSIE ([0-9]{1,}[.0-9]{0,})");
+
+                    //If the regEx through the userAgent is not null
+                    if (re.exec(navigator.userAgent) != null) {
+                        //Set the IE version
+                        var version = parseInt(RegExp.$1);
+                    }
                 }
 
-                // Set time to avoid double click.
-                options.setAttribute('data-' + cb, Math.round( new Date().getTime() / 1000 ) );
+                if ( typeof version === 'undefined' || version >= 10 ) {
+                    // Check time to avoid double click.
+                    if ( options.dataset[cb] !== undefined && parseInt(options.dataset[cb]) + 1 > Math.round( new Date().getTime() / 1000 )) {
+                        return;
+                    }
+
+                    // Set time to avoid double click.
+                    options.setAttribute('data-' + cb, Math.round( new Date().getTime() / 1000 ) );
+                }
+
 
                 $(options).each( function () {
                     $.data( this, cb, new Plugin( this, args[1] ) );
                 });
+
             } else {
                 new Plugin( null, args[0] );
             }
         } else if ( typeof options === 'string' && options === 'close' ) {
             $.data( this, cb, new Plugin( args[0], args[1] ) );
         }
-
     };
 
 })( jQuery, window, document );
