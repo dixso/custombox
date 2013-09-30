@@ -105,6 +105,39 @@ h3 em {
 #countdown {
     display: none;
 }
+
+/*
+ ----------------------------
+ Modal Example 1
+ ----------------------------
+ */
+#modal {
+    width: 600px;
+}
+.modal-example-content {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    background-color: #FFF;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    outline: 0 none;
+}
+.modal-example-header {
+    border-bottom: 1px solid #E5E5E5;
+    padding: 15px;
+}
+.modal-example-body p,
+.modal-example-header h4 {
+    margin: 0;
+}
+.modal-example-body {
+    padding: 20px;
+}
+
+/*
+ ----------------------------
+ Modal Example 2
+ ----------------------------
+ */
 #modal2 {
     width: 600px;
     height: 300px;
@@ -122,6 +155,12 @@ h3 em {
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+/*
+ ----------------------------
+ Modal Example 3
+ ----------------------------
+ */
 .justme .modal-content {
     box-shadow: none;
     border: none;
