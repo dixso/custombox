@@ -119,6 +119,15 @@ h3 em {
     border-radius: 6px;
     outline: 0 none;
 }
+@media only screen and (max-device-width: 480px) {
+    .modal-example-content {
+        width: 300px;
+    }
+    .modal-example-body p {
+        height: 200px;
+        overflow: hidden;
+    }
+}
 .modal-example-header {
     border-bottom: 1px solid #E5E5E5;
     padding: 15px;
