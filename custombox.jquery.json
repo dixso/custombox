@@ -1,0 +1,42 @@
+{
+    "name": "custombox",
+    "title": "Custombox",
+    "description": "jQuery Modal Window Effects with transitions CSS3.",
+    "keywords": [
+        "modal",
+        "animation",
+        "lightbox",
+        "window",
+        "css3",
+        "html5",
+        "popup",
+        "effects",
+        "transitions",
+        "dialog",
+        "ajax",
+        "jquery"
+    ],
+    "version": "1.0.0",
+    "author": {
+        "name": "Julio De La Calle",
+        "email": "juliodlcp@gmail.com",
+        "url": "http://dixso.net"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dixso/custombox.git"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://www.opensource.org/licenses/mit-license.php"
+        }
+    ],
+    "bugs": "https://github.com/dixso/custombox/issues",
+    "homepage": "http://dixso.github.io/custombox/",
+    "docs": "http://dixso.github.io/custombox/",
+    "download": "https://github.com/dixso/custombox/archive/master.zip",
+    "dependencies": {
+        "jquery": ">=1.7"
+    }
+}
