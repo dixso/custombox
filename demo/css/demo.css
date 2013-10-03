@@ -63,6 +63,10 @@ code {
     word-break: break-all;
     word-wrap: break-word;
 }
+.author {
+    float: left;
+    margin-top: 5px;
+}
 #sidebar {
     position: relative;
 }
