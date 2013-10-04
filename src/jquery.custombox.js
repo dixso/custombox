@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v1.0.0 - 2013-10-01
+ *  jQuery Custombox v1.0.1 - 2013-10-04
  *  jQuery Modal Window Effects.
  *  http://dixso.github.io/custombox/
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
@@ -506,10 +506,10 @@
             if ( isElement ) {
 
                 if ( navigator.appName === 'Microsoft Internet Explorer' ) {
-                    //Write a new regEx to find the version number
-                    var re = new RegExp("MSIE ([0-9]{1,}[.0-9]{0,})");
+                    // Write a new regEx to find the version number.
+                    var re = new RegExp('MSIE ([0-9]{1,}[.0-9]{0,})');
 
-                    //If the regEx through the userAgent is not null
+                    // If the regEx through the userAgent is not null.
                     if (re.exec(navigator.userAgent) != null) {
                         //Set the IE version
                         var version = parseInt(RegExp.$1);
@@ -518,14 +518,13 @@
 
                 if ( typeof version === 'undefined' || version >= 10 ) {
                     // Check time to avoid double click.
-                    if ( options.dataset[cb] !== undefined && parseInt(options.dataset[cb]) + 1 > Math.round( new Date().getTime() / 1000 )) {
+                    if ( options.getAttribute('data-' + cb) !== null && parseInt(options.getAttribute('data-' + cb)) + 1 > Math.round( new Date().getTime() / 1000 )) {
                         return;
                     }
 
                     // Set time to avoid double click.
                     options.setAttribute('data-' + cb, Math.round( new Date().getTime() / 1000 ) );
                 }
-
 
                 $(options).each( function () {
                     $.data( this, cb, new Plugin( this, args[1] ) );

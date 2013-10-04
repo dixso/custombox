@@ -31,7 +31,7 @@
     <a href="https://github.com/dixso/custombox" target="_blank"><img id="forkme" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" width="149" height="149"></a>
     <div class="container">
         <div class="page-header">
-            <h1>jQuery Custombox v1.0.0</h1>
+            <h1>jQuery Custombox v1.0.1</h1>
             <p class="lead">jQuery Modal Window Effects with transitions CSS3.</p>
             <div class="me clearfix">
                 <p class="author">By <a href="http://dixso.net" target="_blank">Julio De La Calle</a>.</p>
@@ -88,10 +88,10 @@ $.fn[ cb ] = function ( options ) {
         if ( isElement ) {
 
             if ( navigator.appName === 'Microsoft Internet Explorer' ) {
-                //Write a new regEx to find the version number
-                var re = new RegExp("MSIE ([0-9]{1,}[.0-9]{0,})");
+                // Write a new regEx to find the version number.
+                var re = new RegExp('MSIE ([0-9]{1,}[.0-9]{0,})');
 
-                //If the regEx through the userAgent is not null
+                // If the regEx through the userAgent is not null.
                 if (re.exec(navigator.userAgent) != null) {
                     //Set the IE version
                     var version = parseInt(RegExp.$1);
@@ -100,14 +100,13 @@ $.fn[ cb ] = function ( options ) {
 
             if ( typeof version === 'undefined' || version >= 10 ) {
                 // Check time to avoid double click.
-                if ( options.dataset[cb] !== undefined && parseInt(options.dataset[cb]) + 1 > Math.round( new Date().getTime() / 1000 )) {
+                if ( options.getAttribute('data-' + cb) !== null && parseInt(options.getAttribute('data-' + cb)) + 1 > Math.round( new Date().getTime() / 1000 )) {
                     return;
                 }
 
                 // Set time to avoid double click.
                 options.setAttribute('data-' + cb, Math.round( new Date().getTime() / 1000 ) );
             }
-
 
             $(options).each( function () {
                 $.data( this, cb, new Plugin( this, args[1] ) );
@@ -144,7 +143,7 @@ window[ cb ] = function ( options ) {
 
             if ( typeof version === 'undefined' || version >= 10 ) {
                 // Check time to avoid double click.
-                if ( options.dataset[cb] !== undefined && parseInt(options.dataset[cb]) + 1 > Math.round( new Date().getTime() / 1000 )) {
+                if ( options.getAttribute('data-' + cb) !== null && parseInt(options.getAttribute('data-' + cb)) + 1 > Math.round( new Date().getTime() / 1000 )) {
                     return;
                 }
 
