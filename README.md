@@ -3,6 +3,9 @@ jQuery Modal Window Effects with transitions CSS3. See the [project page](http:/
 
 ## Changelog:
 
+### Version 1.0.1 - 2013/10/04
+* Bug fix IE10.
+
 ### Version 1.0.0 - 2013/10/01
 * First release.
 
