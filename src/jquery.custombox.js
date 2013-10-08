@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v1.0.1 - 2013-10-04
+ *  jQuery Custombox v1.0.2 - 2013-10-08
  *  jQuery Modal Window Effects.
  *  http://dixso.github.io/custombox/
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
@@ -336,7 +336,8 @@
                 d.getElementsByTagName( 'body' )[0].style.marginRight = null;
 
                 // Remove modal.
-                obj._remove( ( obj._isIE() ? d.querySelectorAll('.' + cb + '-modal')[0] : d.getElementsByClassName(cb + '-modal')[0] ) );
+                var modal = ( obj._isIE() ? d.querySelectorAll('.' + cb + '-modal')[0] : d.getElementsByClassName(cb + '-modal')[0] );
+                obj._remove( modal );
 
                 // Remove overlay.
                 if ( obj.settings.overlay ) {
@@ -347,6 +348,14 @@
                 if ( obj.settings.close && typeof obj.settings.close === 'function' ) {
                     obj.settings.close( undefined !== arguments[0] ? arguments[0] : '' );
                 }
+
+                // Check if callback 'close' when the method is public.
+                if ( modal.getAttribute('data-' + cb) !== null ) {
+                    var onClose = modal.getAttribute('data-' + cb),
+                        onCloseLaunch = new Function ( 'onClose', 'return ' + onClose )(onClose);
+                    onCloseLaunch();
+                }
+
             }, obj.settings.speed );
         },
         _listeners: function () {
@@ -383,6 +392,16 @@
                     obj._close();
                 }, false );
             }
+
+            // Check if callback 'close'.
+            if ( obj.settings.close && typeof obj.settings.close === 'function' ) {
+
+                var store =  obj.settings.close;
+                    var modal = ( obj._isIE() ? document.querySelectorAll('.' + cb + '-modal')[0] : document.getElementsByClassName(cb + '-modal')[0] );
+                modal.setAttribute('data-' + cb, store);
+
+            }
+
         },
         /*
          ----------------------------
