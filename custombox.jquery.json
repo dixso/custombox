@@ -14,9 +14,10 @@
         "transitions",
         "dialog",
         "ajax",
-        "jquery"
+        "jquery",
+        "responsive"
     ],
-    "version": "1.0.2",
+    "version": "1.1.0",
     "author": {
         "name": "Julio De La Calle",
         "email": "juliodlcp@gmail.com",

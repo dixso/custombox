@@ -123,15 +123,6 @@ h3 em {
     border-radius: 6px;
     outline: 0 none;
 }
-@media only screen and (max-device-width: 480px) {
-    .modal-example-content {
-        width: 300px;
-    }
-    .modal-example-body p {
-        height: 200px;
-        overflow: hidden;
-    }
-}
 .modal-example-header {
     border-bottom: 1px solid #E5E5E5;
     padding: 15px;
@@ -178,4 +169,32 @@ h3 em {
 }
 .justme .modal-example-header {
     border: none;
+}
+
+
+/*
+ ----------------------------
+ Modal Example 4
+ ----------------------------
+ */
+#modal3 {
+    margin-top: 70px;
+}
+
+
+/*
+ ----------------------------
+ Custom animation
+ ----------------------------
+ */
+.custombox-close.customslide .custombox-modal-content {
+    -webkit-transform: scale(2);
+    -ms-transform: scale(2);
+    -o-transform: scale(2);
+    transform: scale(2);
+    opacity: 1;
+    -webkit-transition-property: all;
+    -ms-transition-property: all;
+    -o-transition-property: all;
+    transition-property: all !important;
 }

@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v1.0.2 - 2013-10-08
+ *  jQuery Custombox v1.1.0 - 2013-10-24
  *  jQuery Modal Window Effects.
  *  http://dixso.github.io/custombox/
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
@@ -36,11 +36,13 @@
             width:          null,           // Set a fixed total width.
             height:         null,           // Set a fixed total height.
             effect:         'fadein',       // fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | blur.
-            position:       null,           // Only with effects: slide, flip and rotate. (top, right, bottom, left and center) | (vertical or horizontal).
+            position:       null,           // Only with effects: slide, flip and rotate. (top, right, bottom, left and center) | (vertical or horizontal) and output position sseparated by commas. Ex: 'top, bottom'.
             speed:          600,            // Sets the speed of the transitions, in milliseconds.
             open:           null,           // Callback that fires right before begins to open.
             complete:       null,           // Callback that fires right after loaded content is displayed.
             close:          null,           // Callback that fires once is closed.
+            responsive:     true,           // Sets if you like box responsive or not.
+            scrollbar:      false,          // Show scrollbar or hide automatically.
             error:          'Error 404!'    // Text to be displayed when an error.
         };
 
@@ -99,47 +101,6 @@
                     obj.settings.open( undefined !== arguments[0] ? arguments[0] : '' );
                 }
 
-                // Add generic class custombox.
-                obj._addClass( document.getElementsByTagName( 'html' )[0], 'html' );
-
-                // Check if scrollbar is visible.
-                var body = document.body,
-                    html = document.documentElement;
-
-                var bodyHeight = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight),
-                    windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
-
-                if ( bodyHeight > windowHeight ) {
-
-                    var outer = obj._create({},{
-                        visibility: 'hidden',
-                        width: '100px'
-                    });
-
-                    body.appendChild(outer);
-
-                    var widthNoScroll = outer.offsetWidth;
-
-                    // Force scrollbars
-                    outer.style.overflow = "scroll";
-
-                    // Add inner div.
-                    var inner = obj._create({},{
-                        width: '100%'
-                    });
-
-                    outer.appendChild(inner);
-
-                    var widthWithScroll = inner.offsetWidth;
-
-                    // Remove divs
-                    outer.parentNode.removeChild(outer);
-
-                    // Hide scrollbar.
-                    obj._addClass( body, 'scrollbar' );
-                    body.style.marginRight = widthNoScroll - widthWithScroll + 'px';
-                }
-
                 // Check 'href'.
                 if ( obj.settings.url === null ) {
                     if ( obj.element !== null ) {
@@ -180,7 +141,7 @@
                         id:                     'modal-content',
                         eClass:                 'modal-content'
                     }, {
-                        'transition-duration':  obj.settings.speed / 1000 + 's'
+                        'transition-duration':  obj.settings.speed + 'ms'
                     });
 
                 // Insert modal to the content.
@@ -199,12 +160,22 @@
             effect: function ( obj ) {
                 var position = ['slide','flip','rotate'],
                     perspective = ['letmein','makeway','slip','blur'],
-                    effect = cb + '-' + obj.settings.effect;
+                    effect = cb + '-' + obj.settings.effect,
+                    effectClose = '';
+
+                // Check if is array.
+                if ( obj.settings.position !== null && obj.settings.position.indexOf(',') !== -1 ) {
+                    // Convert the string to array.
+                    obj.settings.position = obj.settings.position.split(',');
+                    if( obj.settings.position.length > 1 ) {
+                        effectClose = ' ' + cb + '-' + obj.settings.effect + '-' + obj.settings.position[0].replace(/^\s+|\s+$/g, '') + '-' + obj.settings.position[1].replace(/^\s+|\s+$/g, '');
+                    }
+                }
 
                 // Position.
                 for ( var i = 0, len1 = position.length; i < len1; i++ ) {
                     if ( position[i] === obj.settings.effect ) {
-                        effect = cb + '-' + obj.settings.effect + '-' + obj.settings.position;
+                        effect = cb + '-' + obj.settings.effect + '-' + ( effectClose !== '' ? obj.settings.position[0] : obj.settings.position ) + effectClose;
                     }
                 }
 
@@ -234,6 +205,9 @@
 
             },
             build: function ( obj, modal ) {
+                var body = document.body,
+                    html = document.documentElement,
+                    top = ( html && html.scrollTop  || body && body.scrollTop  || 0 );
 
                 if ( obj.settings.error !== false && typeof obj.settings.error === 'string' ) {
                     // If is null, show message error.
@@ -269,17 +243,76 @@
                         modal.style.height = tmpSize.height + 'px';
                     }
 
-                    // Only IE 8.
-                    if ( navigator.appVersion.indexOf('MSIE 8.') != -1 ) {
-                        modal.style.marginLeft = - modal.offsetWidth / 2 + 'px';
-                        modal.style.marginTop = - modal.offsetHeight / 2 + 'px';
+                    var position = {
+                        'margin-left':  - modal.offsetWidth / 2 + 'px',
+                        'width':        modal.offsetWidth + 'px'
+                    };
+
+                    // If position top?
+                    if ( obj.settings.position !== null && obj.settings.position.indexOf('top') !== -1 ) {
+                        position['transform'] = 'none';
+                    }
+
+                    // Center modal.
+                    obj._create( {}, position, tmp[0] );
+
+                    // Check if scrollbar is visible.
+                    var wsize = {
+                            width:  'innerWidth' in window ? window.innerWidth : document.documentElement.offsetWidth,
+                            height: 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight
+                        };
+
+                    if ( !obj.settings.scrollbar ) {
+                        if ( modal.offsetHeight < wsize.height ) {
+
+                            var outer = obj._create({},{
+                                visibility: 'hidden',
+                                width:      '100px'
+                            });
+
+                            // Append outer.
+                            body.appendChild(outer);
+
+                            // Save the width without scrollbar.
+                            var widthNoScroll = outer.offsetWidth;
+
+                            // Force scrollbars
+                            outer.style.overflow = 'scroll';
+
+                            // Add inner div.
+                            var inner = obj._create({},{
+                                width: '100%'
+                            });
+
+                            // Append inner.
+                            outer.appendChild(inner);
+
+                            // Save the width with scrollbar.
+                            var widthWithScroll = inner.offsetWidth;
+
+                            // Remove divs
+                            outer.parentNode.removeChild(outer);
+
+                            // Hide scrollbar.
+                            body.style.marginRight = widthNoScroll - widthWithScroll + 'px';
+                            obj._addClass( document.getElementsByTagName( 'html' )[0], 'hide-scrollbar' );
+                        } else {
+                            obj._scrollbar(tmp[0]);
+                        }
+                    } else {
+                        obj._scrollbar(tmp[0]);
+                    }
+
+                    // Launch responsive.
+                    if ( obj.settings.responsive ) {
+                        obj._box.responsive(obj, tmp, modal, wsize);
                     }
 
                     // Show modal.
                     setTimeout( function () {
 
                         // Init listeners.
-                        obj._listeners();
+                        obj._listeners( top );
 
                         // Show modal.
                         tmp[0].className += ' ' + cb + '-show';
@@ -291,15 +324,91 @@
                             new Function( script[i].text )();
                         }
 
-                        setTimeout( function () {
-                            // Check if callback 'complete'.
-                            if ( obj.settings.complete && typeof obj.settings.complete === 'function' ) {
-                                obj.settings.complete( undefined !== arguments[0] ? arguments[0] : '' );
-                            }
-                        }, obj.settings.speed );
+                        if ( window.attachEvent ) {
+                            setTimeout( function () {
+                                // Check if callback 'complete'.
+                                if ( obj.settings.complete && typeof obj.settings.complete === 'function' ) {
+                                    obj.settings.complete( undefined !== arguments[0] ? arguments[0] : '' );
+                                }
+                            }, obj.settings.speed );
+                        } else {
+                            var stop = true;
+                            tmp[0].addEventListener(obj._crossBrowser(), function () {
+                                if ( stop ) {
+                                    stop = false;
+                                    // Check if callback 'complete'.
+                                    if ( obj.settings.complete && typeof obj.settings.complete === 'function' ) {
+                                        obj.settings.complete( undefined !== arguments[0] ? arguments[0] : '' );
+                                    }
+                                }
+                            }, false);
+                        }
 
                     }, ( obj.settings.overlay ? obj.settings.overlaySpeed : 200 ) );
+
                 }
+            },
+            responsive: function ( obj, tmp, modal, wsize ) {
+                // Store width.
+                modal.setAttribute('data-' + cb + '-width', modal.offsetWidth);
+
+                // Prepare responsive.
+                obj._create( {}, {
+                    width: 'auto'
+                }, modal );
+
+                // The first time.
+                if ( wsize.width < modal.offsetWidth ) {
+                    obj._create( {}, {
+                        width:          wsize.width - 40 + 'px',
+                        'margin-left':  '20px',
+                        'margin-right': '20px',
+                        'left':         0
+                    }, tmp[0] );
+                }
+
+                var supportsOrientationChange = 'onorientationchange' in window,
+                    orientationEvent = supportsOrientationChange ? 'orientationchange' : 'resize';
+
+                if ( window.attachEvent ) {
+                    window.attachEvent(orientationEvent, function () {
+                        modalResize(this);
+                    }, false);
+                } else {
+                    window.addEventListener(orientationEvent, function () {
+                        modalResize(this);
+                    }, false);
+                }
+
+                var modalResize = function ( e ) {
+                    if ( typeof window.orientation === 'undefined' ) {
+                        if  ( modal.getAttribute('data-' + cb + '-width') !== null ) {
+                            var wm = modal.getAttribute('data-' + cb + '-width');
+
+                            if ( wm > e.innerWidth ) {
+                                obj._create( {}, {
+                                    width:          e.innerWidth - 40 + 'px',
+                                    'margin-left':  '20px',
+                                    'margin-right': '20px',
+                                    left:           0
+                                }, tmp[0] );
+                            } else {
+                                obj._create( {}, {
+                                    width:          wm + 'px',
+                                    'margin-left':  - wm / 2 + 'px',
+                                    'left':         '50%'
+                                }, tmp[0] );
+                            }
+                        }
+                    } else {
+                        obj._create( null, {
+                            width:          e.innerWidth - 40 + 'px',
+                            'margin-left':  '20px',
+                            'margin-right': '20px',
+                            left:           0
+                        }, tmp[0] );
+                    }
+                };
             },
             ajax: function ( obj ) {
                 var xhr = new XMLHttpRequest();
@@ -323,25 +432,24 @@
                 xhr.send(null);
             }
         },
-        _close: function () {
-            var obj = this,
-                d = document;
-                obj._removeClass( ( obj._isIE() ? d.querySelectorAll('.' + cb + '-modal')[0] : d.getElementsByClassName(cb + '-modal')[0] ), cb + '-show' );
-                obj._removeClass( d.getElementsByTagName( 'html' )[0], cb + '-perspective' );
+        _close: function ( scroll ) {
+            var obj = this;
 
-            setTimeout( function () {
+            // Clean custombox.
+            setTimeout(function () {
                 // Remove classes.
-                obj._removeClass( d.getElementsByTagName( 'html' )[0], cb + '-html' );
-                obj._removeClass( d.getElementsByTagName( 'body' )[0], cb + '-scrollbar' );
-                d.getElementsByTagName( 'body' )[0].style.marginRight = null;
+                obj._removeClass( document.getElementsByTagName( 'html' )[0], cb + '-hide-scrollbar' );
+
+                // Reset properties scrollbar.
+                document.getElementsByTagName( 'body' )[0].style.marginRight = 0;
 
                 // Remove modal.
-                var modal = ( obj._isIE() ? d.querySelectorAll('.' + cb + '-modal')[0] : d.getElementsByClassName(cb + '-modal')[0] );
+                var modal = ( obj._isIE() ? document.querySelectorAll('.' + cb + '-modal')[0] : document.getElementsByClassName(cb + '-modal')[0] );
                 obj._remove( modal );
 
                 // Remove overlay.
                 if ( obj.settings.overlay ) {
-                    obj._remove( ( obj._isIE() ? d.querySelectorAll('.' + cb + '-overlay')[0] : d.getElementsByClassName(cb + '-overlay')[0] ) );
+                    obj._remove( ( obj._isIE() ? document.querySelectorAll('.' + cb + '-overlay')[0] : document.getElementsByClassName(cb + '-overlay')[0] ) );
                 }
 
                 // Check if callback 'close'.
@@ -350,28 +458,68 @@
                 }
 
                 // Check if callback 'close' when the method is public.
-                if ( modal.getAttribute('data-' + cb) !== null ) {
+                if ( typeof modal !== 'undefined' && modal.getAttribute('data-' + cb) !== null ) {
                     var onClose = modal.getAttribute('data-' + cb),
                         onCloseLaunch = new Function ( 'onClose', 'return ' + onClose )(onClose);
                     onCloseLaunch();
                 }
-
             }, obj.settings.speed );
+
+            // Add class close for animation close.
+            obj._addClass( ( obj._isIE() ? document.querySelectorAll('.' + cb + '-modal')[0] : document.getElementsByClassName(cb + '-modal')[0] ), 'close' );
+
+            // Remove the remaining classes.
+            obj._removeClass( ( obj._isIE() ? document.querySelectorAll('.' + cb + '-modal')[0] : document.getElementsByClassName(cb + '-modal')[0] ), cb + '-show' );
+            obj._removeClass( document.getElementsByTagName( 'html' )[0], cb + '-perspective' );
+
+            // Go to te last position scroll.
+            window.top.scroll( 0, scroll );
+
         },
-        _listeners: function () {
+        _clean: function () {
+            var obj = this;
+
+            // Remove classes.
+            obj._removeClass( document.getElementsByTagName( 'html' )[0], cb + '-hide-scrollbar' );
+
+            // Reset properties scrollbar.
+            document.getElementsByTagName( 'body' )[0].style.marginRight = 0;
+
+            // Remove modal.
+            var modal = ( obj._isIE() ? document.querySelectorAll('.' + cb + '-modal')[0] : document.getElementsByClassName(cb + '-modal')[0] );
+            obj._remove( modal );
+
+            // Remove overlay.
+            if ( obj.settings.overlay ) {
+                obj._remove( ( obj._isIE() ? document.querySelectorAll('.' + cb + '-overlay')[0] : document.getElementsByClassName(cb + '-overlay')[0] ) );
+            }
+
+            // Check if callback 'close'.
+            if ( obj.settings.close && typeof obj.settings.close === 'function' ) {
+                obj.settings.close( undefined !== arguments[0] ? arguments[0] : '' );
+            }
+
+            // Check if callback 'close' when the method is public.
+            if ( typeof modal !== 'undefined' && modal.getAttribute('data-' + cb) !== null ) {
+                var onClose = modal.getAttribute('data-' + cb),
+                    onCloseLaunch = new Function ( 'onClose', 'return ' + onClose )(onClose);
+                onCloseLaunch();
+            }
+        },
+        _listeners: function ( top ) {
             var obj = this;
 
             // Listener overlay.
             if ( obj._isIE() ) {
                 if ( typeof document.querySelectorAll('.' + cb + '-overlay')[0] !== 'undefined' && obj.settings.overlayClose ) {
                     document.querySelectorAll('.' + cb + '-overlay')[0].attachEvent('onclick', function () {
-                        obj._close();
+                        obj._close( top );
                     });
                 }
             } else {
                 if ( typeof document.getElementsByClassName(cb + '-overlay')[0] !== 'undefined' && obj.settings.overlayClose ) {
                     document.getElementsByClassName(cb + '-overlay')[0].addEventListener('click', function () {
-                        obj._close();
+                        obj._close( top );
                     }, false );
                 }
             }
@@ -381,7 +529,7 @@
                 document.onkeydown = function ( evt ) {
                     evt = evt || window.event;
                     if ( evt.keyCode === 27 ) {
-                        obj._close();
+                        obj._close( top );
                     }
                 };
             }
@@ -389,19 +537,16 @@
             // Listener on element close.
             if ( obj.settings.eClose !== null && typeof obj.settings.eClose === 'string' && obj.settings.eClose.charAt(0) === '#' || typeof obj.settings.eClose === 'string' && obj.settings.eClose.charAt(0) === '.' && document.querySelector(obj.settings.eClose) ) {
                 document.querySelector(obj.settings.eClose).addEventListener('click', function () {
-                    obj._close();
+                    obj._close( top );
                 }, false );
             }
 
             // Check if callback 'close'.
             if ( obj.settings.close && typeof obj.settings.close === 'function' ) {
-
                 var store =  obj.settings.close;
                     var modal = ( obj._isIE() ? document.querySelectorAll('.' + cb + '-modal')[0] : document.getElementsByClassName(cb + '-modal')[0] );
                 modal.setAttribute('data-' + cb, store);
-
             }
-
         },
         /*
          ----------------------------
@@ -421,7 +566,7 @@
         _create: function ( attr, styles, element ) {
             var div = ( element === undefined || element === null ? document.createElement('div') : element );
 
-            if (  attr !== null ) {
+            if (  attr !== null && Object.keys(attr).length !== 0 ) {
                 // Add the id.
                 if ( attr.id !== null ) {
                     div.id = cb + '-' + attr.id + new Date().getTime();
@@ -434,7 +579,6 @@
             }
 
             if ( styles !== null ) {
-
                 // Loop with styles (obj).
                 for ( var obj in styles ) {
                     if ( styles.hasOwnProperty(obj) ) {
@@ -445,8 +589,8 @@
                             div.style.setProperty( obj, styles[obj], null );
                         }
 
-                        if ( obj === 'transition-duration' && !this._isIE() ) {
-                            var prefix = [ '-webkit-', '-moz-', '-o-', '-ms-' ];
+                        if ( ( obj.indexOf('transition') !== -1 || obj === 'transform' !== -1 ) && !this._isIE() ) {
+                            var prefix = [ '-webkit-', '-ms-'];
                             // Insert prefix.
                             for ( var x = 0, pre = prefix.length; x < pre; x++ ) {
                                 div.style.setProperty( prefix[x] + obj, styles[obj], null );
@@ -504,6 +648,43 @@
         },
         _isIE: function () {
             return navigator.appVersion.indexOf('MSIE 9.') != -1 || navigator.appVersion.indexOf('MSIE 8.') != -1;
+        },
+        _crossBrowser: function () {
+            var el = document.createElement('fakeelement'),
+                transitions = {
+                    transition:         'transitionend',
+                    WebkitTransition:   'webkitTransitionEnd'
+                },
+                transition;
+
+            // Check transition.
+            for( var t in transitions ) {
+                if ( transitions.hasOwnProperty(t) && el.style[t] !== undefined ) {
+                    transition =  transitions[t];
+                }
+            }
+
+            return transition;
+        },
+        _scrollbar: function ( modal ) {
+            var obj = this;
+
+            // Go to te last position scroll.
+            setTimeout( function () {
+                window.scrollTo( 0, 0 );
+            }, ( obj.settings.overlay ? obj.settings.overlaySpeed : 200 ) );
+
+            var position = {
+                'position':     'absolute'
+            };
+
+            if ( obj.settings.position !== null && obj.settings.position.indexOf('top') !== -1 ) {
+                position['top'] = 0;
+                position['margin-top'] = '20px';
+            }
+
+            // Change property position
+            obj._create( {}, position, modal );
         },
         /*
          ----------------------------
