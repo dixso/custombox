@@ -58,11 +58,11 @@ $(function() {
      Fadein
      ----------------------------
      */
-    $('#fadein').on('click', function () {
+    $('#fadein').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect: 'fadein'
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -70,14 +70,14 @@ $(function() {
      Slide
      ----------------------------
      */
-    var slide_position = ['top','right','bottom','center'];
+    var slide_position = ['top','right','bottom','center','left'];
 
-    $('#slide').on('click', function () {
+    $('#slide').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect:     'slide',
             position:   slide_position[Math.floor( Math.random() * slide_position.length )]
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -85,11 +85,11 @@ $(function() {
      Newspaper
      ----------------------------
      */
-    $('#newspaper').on('click', function () {
+    $('#newspaper').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect: 'newspaper'
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -97,11 +97,11 @@ $(function() {
      Fall
      ----------------------------
      */
-    $('#fall').on('click', function () {
+    $('#fall').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect: 'fall'
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -109,11 +109,11 @@ $(function() {
      Sidefall
      ----------------------------
      */
-    $('#sidefall').on('click', function () {
+    $('#sidefall').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect: 'sidefall'
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -123,12 +123,12 @@ $(function() {
      */
     var flip_position = ['vertical','horizontal'];
 
-    $('#flip').on('click', function () {
+    $('#flip').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect:     'flip',
             position:   flip_position[Math.floor((Math.random()*2))]
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -136,11 +136,11 @@ $(function() {
      Sign
      ----------------------------
      */
-    $('#sign').on('click', function () {
+    $('#sign').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect: 'sign'
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -148,11 +148,11 @@ $(function() {
      Sign
      ----------------------------
      */
-    $('#superscaled').on('click', function () {
+    $('#superscaled').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect: 'superscaled'
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -160,11 +160,11 @@ $(function() {
      Slit
      ----------------------------
      */
-    $('#slit').on('click', function () {
+    $('#slit').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect: 'slit'
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -174,12 +174,12 @@ $(function() {
      */
     var rotate_position = ['bottom','left'];
 
-    $('#rotate').on('click', function () {
+    $('#rotate').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect:     'rotate',
             position:   rotate_position[Math.floor((Math.random()*2))]
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -187,7 +187,7 @@ $(function() {
      Letmein
      ----------------------------
      */
-    $('#letmein').on('click', function () {
+    $('#letmein').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect: 'letmein',
             // Remove style attribute.
@@ -195,7 +195,7 @@ $(function() {
                 $('#sidebar').removeAttr('style');
             }
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -203,7 +203,7 @@ $(function() {
      Makeway
      ----------------------------
      */
-    $('#makeway').on('click', function () {
+    $('#makeway').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect: 'makeway',
             // Remove style attribute.
@@ -211,7 +211,7 @@ $(function() {
                 $('#sidebar').removeAttr('style');
             }
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -219,7 +219,7 @@ $(function() {
      Slip
      ----------------------------
      */
-    $('#slip').on('click', function () {
+    $('#slip').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect: 'slip',
             // Remove style attribute.
@@ -227,7 +227,7 @@ $(function() {
                 $('#sidebar').removeAttr('style');
             }
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -235,23 +235,23 @@ $(function() {
      Blur
      ----------------------------
      */
-    $('#blur').on('click', function () {
+    $('#blur').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect: 'blur'
         });
-        return false;
+        e.preventDefault();
     });
     /*
      ----------------------------
      Custom - Without overlay
      ----------------------------
      */
-    $('#example1').on('click', function () {
+    $('#example1').on('click', function ( e ) {
         $.fn.custombox( this, {
             overlay: false,
             effect: 'fadein'
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -259,11 +259,11 @@ $(function() {
      Custom - Ajax
      ----------------------------
      */
-    $('#example2').on('click', function () {
+    $('#example2').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect: 'newspaper'
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -271,7 +271,7 @@ $(function() {
      Custom - Auto start
      ----------------------------
      */
-    $('#example3').on('click', function () {
+    $('#example3').on('click', function ( e ) {
         var clock = 5,
             countdownId = 0,
             eCountdown = document.getElementById('countdown');
@@ -294,7 +294,7 @@ $(function() {
                 clearInterval(countdown);
             }
         }, 1000);
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -302,12 +302,12 @@ $(function() {
      Custom - Error :(
      ----------------------------
      */
-    $('#example4').on('click', function () {
+    $('#example4').on('click', function ( e ) {
         $.fn.custombox( this, {
             effect: 'slit',
             error: 'OPS! File not found'
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -315,7 +315,7 @@ $(function() {
      Custom - Callbacks
      ----------------------------
      */
-    $('#example5').on('click', function () {
+    $('#example5').on('click', function ( e ) {
         $.fn.custombox( this, {
             open: function () {
                 alert('open');
@@ -327,7 +327,7 @@ $(function() {
                 alert('close');
             }
         });
-        return false;
+        e.preventDefault();
     });
 
     /*
@@ -335,25 +335,53 @@ $(function() {
      Custom - Other style
      ----------------------------
      */
-    $('#example6').on('click', function () {
+    $('#example6').on('click', function ( e ) {
         $.fn.custombox( this );
-        return false;
+        e.preventDefault();
     });
 
     /*
      ----------------------------
-     Custom effect
+     Custom effect 1
      ----------------------------
      */
-    $('#example7').on('click', function () {
+    $('#example7').on('click', function ( e ) {
         $.fn.custombox( this, {
-            effect: 'fadein',
-            overlayColor: '#FFF',
+            effect:         'fadein',
+            overlayColor:   '#FFF',
             overlayOpacity: 1,
-            customClass: 'justme',
-            speed: 200
+            customClass:    'justme',
+            speed:          200
         });
-        return false;
+        e.preventDefault();
+    });
+
+    /*
+     ----------------------------
+     Custom effect 2
+     ----------------------------
+     */
+    $('#example8').on('click', function ( e ) {
+        $.fn.custombox( this, {
+            effect:         'slide',
+            position:       'center',
+            customClass:    'customslide',
+            speed:          200
+        });
+        e.preventDefault();
+    });
+
+    /*
+     ----------------------------
+     Custom open and close position
+     ----------------------------
+     */
+    $('#example9').on('click', function ( e ) {
+        $.fn.custombox( this, {
+            effect:     'slide',
+            position:   'left, right'
+        });
+        e.preventDefault();
     });
 
 });
