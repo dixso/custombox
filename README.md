@@ -3,6 +3,9 @@ jQuery Modal Window Effects with transitions CSS3. See the [project page](http:/
 
 ## Changelog:
 
+### Version 1.1.1 - 2013/11/05
+* Bug fix on the position scrollbar.
+
 ### Version 1.1.0 - 2013/10/22
 * Added new property of the position to the output.
 * Added support responsive.
