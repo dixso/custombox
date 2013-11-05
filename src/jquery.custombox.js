@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v1.1.0 - 2013-10-24
+ *  jQuery Custombox v1.1.1 - 2013-11-05
  *  jQuery Modal Window Effects.
  *  http://dixso.github.io/custombox/
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
@@ -227,6 +227,9 @@
                     // Show the content.
                     modal.style.display = 'block';
 
+                    // Set scroll.
+                    tmp[0].setAttribute('data-' + cb + '-scroll', top);
+
                     // Temporal sizes.
                     var tmpSize = {
                         width:  parseInt(obj.settings.width, 0),
@@ -432,7 +435,7 @@
                 xhr.send(null);
             }
         },
-        _close: function ( scroll ) {
+        _close: function () {
             var obj = this;
 
             // Clean custombox.
@@ -463,6 +466,10 @@
                         onCloseLaunch = new Function ( 'onClose', 'return ' + onClose )(onClose);
                     onCloseLaunch();
                 }
+
+                // Go to te last position scroll.
+                window.top.scroll( 0, modal.getAttribute('data-' + cb + '-scroll') );
+
             }, obj.settings.speed );
 
             // Add class close for animation close.
@@ -471,10 +478,6 @@
             // Remove the remaining classes.
             obj._removeClass( ( obj._isIE() ? document.querySelectorAll('.' + cb + '-modal')[0] : document.getElementsByClassName(cb + '-modal')[0] ), cb + '-show' );
             obj._removeClass( document.getElementsByTagName( 'html' )[0], cb + '-perspective' );
-
-            // Go to te last position scroll.
-            window.top.scroll( 0, scroll );
-
         },
         _clean: function () {
             var obj = this;
@@ -506,20 +509,20 @@
                 onCloseLaunch();
             }
         },
-        _listeners: function ( top ) {
+        _listeners: function () {
             var obj = this;
 
             // Listener overlay.
             if ( obj._isIE() ) {
                 if ( typeof document.querySelectorAll('.' + cb + '-overlay')[0] !== 'undefined' && obj.settings.overlayClose ) {
                     document.querySelectorAll('.' + cb + '-overlay')[0].attachEvent('onclick', function () {
-                        obj._close( top );
+                        obj._close();
                     });
                 }
             } else {
                 if ( typeof document.getElementsByClassName(cb + '-overlay')[0] !== 'undefined' && obj.settings.overlayClose ) {
                     document.getElementsByClassName(cb + '-overlay')[0].addEventListener('click', function () {
-                        obj._close( top );
+                        obj._close();
                     }, false );
                 }
             }
@@ -529,7 +532,7 @@
                 document.onkeydown = function ( evt ) {
                     evt = evt || window.event;
                     if ( evt.keyCode === 27 ) {
-                        obj._close( top );
+                        obj._close();
                     }
                 };
             }
@@ -537,7 +540,8 @@
             // Listener on element close.
             if ( obj.settings.eClose !== null && typeof obj.settings.eClose === 'string' && obj.settings.eClose.charAt(0) === '#' || typeof obj.settings.eClose === 'string' && obj.settings.eClose.charAt(0) === '.' && document.querySelector(obj.settings.eClose) ) {
                 document.querySelector(obj.settings.eClose).addEventListener('click', function () {
-                    obj._close( top );
+                    console.log('entro');
+                    obj._close();
                 }, false );
             }
 
