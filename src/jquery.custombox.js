@@ -460,13 +460,6 @@
                     obj.settings.close( undefined !== arguments[0] ? arguments[0] : '' );
                 }
 
-                // Check if callback 'close' when the method is public.
-                if ( typeof modal !== 'undefined' && modal.getAttribute('data-' + cb) !== null ) {
-                    var onClose = modal.getAttribute('data-' + cb),
-                        onCloseLaunch = new Function ( 'onClose', 'return ' + onClose )(onClose);
-                    onCloseLaunch();
-                }
-
                 // Go to te last position scroll.
                 window.top.scroll( 0, modal.getAttribute('data-' + cb + '-scroll') );
 
@@ -545,12 +538,6 @@
                 }, false );
             }
 
-            // Check if callback 'close'.
-            if ( obj.settings.close && typeof obj.settings.close === 'function' ) {
-                var store =  obj.settings.close;
-                    var modal = ( obj._isIE() ? document.querySelectorAll('.' + cb + '-modal')[0] : document.getElementsByClassName(cb + '-modal')[0] );
-                modal.setAttribute('data-' + cb, store);
-            }
         },
         /*
          ----------------------------
