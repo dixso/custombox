@@ -1,5 +1,5 @@
 /*
- *  jQuery Custombox v1.1.1 - 2013-11-05
+ *  jQuery Custombox v1.1.2 - 2013/12/10
  *  jQuery Modal Window Effects.
  *  http://dixso.github.io/custombox/
  *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
@@ -246,10 +246,18 @@
                         modal.style.height = tmpSize.height + 'px';
                     }
 
-                    var position = {
-                        'margin-left':  - modal.offsetWidth / 2 + 'px',
-                        'width':        modal.offsetWidth + 'px'
-                    };
+                    var offw = modal.offsetWidth,
+                        position = {
+                            'margin-left':  - offw / 2 + 'px',
+                            'width':        offw + 'px'
+                        };
+
+                    // IE8 not supported: translateY(-50%).
+                    if ( obj._isIE() ) {
+                        var offh = modal.offsetHeight;
+                        position['margin-top'] = - offh / 2 + 'px';
+                        position['height'] = offh + 'px';
+                    }
 
                     // If position top?
                     if ( obj.settings.position !== null && obj.settings.position.indexOf('top') !== -1 ) {
@@ -261,9 +269,9 @@
 
                     // Check if scrollbar is visible.
                     var wsize = {
-                            width:  'innerWidth' in window ? window.innerWidth : document.documentElement.offsetWidth,
-                            height: 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight
-                        };
+                        width:  'innerWidth' in window ? window.innerWidth : document.documentElement.offsetWidth,
+                        height: 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight
+                    };
 
                     if ( !obj.settings.scrollbar ) {
                         if ( modal.offsetHeight < wsize.height && body.offsetHeight > wsize.height ) {
@@ -458,10 +466,8 @@
                 // Check if callback 'close'.
                 if ( obj.settings.close && typeof obj.settings.close === 'function' ) {
                     obj.settings.close( undefined !== arguments[0] ? arguments[0] : '' );
-                }
-
-                // Check if callback 'close' when the method is public.
-                if ( typeof modal !== 'undefined' && modal.getAttribute('data-' + cb) !== null ) {
+                } else if ( typeof modal !== 'undefined' && modal.getAttribute('data-' + cb) !== null ) {
+                    // Check if callback 'close' when the method is public.
                     var onClose = modal.getAttribute('data-' + cb),
                         onCloseLaunch = new Function ( 'onClose', 'return ' + onClose )(onClose);
                     onCloseLaunch();
@@ -540,7 +546,6 @@
             // Listener on element close.
             if ( obj.settings.eClose !== null && typeof obj.settings.eClose === 'string' && obj.settings.eClose.charAt(0) === '#' || typeof obj.settings.eClose === 'string' && obj.settings.eClose.charAt(0) === '.' && document.querySelector(obj.settings.eClose) ) {
                 document.querySelector(obj.settings.eClose).addEventListener('click', function () {
-                    console.log('entro');
                     obj._close();
                 }, false );
             }
@@ -570,10 +575,21 @@
         _create: function ( attr, styles, element ) {
             var div = ( element === undefined || element === null ? document.createElement('div') : element );
 
+            // Compatibility ECMAScript 5 Objects and Properties.
+            Object.keys = Object.keys || function( o ) {
+                var result = [];
+                for ( var name in o ) {
+                    if ( o.hasOwnProperty(name) ) {
+                        result.push(name);
+                    }
+                }
+                return result;
+            };
+
             if (  attr !== null && Object.keys(attr).length !== 0 ) {
                 // Add the id.
                 if ( attr.id !== null ) {
-                    div.id = cb + '-' + attr.id + new Date().getTime();
+                    div.id = cb + '-' + attr.id;
                 }
 
                 // Add the class.
@@ -588,7 +604,13 @@
                     if ( styles.hasOwnProperty(obj) ) {
                         // Insert browser dependent styles.
                         if ( this._isIE() ) {
-                            div.style[obj] = styles[obj];
+                            var camelCase = obj.split('-');
+                            if ( camelCase.length > 1 ) {
+                                camelCase = camelCase[0] + camelCase[1].replace(/(?:^|\s)\w/g, function( match ) {
+                                    return match.toUpperCase();
+                                });
+                            }
+                            div.style[camelCase] = styles[obj];
                         } else {
                             div.style.setProperty( obj, styles[obj], null );
                         }
@@ -640,10 +662,11 @@
             }
         },
         _zIndex: function () {
-            var elems = document.getElementsByTagName('*'),
+            var d = document,
+                elems = d.getElementsByTagName('*'),
                 zIndexMax = 0;
             for ( var i = 0, etotal = elems.length; i < etotal; i++ ) {
-                var zindex = document.defaultView.getComputedStyle(elems[i],null).getPropertyValue('z-index');
+                var zindex = d.defaultView.getComputedStyle(elems[i],null).getPropertyValue('z-index');
                 if ( zindex > zIndexMax && zindex !== 'auto' ) {
                     zIndexMax = zindex;
                 }
