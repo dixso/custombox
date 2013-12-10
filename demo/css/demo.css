@@ -37,6 +37,9 @@ code {
 code {
     padding: 0;
 }
+.code .container {
+    width: 100%;
+}
 .clearfix:after {
     content: ".";
     display: block;
@@ -77,7 +80,7 @@ code {
     right: -50px;
     top: -65px;
     left: auto;
-    z-index: 2;
+    z-index: 3;
 }
 a.download {
     font-size: 22px;
@@ -153,7 +156,6 @@ h3 em {
     top: 50%;
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
@@ -170,7 +172,6 @@ h3 em {
 .justme .modal-example-header {
     border: none;
 }
-
 
 /*
  ----------------------------
@@ -190,11 +191,9 @@ h3 em {
 .custombox-close.customslide .custombox-modal-content {
     -webkit-transform: scale(2);
     -ms-transform: scale(2);
-    -o-transform: scale(2);
     transform: scale(2);
     opacity: 1;
     -webkit-transition-property: all;
     -ms-transition-property: all;
-    -o-transition-property: all;
     transition-property: all !important;
 }
