@@ -62,13 +62,13 @@ code {
     font-size: 13px;
     line-height: 1.42857;
     margin: 0 0 10px;
-    padding: 9.5px;
+    padding: 10px;
     word-break: break-all;
     word-wrap: break-word;
 }
 .author {
     float: left;
-    margin-top: 5px;
+    margin: 5px 0 20px 0;
 }
 #sidebar {
     position: relative;
@@ -181,7 +181,6 @@ h3 em {
 #modal3 {
     margin-top: 70px;
 }
-
 
 /*
  ----------------------------

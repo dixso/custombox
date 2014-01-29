@@ -1,8 +1,8 @@
 /*
- *  jQuery Custombox v1.1.2 - 2013/12/10
+ *  jQuery Custombox v1.1.3 - 2014/02/18
  *  jQuery Modal Window Effects.
  *  http://dixso.github.io/custombox/
- *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
+ *  (c) 2014 Julio De La Calle - http://dixso.net - @dixso9
  *
  *  Under MIT License - http://www.opensource.org/licenses/mit-license.php
  */
@@ -26,8 +26,7 @@
  Modal
  -------------------------------------------------
  */
-.custombox-modal,
-.custombox-error {
+.custombox-modal {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -50,10 +49,7 @@
  -------------------------------------------------
  */
 .custombox-error {
-    height: auto;
-    width: 200px;
-    height: 75px;
-    line-height: 75px;
+    padding: 20px;
     text-align: center;
     color: #F00;
     font-weight: bold;

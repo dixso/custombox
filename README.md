@@ -3,6 +3,10 @@ jQuery Modal Window Effects with transitions CSS3. See the [project page](http:/
 
 ## Changelog:
 
+### Version 1.1.3 - 2014/02/18
+* Remove unnecessary code.
+* Bug fix on the text to be displayed when there is an error.
+
 ### Version 1.1.2 - 2013/12/10
 * Bug fix on callback that fires once is closed in the overlay.
 * Bug fix IE8 when open the modal.

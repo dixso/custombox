@@ -1,8 +1,8 @@
 /*
- *  jQuery Custombox v1.1.2 - 2013/12/10
+ *  jQuery Custombox v1.1.3 - 2014/02/18
  *  jQuery Modal Window Effects.
  *  http://dixso.github.io/custombox/
- *  (c) 2013 Julio De La Calle - http://dixso.net - @dixso9
+ *  (c) 2014 Julio De La Calle - http://dixso.net - @dixso9
  *
  *  Under MIT License - http://www.opensource.org/licenses/mit-license.php
  */
@@ -43,7 +43,7 @@
             close:          null,           // Callback that fires once is closed.
             responsive:     true,           // Sets if you like box responsive or not.
             scrollbar:      false,          // Show scrollbar or hide automatically.
-            error:          'Error 404!'    // Text to be displayed when an error.
+            error:          'Error 404!'    // Text to be displayed when there is an error.
         };
 
     // The plugin constructor.
@@ -485,36 +485,6 @@
             obj._removeClass( ( obj._isIE() ? document.querySelectorAll('.' + cb + '-modal')[0] : document.getElementsByClassName(cb + '-modal')[0] ), cb + '-show' );
             obj._removeClass( document.getElementsByTagName( 'html' )[0], cb + '-perspective' );
         },
-        _clean: function () {
-            var obj = this;
-
-            // Remove classes.
-            obj._removeClass( document.getElementsByTagName( 'html' )[0], cb + '-hide-scrollbar' );
-
-            // Reset properties scrollbar.
-            document.getElementsByTagName( 'body' )[0].style.marginRight = 0;
-
-            // Remove modal.
-            var modal = ( obj._isIE() ? document.querySelectorAll('.' + cb + '-modal')[0] : document.getElementsByClassName(cb + '-modal')[0] );
-            obj._remove( modal );
-
-            // Remove overlay.
-            if ( obj.settings.overlay ) {
-                obj._remove( ( obj._isIE() ? document.querySelectorAll('.' + cb + '-overlay')[0] : document.getElementsByClassName(cb + '-overlay')[0] ) );
-            }
-
-            // Check if callback 'close'.
-            if ( obj.settings.close && typeof obj.settings.close === 'function' ) {
-                obj.settings.close( undefined !== arguments[0] ? arguments[0] : '' );
-            }
-
-            // Check if callback 'close' when the method is public.
-            if ( typeof modal !== 'undefined' && modal.getAttribute('data-' + cb) !== null ) {
-                var onClose = modal.getAttribute('data-' + cb),
-                    onCloseLaunch = new Function ( 'onClose', 'return ' + onClose )(onClose);
-                onCloseLaunch();
-            }
-        },
         _listeners: function () {
             var obj = this;
 
@@ -737,7 +707,7 @@
                     var re = new RegExp('MSIE ([0-9]{1,}[.0-9]{0,})');
 
                     // If the regEx through the userAgent is not null.
-                    if (re.exec(navigator.userAgent) != null) {
+                    if ( re.exec(navigator.userAgent) != null ) {
                         //Set the IE version
                         var version = parseInt(RegExp.$1);
                     }
@@ -745,7 +715,7 @@
 
                 if ( typeof version === 'undefined' || version >= 10 ) {
                     // Check time to avoid double click.
-                    if ( options.getAttribute('data-' + cb) !== null && parseInt(options.getAttribute('data-' + cb)) + 1 > Math.round( new Date().getTime() / 1000 )) {
+                    if ( options.getAttribute('data-' + cb) !== null && parseInt(options.getAttribute('data-' + cb)) + 1 > Math.round( new Date().getTime() / 1000 ) ) {
                         return;
                     }
 
