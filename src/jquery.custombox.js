@@ -515,9 +515,12 @@
 
             // Listener on element close.
             if ( obj.settings.eClose !== null && typeof obj.settings.eClose === 'string' && obj.settings.eClose.charAt(0) === '#' || typeof obj.settings.eClose === 'string' && obj.settings.eClose.charAt(0) === '.' && document.querySelector(obj.settings.eClose) ) {
-                document.querySelector(obj.settings.eClose).addEventListener('click', function () {
-                    obj._close();
-                }, false );
+                var target = document.querySelector(obj.settings.eClose);
+                if ( obj._isIE() ) {
+                    target.attachEvent('click', function () { obj._close();}, false );
+                } else {
+                    target.addEventListener('click', function () { obj._close();}, false );
+                }
             }
 
             // Check if callback 'close'.
