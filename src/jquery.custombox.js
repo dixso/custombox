@@ -517,7 +517,7 @@
             if ( obj.settings.eClose !== null && typeof obj.settings.eClose === 'string' && obj.settings.eClose.charAt(0) === '#' || typeof obj.settings.eClose === 'string' && obj.settings.eClose.charAt(0) === '.' && document.querySelector(obj.settings.eClose) ) {
                 var target = document.querySelector(obj.settings.eClose);
                 if ( obj._isIE() ) {
-                    target.attachEvent('click', function () { obj._close();}, false );
+                    target.attachEvent('onclick', function () { obj._close();}, false );
                 } else {
                     target.addEventListener('click', function () { obj._close();}, false );
                 }
