@@ -43,7 +43,7 @@ var Custombox = (function () {
         width:          null,       // Set a fixed total width.
         effect:         'fadein',   // fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip.
         position:       null,       // Only with effects: slide, flip and rotate. (top, right, bottom, left and center) | (vertical or horizontal) and output position separated by commas. Ex: 'top, bottom'.
-        speed:          600,        // Sets the speed of the transitions, in milliseconds.
+        speed:          500,        // Sets the speed of the transitions, in milliseconds.
         open:           null,       // Callback that fires right before begins to open.
         complete:       null,       // Callback that fires right after loaded content is displayed.
         close:          null        // Callback that fires once is closed.
@@ -55,7 +55,7 @@ var Custombox = (function () {
      */
     _config = {
         polyfills: {
-            es5shim:        '//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js',
+            es5shim:        '//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.3/es5-shim.min.js',
             classlist:      '//cdnjs.cloudflare.com/ajax/libs/classlist/2014.01.31/classList.min.js',
             eventlistener:  '//cdn.rawgit.com/jonathantneal/EventListener/master/EventListener.js'
         },

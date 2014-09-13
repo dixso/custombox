@@ -646,7 +646,7 @@
  ----------------------------
  */
 .custombox-modal-slip {
-    transform: translateY(-200%);
+    transform: translateY(-350%);
 }
 .custombox-modal-open .custombox-modal-slip {
     transform: translateY(0);
@@ -718,7 +718,7 @@
  ----------------------------
  */
 .custombox-modal-push {
-    transform: translateX(-200%);
+    transform: translateX(-300%);
 }
 .custombox-modal-open .custombox-modal-push {
     transform: translateX(0%);

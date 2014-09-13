@@ -1,534 +1,524 @@
 <!DOCTYPE html>
-<html class="no-js">
-<head>
-    <meta charset="utf-8">
-    <title>jQuery Custombox :: dixso.net</title>
-    <meta name="description" content="jQuery Modal Window Effects with transitions CSS3.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Custombox</title>
+        <meta name="description" content="Modal window effects with transitions CSS3.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- og -->
-    <meta property="og:locale" content="en_US">
-    <meta property="og:type" content="article">
-    <meta property="og:title" content="jQuery Custombox">
-    <meta property="og:description" content="jQuery Modal Window Effects with transitions CSS3.">
-    <meta property="og:url" content="http://dixso.github.io/custombox/">
-    <meta property="og:image" content="http://dixso.net/wp-content/uploads/2013/09/jquery-custombox-v0.1b-1024x510-300x160.png">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:site" content="@dixso9">
-    <meta name="twitter:creator" content="@dixso9">
+        <link href='http://fonts.googleapis.com/css?family=Dosis:400,600,700' rel='stylesheet' type='text/css'>
 
-    <!-- External CSS -->
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css">
+        <!-- Begin Facebook tags -->
+        <meta property="og:title" content="Custombox">
+        <meta property="og:url" content="http://dixso.github.io/custombox/">
+        <meta property="og:description" content="Modal window effects with transitions CSS3.">
+        <meta property="og:image" content="http://dixso.net/wp-content/uploads/2013/09/jquery-custombox-v0.1b-1024x510-300x160.png">
+        <meta property="og:type" content="website">
+        <!-- End Facebook tags -->
 
-    <!-- jQuery Custombox CSS -->
-    <link rel="stylesheet" href="src/jquery.custombox.css">
+        <!-- Begin Twitter tags -->
+        <meta name="twitter:title" content="Custombox">
+        <meta name="twitter:url" content="http://dixso.github.io/custombox/">
+        <meta name="twitter:card" content="Modal window effects with transitions CSS3.">
+        <meta name="twitter:image" content="http://dixso.net/wp-content/uploads/2013/09/jquery-custombox-v0.1b-1024x510-300x160.png">
+        <!-- End Twitter tags -->
 
-    <!-- Demo page CSS -->
-    <link rel="stylesheet" href="demo/css/demo.css">
+        <!-- External CSS -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
-</head>
-<body>
-    <!-- Google Tag Manager -->
-    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5NNSVV"
-                      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-5NNSVV');</script>
-    <!-- End Google Tag Manager -->
+        <!-- Internal CSS -->
+        <link rel="stylesheet" href="demo/css/demo.css">
+        <link rel="stylesheet" href="src/css/custombox.css">
+    </head>
+    <body>
+        <!-- Google Tag Manager -->
+        <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5NNSVV"
+                          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-5NNSVV');</script>
+        <!-- End Google Tag Manager -->
 
-    <a href="https://github.com/dixso/custombox" target="_blank"><img id="forkme" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" width="149" height="149"></a>
-    <div class="container">
-        <div class="page-header">
-            <h1>jQuery Custombox v1.1.3</h1>
-            <p class="lead">jQuery Modal Window Effects with transitions CSS3.</p>
-            <div class="me clearfix">
-                <p class="author">By <a href="http://dixso.net" target="_blank">Julio De La Calle</a>.</p>
-                <a href="https://twitter.com/dixso9" target="_blank" rel="nofollow" class="icon twitter" title="Twitter">Twitter</a>
-                <a href="https://github.com/dixso" target="_blank" rel="nofollow" class="icon github" title="GitHub">GitHub</a>
+        <a href="https://github.com/dixso/custombox" target="_blank" id="forkme">
+            <img src="//s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" width="149" height="149">
+        </a>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="page-header">
+                        <h1>custom<em>box</em></h1>
+                        <span id="version" class="label label-default"></span>
+                        <h2>Modal window effects with transitions CSS3.</h2>
+                        <div class="share-github"><iframe src="http://ghbtns.com/github-btn.html?user=dixso&repo=custombox&type=watch&count=true" height="30" width="118" frameborder="0" scrolling="0" style="width:118px; height: 30px;" allowTransparency="true"></iframe></div>
+                        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://dixso.github.io/custombox/" data-via="dixso9">Tweet</a>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <div id="sidebar" class="list-group">
-                    <div id="tooltip" class="popover top">
-                        <div class="arrow"></div>
-                        <div class="popover-content">
-                            <p>These are examples.</p>
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <a href="https://github.com/dixso/custombox/archive/master.zip" class="btn btn-success btn-large btn-group-justified download"><i class="glyphicon glyphicon-download"></i> Download</a>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Effects</div>
+                        <div class="list-group">
+                            <a class="list-group-item" href="#modal">
+                                Fadein
+                            </a>
+                            <a class="list-group-item" href="#modal">
+                                Slide
+                                <span class="label label-default pull-right">positions</span>
+                            </a>
+                            <a class="list-group-item" href="#modal">Newspaper</a>
+                            <a class="list-group-item" href="#modal">Fall</a>
+                            <a class="list-group-item" href="#modal">Sidefall</a>
+                            <a class="list-group-item" href="#modal">Blur</a>
+                            <a class="list-group-item" href="#modal">
+                                Flip
+                                <span class="label label-default pull-right">positions</span>
+                            </a>
+                            <a class="list-group-item" href="#modal">Sign</a>
+                            <a class="list-group-item" href="#modal">Superscaled</a>
+                            <a class="list-group-item" href="#modal">Slit</a>
+                            <a class="list-group-item" href="#modal">
+                                Rotate
+                                <span class="label label-default pull-right">positions</span>
+                            </a>
+                            <a class="list-group-item" href="#modal">
+                                Letmein
+                                <span class="label label-warning pull-right">update</span>
+                            </a>
+                            <a class="list-group-item" href="#modal">
+                                Makeway
+                                <span class="label label-warning pull-right">update</span>
+                            </a>
+                            <a class="list-group-item" href="#modal">
+                                Slip
+                                <span class="label label-warning pull-right">update</span>
+                            </a>
+                            <a class="list-group-item" href="#modal">
+                                Corner
+                                <span class="label label-success pull-right">new</span>
+                            </a>
+                            <a class="list-group-item" href="#modal">
+                                Slide together
+                                <span class="label label-success pull-right">new</span>
+                            </a>
+                            <a class="list-group-item" href="#modal">
+                                Scale
+                                <span class="label label-success pull-right">new</span>
+                            </a>
+                            <a class="list-group-item" href="#modal">
+                                Door
+                                <span class="label label-success pull-right">new</span>
+                            </a>
+                            <a class="list-group-item" href="#modal">
+                                Push
+                                <span class="label label-success pull-right">new</span>
+                            </a>
+                            <a class="list-group-item" href="#modal">
+                                Content scale
+                                <span class="label label-success pull-right">new</span>
+                            </a>
                         </div>
                     </div>
-                    <a href="javascript:void(0);" class="list-group-item active" style="cursor: default;">Effects</a>
-                    <a href="#modal" class="list-group-item" id="fadein">Fadein</a>
-                    <a href="#modal" class="list-group-item" id="slide">Slide <em style="font-size: 11px;">(Random position: top, right, bottom, left or center)</em></a>
-                    <a href="#modal" class="list-group-item" id="newspaper">Newspaper</a>
-                    <a href="#modal" class="list-group-item" id="fall">Fall</a>
-                    <a href="#modal" class="list-group-item" id="sidefall">Sidefall</a>
-                    <a href="#modal" class="list-group-item" id="blur">Blur</a>
-                    <a href="#modal" class="list-group-item" id="flip">Flip <em style="font-size: 11px;">(Random position: vertical or horizontal)</em></a>
-                    <a href="#modal" class="list-group-item" id="sign">Sign</a>
-                    <a href="#modal" class="list-group-item" id="superscaled">Superscaled</a>
-                    <a href="#modal" class="list-group-item" id="slit">Slit</a>
-                    <a href="#modal" class="list-group-item" id="rotate">Rotate <em style="font-size: 11px;">(Random position: bottom or left)</em></a>
-                    <a href="#modal" class="list-group-item" id="letmein">Letmein</a>
-                    <a href="#modal" class="list-group-item" id="makeway">Makeway</a>
-                    <a href="#modal" class="list-group-item" id="slip">Slip</a>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 demo-content">
+                    <div class="bs-callout bs-callout-info bs-callout-support">
+                        <h4>
+                            <span class="glyphicon glyphicon-bullhorn"></span>
+                            About Custombox:
+                        </h4>
+                        <p>This plugin is created with native JavaScript but works perfectly with jQuery.</p>
+                        <p>Please note: these animations only works as intended in browsers that support the respective CSS properties.<br>Internet Explorer 8 and 9 works, but without animations.</p>
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAAAdCAYAAAAtm2eGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpFNzQzODFFRTIxRjgxMUUzOTIyNkFEM0JDMjg5MkU0NiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpFNzQzODFFRjIxRjgxMUUzOTIyNkFEM0JDMjg5MkU0NiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkU3NDM4MUVDMjFGODExRTM5MjI2QUQzQkMyODkyRTQ2IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkU3NDM4MUVEMjFGODExRTM5MjI2QUQzQkMyODkyRTQ2Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+krNC9gAALBhJREFUeNrUfAeY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" alt="Modern browsers only!">
+                    </div>
+                    <h4>
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                        How to use:
+                    </h4>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p>1) Include custombox.js code:</p>
+                            <p>In just about every case, it's best to place all your script references at the end of the page, just before: <code>&lt;/body&gt;</code>.</p>
+                            <code class="prettyprint">
+                                &lt;script src="src/custombox.js"&gt;&lt;/script&gt;
+                            </code>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p>2) Include jquery.custombox.css code:</p>
+                            <p>Insert it in the section of your HTML document, after: <code>&lt;html&gt;</code>.</p>
+                            <code class="prettyprint">
+                                &lt;link rel="stylesheet" href="src/custombox.css"&gt;
+                            </code>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p>3) Call the plugin when the body is on load:</p>
+                            <ul class="nav nav-tabs" data-tabs="tabs">
+                                <li class="active"><a href="#native" data-toggle="tab">Native</a></li>
+                                <li><a href="#jquery" data-toggle="tab">jQuery</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="native">
+                                    <code class="prettyprint linenums">
+                                        &lt;script&gt;<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;document.addEventListener('DOMContentLoaded', function () {<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById('element').addEventListener('click', function ( e ) {<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Custombox.open({<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target: '#modal',<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;effect: 'fadein'<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.preventDefault();<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                                        &lt;/script&gt;
+                                    </code>
+                                </div>
+                                <div class="tab-pane" id="jquery">
+                                    <code class="prettyprint linenums">
+                                        &lt;script&gt;<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;$(function () {<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$('#element').on('click', function ( e ) {<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Custombox.open({<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target: '#modal',<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;effect: 'fadein'<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.preventDefault();<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                                        &lt;/script&gt;
+                                    </code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h4>
+                        <span class="glyphicon glyphicon-cog"></span>
+                        Options
+                    </h4>
+                    <table class="table table-bordered table-striped table-popover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Property</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>target</td>
+                                <td>string</td>
+                                <td>null</td>
+                                <td>Set the URL, ID or Class.</td>
+                            </tr>
+                            <tr>
+                                <td>cache</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>If set to false, it will force requested pages not to be cached by the browser only when send by AJAX.</td>
+                            </tr>
+                            <tr>
+                                <td>escKey</td>
+                                <td>boolean</td>
+                                <td>true</td>
+                                <td>Allows the user to close the modal when press escape key.</td>
+                            </tr>
+                            <tr>
+                                <td>zIndex</td>
+                                <td>string | number</td>
+                                <td>auto</td>
+                                <td>Overlay z-index: Auto or number.</td>
+                            </tr>
+                            <tr>
+                                <td>overlay</td>
+                                <td>boolean</td>
+                                <td>true</td>
+                                <td>Show the overlay.</td>
+                            </tr>
+                            <tr>
+                                <td>overlayColor</td>
+                                <td>string</td>
+                                <td>#000</td>
+                                <td>Overlay color.</td>
+                            </tr>
+                            <tr>
+                                <td>overlayOpacity</td>
+                                <td>number</td>
+                                <td>0.8</td>
+                                <td>The overlay opacity level. Range: 0 to 1.</td>
+                            </tr>
+                            <tr>
+                                <td>overlayClose</td>
+                                <td>boolean</td>
+                                <td>true</td>
+                                <td>Allows the user to close the modal by clicking the overlay.</td>
+                            </tr>
+                            <tr>
+                                <td>overlaySpeed</td>
+                                <td>number</td>
+                                <td>300</td>
+                                <td>Sets the speed of the overlay, in milliseconds.</td>
+                            </tr>
+                            <tr>
+                                <td>overlayEffect</td>
+                                <td>string</td>
+                                <td>auto</td>
+                                <td>fadein | letmein.</td>
+                            </tr>
+                            <tr>
+                                <td>width</td>
+                                <td>number | null</td>
+                                <td>null</td>
+                                <td>Set a fixed total width.</td>
+                            </tr>
+                            <tr>
+                                <td>effect</td>
+                                <td>string</td>
+                                <td>fadein</td>
+                                <td>fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip.</td>
+                            </tr>
+                            <tr>
+                                <td>position</td>
+                                <td>string | null</td>
+                                <td>null</td>
+                                <td>Only with effects: slide, flip and rotate. (top, right, bottom, left and center) | (vertical or horizontal) and output position separated by commas. Ex: 'top, bottom'.</td>
+                            </tr>
+                            <tr>
+                                <td>speed</td>
+                                <td>number</td>
+                                <td>600</td>
+                                <td>Sets the speed of the transitions, in milliseconds.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4>
+                        <span class="glyphicon glyphicon-flash"></span>
+                        Events
+                    </h4>
+                    <table class="table table-bordered table-striped table-popover">
+                        <thead>
+                            <tr>
+                                <th>Event Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-demo="callback-open">
+                                <td>open</td>
+                                <td>Callback that fires right before begins to open.</td>
+                            </tr>
+                            <tr data-demo="callback-complete">
+                                <td>complete</td>
+                                <td>Callback that fires right after loaded content is displayed.</td>
+                            </tr>
+                            <tr data-demo="callback-close">
+                                <td>close</td>
+                                <td>Callback that fires once is closed.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4>
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Methods
+                    </h4>
+                    <table class="table table-bordered table-striped table-popover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>open</td>
+                                <td>Open Custombox.</td>
+                            </tr>
+                            <tr>
+                                <td>close</td>
+                                <td>Close Custombox.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="bs-callout bs-callout-info">
+                        <h4>
+                            <span class="glyphicon glyphicon-search"></span>
+                            Support:
+                        </h4>
+                        <p>- Find any bugs? <a target="_blank" rel="nofollow" href="https://github.com/dixso/custombox/issues">Issues</a>.</p>
+                    </div>
+                    <div class="bs-callout bs-callout-info">
+                        <h4>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            Credits:
+                        </h4>
+                        <p>- The animations CSS3 based on <a target="_blank" rel="nofollow" href="http://tympanus.net/codrops/2013/06/25/nifty-modal-window-effects/">Codrops</a>.</p>
+                        <p>- This script can run with <a target="_blank" rel="nofollow" href="http://jquery.com/">jQuery</a>.</p>
+                        <p>- The example page is built with <a target="_blank" rel="nofollow" href="http://getbootstrap.com/">Bootstrap 3</a>.</p>
+                        <p>- The page example code is built with <a target="_blank" rel="nofollow" href="//code.google.com/p/google-code-prettify/">Google Code Prettify</a>.</p>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-8">
-                <a href="https://github.com/dixso/custombox/archive/1.1.3.zip" class="download" data-ga="Download"><em class="glyphicon glyphicon-cloud-download"></em>Download</a>
-                <div class="well">
-                    <p>Please note: these animations only works as intended in browsers that support the respective CSS properties.<br>Internet Explorer 8 and 9 works, but without animations.</p>
-                    <img alt="Modern browsers only!" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAAAdCAYAAAAtm2eGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpFNzQzODFFRTIxRjgxMUUzOTIyNkFEM0JDMjg5MkU0NiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpFNzQzODFFRjIxRjgxMUUzOTIyNkFEM0JDMjg5MkU0NiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkU3NDM4MUVDMjFGODExRTM5MjI2QUQzQkMyODkyRTQ2IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkU3NDM4MUVEMjFGODExRTM5MjI2QUQzQkMyODkyRTQ2Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+krNC9gAALBhJREFUeNrUfAeY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" />
+
+
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 footer">
+                    Custombox © 2013-2014 Julio de la Calle. Code and documentation licensed under the The MIT License.
                 </div>
+            </div>
 
-                <h3><em class="glyphicon glyphicon-bullhorn"></em> About Custombox:</h3>
-                <p>This plugin is created with native JavaScript but works perfectly with jQuery.<br>If you do not want to use jQuery click <a id="actiontutorial" href="javascript:void(0);">here</a>.</p>
-                <div id="tutorial">
-                    <p>1) Rename the file jquery.custombox.js by <b>custombox.js</b> (obviously).</p>
-                    <p>2) In the file jquery.custombox.js replace this code:</p>
-                        <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">
-// A really lightweight plugin wrapper around the constructor,
-// preventing against multiple instantiations with jQuery.
-$.fn[ cb ] = function ( options ) {
-    var args = arguments,
-        isElement = typeof HTMLElement === 'object' ? options instanceof HTMLElement : options && typeof options === 'object' && options !== null && options.nodeType === 1 && typeof options.nodeName === 'string';
-
-    if ( options === undefined || typeof options === 'object' ) {
-        if ( isElement ) {
-
-            if ( navigator.appName === 'Microsoft Internet Explorer' ) {
-                // Write a new regEx to find the version number.
-                var re = new RegExp('MSIE ([0-9]{1,}[.0-9]{0,})');
-
-                // If the regEx through the userAgent is not null.
-                if (re.exec(navigator.userAgent) != null) {
-                    //Set the IE version
-                    var version = parseInt(RegExp.$1);
-                }
-            }
-
-            if ( typeof version === 'undefined' || version >= 10 ) {
-                // Check time to avoid double click.
-                if ( options.getAttribute('data-' + cb) !== null && parseInt(options.getAttribute('data-' + cb)) + 1 > Math.round( new Date().getTime() / 1000 )) {
-                    return;
-                }
-
-                // Set time to avoid double click.
-                options.setAttribute('data-' + cb, Math.round( new Date().getTime() / 1000 ) );
-            }
-
-            $(options).each( function () {
-                $.data( this, cb, new Plugin( this, args[1] ) );
-            });
-
-        } else {
-            new Plugin( null, args[0] );
-        }
-    } else if ( typeof options === 'string' && options === 'close' ) {
-        $.data( this, cb, new Plugin( args[0], args[1] ) );
-    }
-};
-</pre>
-                        <p>By this:</p>
-                        <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">
-// A really lightweight plugin wrapper around the constructor,
-// preventing against multiple instantiations.
-window[ cb ] = function ( options ) {
-    var isElement = typeof HTMLElement === 'object' ? options instanceof HTMLElement : options && typeof options === 'object' && options !== null && options.nodeType === 1 && typeof options.nodeName === 'string';
-
-    if ( options === undefined || typeof options === 'object' ) {
-        if ( isElement ) {
-
-            if ( navigator.appName === 'Microsoft Internet Explorer' ) {
-                //Write a new regEx to find the version number
-                var re = new RegExp("MSIE ([0-9]{1,}[.0-9]{0,})");
-
-                //If the regEx through the userAgent is not null
-                if (re.exec(navigator.userAgent) != null) {
-                    //Set the IE version
-                    var version = parseInt(RegExp.$1);
-                }
-            }
-
-            if ( typeof version === 'undefined' || version >= 10 ) {
-                // Check time to avoid double click.
-                if ( options.getAttribute('data-' + cb) !== null && parseInt(options.getAttribute('data-' + cb)) + 1 > Math.round( new Date().getTime() / 1000 )) {
-                    return;
-                }
-
-                // Set time to avoid double click.
-                options.setAttribute('data-' + cb, Math.round( new Date().getTime() / 1000 ) );
-            }
-
-            new Plugin( arguments[0], arguments[1] );
-        } else {
-            new Plugin( null, arguments[0] );
-        }
-    } else if ( typeof options === 'string' && options === 'close' ) {
-        new Plugin( arguments[0], arguments[1] );
-    }
-};
-</pre>
-                <p>Call the plugin when the body is on load:</p>
-                <pre class="brush: js; toolbar: false; gutter: false; quick-code: false; html-script: true;">&lt;script&gt;
-window.onload = function () {
-    document.getElementById('example').addEventListener('click', function ( e ) {
-        custombox( this, {
-            effect: 'fadein'
-        });
-        e.preventDefault();
-    }, false );
-};
-&lt;/script&gt;</pre>
-                </div><!-- tutorial -->
-
-                <h3><em class="glyphicon glyphicon-question-sign"></em> How to use:</h3>
-                <div class="panel">
-                    <p>1) Include jQuery (Compatible with v1.7+):</p>
-                    <p>In just about every case, it's best to place all your script references at the end of the page, just before: <code>&lt;/body&gt;</code>.</p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">&lt;script src="//code.jquery.com/jquery-1.11.0.min.js"&gt;&lt;/script&gt;</pre>
-                </div>
-                <div class="panel">
-                    <p>2) Include jquery.custombox.js code:</p>
-                    <p>In just about every case, it's best to place all your script references at the end of the page, just before: <code>&lt;/body&gt;</code>.</p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">&lt;script src="src/jquery.custombox.js"&gt;&lt;/script&gt;</pre>
-                </div>
-                <div class="panel">
-                    <p>3) Include jquery.custombox.css code:</p>
-                    <p>Insert it in the section of your HTML document, after: <code>&lt;html&gt;</code>.</p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false; html-script: true;">&lt;link rel="stylesheet" href="src/jquery.custombox.css"&gt;</pre>
-                </div>
-                <div class="panel">
-                    <p>4) Call the plugin when the body is on load:</p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false; html-script: true;">&lt;script&gt;
-$(function () {
-    $('#element').on('click', function ( e ) {
-        $.fn.custombox( this );
-        e.preventDefault();
-    });
-});
-&lt;/script&gt;</pre>
-                </div>
-                <h3><em class="glyphicon glyphicon-cog"></em> Settings</h3>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Property</th>
-                            <th>Default</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>url</td>
-                            <td>null</td>
-                            <td>Set the URL, ID or Class.</td>
-                        </tr>
-                        <tr>
-                            <td>cache</td>
-                            <td>false</td>
-                            <td>If set to false, it will force requested pages not to be cached by the browser only when send by AJAX.</td>
-                        </tr>
-                        <tr>
-                            <td>escKey</td>
-                            <td>true</td>
-                            <td>Allow the user to close the modal by pressing 'ESC'.</td>
-                        </tr>
-                        <tr>
-                            <td>eClose</td>
-                            <td>null</td>
-                            <td>Element ID or Class to close the modal.</td>
-                        </tr>
-                        <tr>
-                            <td>zIndex</td>
-                            <td>9999</td>
-                            <td>Overlay z-index: Number or auto.</td>
-                        </tr>
-                        <tr>
-                            <td>overlay</td>
-                            <td>true</td>
-                            <td>Show the overlay.</td>
-                        </tr>
-                        <tr>
-                            <td>overlayColor</td>
-                            <td>#000</td>
-                            <td>Overlay color.</td>
-                        </tr>
-
-                        <tr>
-                            <td>overlayOpacity</td>
-                            <td>0.8</td>
-                            <td>The overlay opacity level. Range: 0 to 1.</td>
-                        </tr>
-                        <tr>
-                            <td>overlayClose</td>
-                            <td>true</td>
-                            <td>Allow the user to close the modal by clicking the overlay.</td>
-                        </tr>
-                        <tr>
-                            <td>overlaySpeed</td>
-                            <td>200</td>
-                            <td>Sets the speed of the overlay, in milliseconds.</td>
-                        </tr>
-                        <tr>
-                            <td>customClass</td>
-                            <td>null</td>
-                            <td>Custom class to modal.</td>
-                        </tr>
-                        <tr>
-                            <td>width</td>
-                            <td>null</td>
-                            <td>Set a fixed total width.</td>
-                        </tr>
-                        <tr>
-                            <td>height</td>
-                            <td>null</td>
-                            <td>Set a fixed total height.</td>
-                        </tr>
-                        <tr>
-                            <td>effect</td>
-                            <td>fadein</td>
-                            <td>fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip.</td>
-                        </tr>
-                        <tr>
-                            <td>position</td>
-                            <td>null</td>
-                            <td>Only with effects: slide, flip and rotate. (top, right, bottom, left and center) | (vertical or horizontal) and output position sseparated by commas. Ex: 'top, bottom'.</td>
-                        </tr>
-                        <tr>
-                            <td>speed</td>
-                            <td>600</td>
-                            <td>Sets the speed of the transitions, in milliseconds.</td>
-                        </tr>
-                        <tr>
-                            <td>open</td>
-                            <td>null</td>
-                            <td>Callback that fires right before begins to open.</td>
-                        </tr>
-                        <tr>
-                            <td>complete</td>
-                            <td>null</td>
-                            <td>Callback that fires right after loaded content is displayed.</td>
-                        </tr>
-                        <tr>
-                            <td>close</td>
-                            <td>null</td>
-                            <td>Callback that fires once is closed.</td>
-                        </tr>
-                        <tr>
-                            <td>responsive</td>
-                            <td>true</td>
-                            <td>Sets if you like box responsive or not.</td>
-                        </tr>
-                        <tr>
-                            <td>scrollbar</td>
-                            <td>false</td>
-                            <td>Show scrollbar or hide automatically.</td>
-                        </tr>
-                        <tr>
-                            <td>error</td>
-                            <td>Error 404!</td>
-                            <td>Text to be displayed when there is an error.</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h3><em class="glyphicon glyphicon-plus"></em> Public Methods</h3>
-                <table class="table table-bordered">
-                    <tbody>
-                    <tr>
-                        <td>$.fn.custombox('close')</td>
-                        <td>Allow the user to close the modal.</td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <h3>Custom</h3>
-                <div class="panel">
-                    <h4>Without overlay</h4>
-                    <p>- <a href="#modal" id="example1" title="Example without overlay">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">
-$('#example1').on('click', function ( e ) {
-    $.fn.custombox( this, {
-        overlay: false,
-        effect: 'fadein'
-    });
-    e.preventDefault();
-});</pre>
-                </div><!-- Without overlay -->
-
-                <div class="panel">
-                    <h4>Ajax</h4>
-                    <p>- <a href="demo/xhr/ajax.html" id="example2" title="Example with ajax">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">
-$('#example2').on('click', function ( e ) {
-    $.fn.custombox( this, {
-        effect: 'newspaper'
-    });
-    e.preventDefault();
-});</pre>
-                </div><!-- ajax -->
-
-                <div class="panel">
-                    <h4>Auto start</h4>
-                    <p>- <a href="demo/xhr/ajax.html" id="example3" title="Example with ajax">Example <em class="glyphicon glyphicon-hand-left"></em></a> <span id="countdown">5</span></p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">$.fn.custombox({
-    url: 'demo/xhr/ajax.html'
-});</pre>
-                </div><!-- auto start -->
-
-                <div class="panel">
-                    <h4>Error :(</h4>
-                    <p>- <a href="noexist.html" id="example4" title="Example error">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">
-$('#example4').on('click', function ( e ) {
-    $.fn.custombox( this, {
-        effect: 'slit'
-    });
-    e.preventDefault();
-});</pre>
-                </div><!-- error -->
-
-                <div class="panel">
-                    <h4>Callbacks</h4>
-                    <p>- <a href="demo/xhr/ajax.html" id="example5" title="Callbacks">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">
-$('#example5').on('click', function ( e ) {
-    $.fn.custombox( this, {
-        open: function () {
-            alert('open');
-        },
-        complete: function () {
-            alert('complete');
-        },
-        close: function () {
-            alert('close');
-        }
-    });
-    e.preventDefault();
-});</pre>
-                </div><!-- callbacks -->
-
-                <div class="panel">
-                    <h4>Other style</h4>
-                    <p>- <a href="#modal2" id="example6" title="Other style">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">
-$('#example6').on('click', function ( e ) {
-    $.fn.custombox( this );
-    e.preventDefault();
-});
-</pre>
-                </div><!-- other style -->
-
-                <div class="panel">
-                    <h4>Custom effect 1</h4>
-                    <p>- <a href="#modal" id="example7" title="Custom effect">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">
-$('#example7').on('click', function ( e ) {
-    $.fn.custombox( this, {
-        effect:         'fadein',
-        overlayColor:   '#FFF',
-        overlayOpacity: 1,
-        customClass:    'justme',
-        speed:          200
-    });
-    e.preventDefault();
-});
-</pre>
-                </div><!-- custom effect-->
-
-                <div class="panel">
-                    <h4>Custom effect 2</h4>
-                    <p>- <a href="#modal" id="example8" title="Custom effect">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
-                    <h6>The Javascript:</h6>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">
-$('#example8').on('click', function ( e ) {
-    $.fn.custombox( this, {
-        effect:         'slide',
-        position:       'center',
-        customClass:    'customslide',
-        speed:          200
-    });
-    e.preventDefault();
-});
-</pre>
-                    <h6>The CSS (Prefix: custombox-show and custombox-close):</h6>
-                    <pre class="brush: css; toolbar: false; gutter: false; quick-code: false;">
-.custombox-close.customslide .custombox-modal-content {
-    -webkit-transform: scale(2);
-    -ms-transform: scale(2);
-    transform: scale(2);
-    opacity: 1;
-    -webkit-transition-property: all;
-    -ms-transition-property: all;
-    transition-property: all;
-}
-</pre>
-                </div><!-- custom effect-->
-
-                <div class="panel">
-                    <h4>Custom open and close position.</h4>
-                    <p>- <a href="#modal" id="example9" title="Open effect top and close effect bottom">Example <em class="glyphicon glyphicon-hand-left"></em></a></p>
-                    <pre class="brush: js; toolbar: false; gutter: false; quick-code: false;">
-$('#example8').on('click', function ( e ) {
-    $.fn.custombox( this, {
-        effect:     'slide',
-        position:   'left, right'
-    });
-    e.preventDefault();
-});
-</pre>
-                </div><!-- custom open and close -->
-
-                <h3><em class="glyphicon glyphicon-search"></em> Support:</h3>
-                <div class="well">
-                    <p>- Find any bugs? <a href="https://github.com/dixso/custombox/issues" rel="nofollow" target="_blank">Issues</a>.</p>
-                </div>
-
-                <h3><em class="glyphicon glyphicon-star-empty"></em> Credits:</h3>
-                <div class="well">
-                    <p>- The animations CSS3 based on <a href="http://tympanus.net/codrops/2013/06/25/nifty-modal-window-effects/" rel="nofollow" target="_blank">Codrops</a>.</p>
-                    <p>- This script can run with <a href="http://jquery.com/" rel="nofollow" target="_blank">jQuery</a>.</p>
-                    <p>- The example page is built with <a href="http://getbootstrap.com/" rel="nofollow" target="_blank">Bootstrap 3</a>.</p>
-                    <p>- The page example code is built with <a href="http://alexgorbatchev.com/SyntaxHighlighter/" rel="nofollow" target="_blank">SyntaxHighlighter</a>.</p>
-                </div>
-            </div><!-- col-lg-8 -->
-        </div><!-- row -->
-    </div><!-- container -->
-
-    <div id="modal" style="display: none;" class="modal-example-content">
-        <div class="modal-example-header">
-            <button type="button" class="close" onclick="$.fn.custombox('close');">&times;</button>
-            <h4>jQuery Custombox</h4>
         </div>
-        <div class="modal-example-body">
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+
+        <!-- popover -->
+        <div id="custompopover" class="popover left">
+            <div class="arrow"></div>
+            <h3 class="popover-title">Example</h3>
+            <div class="popover-content">
+                <code id="demo-target" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'
+                    <br>});
+                </code>
+                <code id="demo-cache" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;cache:&nbsp;&nbsp;false
+                    <br>});
+                </code>
+                <code id="demo-escKey" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;escKey: true
+                    <br>});
+                </code>
+                <code id="demo-zIndex" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: 'auto'
+                    <br>});
+                </code>
+                <code id="demo-overlay" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp'#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;overlay: true
+                    <br>});
+                </code>
+                <code id="demo-overlayColor" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;overlayColor: '#000'
+                    <br>});
+                </code>
+                <code id="demo-overlayOpacity" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;overlayOpacity: 0.8
+                    <br>});
+                </code>
+                <code id="demo-overlayClose" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;overlayClose: true
+                    <br>});
+                </code>
+                <code id="demo-overlaySpeed" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;overlaySpeed: 300
+                    <br>});
+                </code>
+                <code id="demo-overlayEffect" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;overlayEffect: 'fadein'
+                    <br>});
+                </code>
+                <code id="demo-width" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;width:  &nbsp;600
+                    <br>});
+                </code>
+                <code id="demo-effect" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;effect: 'newspaper'
+                    <br>});
+                </code>
+                <code id="demo-position" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;'#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;effect: &nbsp;&nbsp;'slide'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;position: 'bottom'
+                    <br>});
+                </code>
+                <code id="demo-speed" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;speed: &nbsp;600
+                    <br>});
+                </code>
+                <code id="demo-callback-open" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;open: &nbsp;&nbsp;function () {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert('open');<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}
+                    <br>});
+                </code>
+                <code id="demo-callback-complete" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;'#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;complete: &nbsp;&nbsp;function () {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert('complete');<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}
+                    <br>});
+                </code>
+                </code>
+                <code id="demo-callback-close" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;'#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;close: &nbsp;&nbsp;function () {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert('close');<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}
+                    <br>});
+                </code>
+                <code id="demo-open" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;'#modal'
+                    <br>});
+                </code>
+                <code id="demo-close" class="prettyprint">
+                    Custombox.close();
+                </code>
+            </div>
         </div>
-    </div>
 
-    <div id="modal2" style="display: none;">
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-    </div>
+        <!-- Modal -->
+        <div id="modal">
+            <button type="button" class="close" onclick="Custombox.close();">
+                <span>&times;</span><span class="sr-only">Close</span>
+            </button>
+            <h4 class="title">Modal title</h4>
+            <div class="text">
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            </div>
+        </div>
 
-    <!-- External JS -->
-    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
-    <script src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushJScript.js"></script>
-    <script src="http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushCss.js"></script>
-    <script src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+        <!-- External JavaScript -->
+        <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
-    <!-- jQuery Custombox JS -->
-    <script src="src/jquery.custombox.js"></script>
-
-    <!-- Demo page JS -->
-    <script src="demo/js/demo.js"></script>
-
-    <script>
-        if ( $(window).width() > 360 ) {
-            SyntaxHighlighter.all();
-        }
-    </script>
+        <!-- Internal JavaScript -->
+        <script src="src/js/custombox.js"></script>
+        <script src="demo/js/demo.js"></script>
     </body>
 </html>
