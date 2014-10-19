@@ -41,7 +41,7 @@ h4 {
 .demo-content > h4 {
     margin-top: 25px;
 }
-#modal {
+.modal-demo {
     background-color: #FFF;
     width: 600px;
     border: #000 solid 1px;

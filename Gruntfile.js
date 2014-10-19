@@ -25,7 +25,16 @@ module.exports = function ( grunt ) {
             ]
         },
 
-        // [TASK] Watch changes in files and triggers listeners and tests on change.
+        connect: {
+            server: {
+                options: {
+                    hostname: 'localhost',
+                    keepalive: true,
+                    open: true
+                }
+            }
+        },
+
         watch: {
             js: {
                 files: [
@@ -37,6 +46,17 @@ module.exports = function ( grunt ) {
                     livereload: true
                 }
             }
+        },
+
+        autoprefixer: {
+            default: {
+                options: {
+                    // Target-specific options go here.
+                },
+                src:    'src/css/*.css',
+                dest:   'dist/css/custombox.css'
+            }
         }
+
     });
 };

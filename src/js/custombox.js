@@ -62,7 +62,7 @@ var Custombox = (function () {
         isIE:               false,
         overlay: {
             perspective:    ['letmein', 'makeway', 'slip'],
-            together:       ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale', 'simplegenie']
+            together:       ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale', 'simplegenie', 'slit']
         },
         modal: {
             position:       ['slide', 'flip', 'rotate']
@@ -273,7 +273,9 @@ var Custombox = (function () {
                 if( xhr.readyState === 4 ) {
                     if( xhr.status === 200 ) {
                         modal.innerHTML = xhr.responseText;
-                        _cache.content.push(modal);
+                        _cache.content.push( ( modal.childNodes.length === 3 ? modal.childNodes[2] : modal ));
+                        _cache.content[_cache.item].style.display = 'block';
+                        _cache.container[_cache.item].appendChild(_cache.content[_cache.item]);
                         _this.size().open();
                     } else {
                         _this.error();
@@ -291,12 +293,6 @@ var Custombox = (function () {
             // Check width.
             if ( !isNaN( _cache.settings[_cache.item].width ) && _cache.settings[_cache.item].width !== null ) {
                 w = parseInt( _cache.settings[_cache.item].width, 0);
-            } else {
-                for ( var i = 0, elements = _cache.content[_cache.item].querySelectorAll('*'), t = elements.length; i < t; i++ ) {
-                    if ( elements[i].offsetWidth > w ) {
-                        w = elements[i].offsetWidth;
-                    }
-                }
             }
 
             // Storage.
@@ -337,7 +333,7 @@ var Custombox = (function () {
                     _cache.wrapper[_cache.item].classList.add('custombox-modal-open');
                 } else {
                     _cache.overlay[_cache.item].addEventListener('transitionend', function ( event ) {
-                        if ( ( event.propertyName === 'transform' || event.propertyName === 'opacity' || event.propertyName === 'transform-origin' ) && _cache.close[_cache.item] === undefined ) {
+                        if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' || event.propertyName === 'transform-origin' || event.propertyName === '-webkit-transform-origin' ) && _cache.close[_cache.item] === undefined ) {
                             _cache.wrapper[_cache.item].classList.add('custombox-modal-open');
                         }
                     }, false);
@@ -378,7 +374,7 @@ var Custombox = (function () {
 
             // Callback oncomplete.
             _cache.wrapper[_cache.item].addEventListener('transitionend', function ( event ) {
-                if ( ( event.propertyName === 'transform' || event.propertyName === 'opacity' ) && _cache.open[_cache.item] === undefined ) {
+                if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' ) && _cache.open[_cache.item] === undefined ) {
                     _cache.open[_cache.item] = true;
                     if ( _cache.settings[_cache.item] && typeof _cache.settings[_cache.item].complete === 'function' ) {
                         _cache.settings[_cache.item].complete.call();
@@ -403,13 +399,13 @@ var Custombox = (function () {
 
                     // Listener overlay.
                     _cache.overlay[_cache.item].addEventListener('transitionend', function ( event ) {
-                        if ( ( event.propertyName === 'transform' || event.propertyName === 'opacity' ) && _cache.close[_cache.item] === undefined ) {
+                        if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' ) && _cache.close[_cache.item] === undefined ) {
                             end();
                         }
                     }, false );
                 } else if ( _cache.close[_cache.item] === undefined ) {
                     _cache.modal[_cache.item].addEventListener('transitionend', function ( event ) {
-                        if ( ( event.propertyName === 'transform' || event.propertyName === 'opacity' ) && _cache.close[_cache.item] === undefined ) {
+                        if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' ) && _cache.close[_cache.item] === undefined ) {
                             end();
                         }
                     });
@@ -479,7 +475,7 @@ var Custombox = (function () {
                 } else {
                     // Listener overlay.
                     _cache.wrapper[_cache.item].addEventListener('transitionend', function ( event ) {
-                        if ( event.propertyName === 'transform' ) {
+                        if ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' ) {
                             start();
                         }
                     }, false);
