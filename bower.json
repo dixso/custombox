@@ -1,6 +1,7 @@
 {
     "name": "custombox",
-    "description": "jQuery Modal Window Effects with transitions CSS3.",
+    "title": "Custombox",
+    "description": "Modal Window Effects with transitions CSS3.",
     "keywords": [
         "modal",
         "animation",
@@ -16,11 +17,10 @@
         "jquery",
         "responsive"
     ],
-    "version": "1.1.3",
+    "version": "2.0.0-beta",
     "author": {
-        "name": "Julio De La Calle",
-        "email": "juliodlcp@gmail.com",
-        "url": "http://dixso.net"
+        "name": "Julio de la Calle",
+        "email": "juliodlcp@gmail.com"
     },
     "repository": {
         "type": "git",
@@ -35,7 +35,7 @@
     "bugs": "https://github.com/dixso/custombox/issues",
     "homepage": "http://dixso.github.io/custombox/",
     "docs": "http://dixso.github.io/custombox/",
-    "download": "https://github.com/dixso/custombox/archive/1.1.3.zip",
+    "download": "https://github.com/dixso/custombox/archive/master.zip",
     "dependencies": {
         "jquery": ">=1.7"
     }

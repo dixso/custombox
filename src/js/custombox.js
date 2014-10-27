@@ -36,7 +36,7 @@ var Custombox = (function () {
         zIndex:         'auto',     // Overlay z-index: Auto or number.
         overlay:        true,       // Show the overlay.
         overlayColor:   '#000',     // Overlay color.
-        overlayOpacity: .8,         // The overlay opacity level. Range: 0 to 1.
+        overlayOpacity: 0.8,        // The overlay opacity level. Range: 0 to 1.
         overlayClose:   true,       // Allows the user to close the modal by clicking the overlay.
         overlaySpeed:   300,        // Sets the speed of the overlay, in milliseconds.
         overlayEffect:  'auto',     // fadein | letmein.
@@ -427,9 +427,6 @@ var Custombox = (function () {
                     _cache.inline[_cache.item].parentNode.replaceChild(_cache.content[_cache.item], _cache.inline[_cache.item]);
                 }
 
-                // Unwrap container.
-//                    _cache.main.outerHTML = _cache.main.innerHTML;
-
                 _cache.main.classList.remove(
                     'custombox-container-' + _cache.settings[_cache.item].overlayEffect
                 );
@@ -475,7 +472,7 @@ var Custombox = (function () {
                 } else {
                     // Listener overlay.
                     _cache.wrapper[_cache.item].addEventListener('transitionend', function ( event ) {
-                        if ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' ) {
+                        if ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'visibility' || event.propertyName === 'opacity' ) {
                             start();
                         }
                     }, false);

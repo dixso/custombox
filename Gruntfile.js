@@ -1,15 +1,11 @@
 'use strict';
 module.exports = function ( grunt ) {
-    // Displays the execution time of grunt tasks.
     require('time-grunt')( grunt );
 
-    // Globule to filter npm module dependencies by name.
     require('matchdep').filterDev('grunt-*').forEach( grunt.loadNpmTasks );
 
     grunt.initConfig( {
-
-        // [OPTION] Package.
-        pkg: grunt.file.readJSON( 'package.json' ),
+        pkg: grunt.file.readJSON('package.json'),
 
         files: {
             js: [
@@ -21,22 +17,23 @@ module.exports = function ( grunt ) {
                 './demo/css/*.css'
             ],
             html: [
-                './index.html'
+                './index.html',
+                './demo/xhr/*.html'
             ]
         },
 
         connect: {
-            server: {
+            default: {
                 options: {
-                    hostname: 'localhost',
-                    keepalive: true,
-                    open: true
+                    hostname:   'localhost',
+                    keepalive:  true,
+                    open:       true
                 }
             }
         },
 
         watch: {
-            js: {
+            default: {
                 files: [
                     '<%= files.js %>',
                     '<%= files.css %>',
@@ -44,19 +41,85 @@ module.exports = function ( grunt ) {
                 ],
                 options: {
                     livereload: true
-                }
+                },
+                tasks: ['dev']
+            }
+        },
+
+        clean: {
+            default: {
+                src: ['./dist']
+            }
+        },
+
+        csslint: {
+            default: {
+                options: {
+                    'adjoining-classes':    false,
+                    'vendor-prefix':        false,
+                    'universal-selector':   false
+                },
+                src: ['src/css/*.css']
             }
         },
 
         autoprefixer: {
             default: {
                 options: {
-                    // Target-specific options go here.
+                    browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ios 7']
                 },
                 src:    'src/css/*.css',
-                dest:   'dist/css/custombox.css'
+                dest:   'dist/custombox.min.css'
+            }
+        },
+
+        cssmin: {
+            default: {
+                options: {
+                    banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+                    '<%= grunt.template.today("yyyy-mm-dd") %> */'
+                },
+                files: {
+                    'dist/custombox.min.css': ['dist/custombox.min.css']
+                }
+            }
+        },
+
+        jshint: {
+            default: ['src/js/*.js']
+        },
+
+        uglify: {
+            default: {
+                options: {
+                    banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+                    '<%= grunt.template.today("yyyy-mm-dd") %> */'
+                },
+                files: {
+                    'dist/custombox.min.js': ['src/js/*.js']
+                }
             }
         }
-
     });
+
+    /*
+     ----------------------------
+     Task init
+     ----------------------------
+     */
+    grunt.registerTask('init', ['dev', 'connect']);
+
+    /*
+     ----------------------------
+     Task dev
+     ----------------------------
+     */
+    grunt.registerTask('dev', ['clean', 'autoprefixer', 'cssmin', 'uglify']);
+
+    /*
+     ----------------------------
+     Task development
+     ----------------------------
+     */
+    grunt.registerTask('default', ['clean', 'csslint', 'autoprefixer', 'cssmin', 'jshint', 'uglify']);
 };
