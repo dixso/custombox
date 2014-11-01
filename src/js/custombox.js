@@ -42,7 +42,7 @@ var Custombox = (function () {
         overlaySpeed:   300,        // Sets the speed of the overlay, in milliseconds.
         overlayEffect:  'auto',     // fadein | letmein.
         width:          null,       // Set a fixed total width.
-        effect:         'fadein',   // fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip.
+        effect:         'fadein',   // fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale.
         position:       null,       // Only with effects: slide, flip and rotate. (top, right, bottom, left and center) | (vertical or horizontal) and output position separated by commas. Ex: 'top, bottom'.
         speed:          500,        // Sets the speed of the transitions, in milliseconds.
         open:           null,       // Callback that fires right before begins to open.

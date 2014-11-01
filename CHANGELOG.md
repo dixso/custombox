@@ -5,6 +5,7 @@
 * Responsive 100%.
 * Native and pure 100% JavaScript.
 * Combine and minify CSS and JS.
+* Updated demo page.
 
 ### Version 1.1.3 - 2014/02/18
 * Remove unnecessary code.

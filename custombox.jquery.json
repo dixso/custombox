@@ -17,7 +17,7 @@
         "jquery",
         "responsive"
     ],
-    "version": "2.0.0-beta",
+    "version": "2.0.0",
     "author": {
         "name": "Julio de la Calle",
         "email": "juliodlcp@gmail.com"
@@ -37,6 +37,6 @@
     "docs": "http://dixso.github.io/custombox/",
     "download": "https://github.com/dixso/custombox/archive/master.zip",
     "dependencies": {
-        "jquery": ">=1.7"
+        "jquery": ">=1.9"
     }
 }

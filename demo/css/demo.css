@@ -105,3 +105,14 @@ h4 {
     line-height: 16px;
     font-weight: normal;
 }
+#gitfork {
+    display: none;
+}
+@media only screen and (max-device-width: 480px) {
+    #forkme {
+        display: none;
+    }
+    #gitfork {
+        display: block;
+    }
+}
