@@ -93,7 +93,6 @@
     transform: translateY(150px) translateX(150px);
     transition-property: opacity, transform, visibility;
 }
-
 .custombox-overlay-open.custombox-overlay-corner {
     transform: translateY(0);
     transition-property: opacity, transform;
@@ -108,7 +107,6 @@
     transform: scale(0.9);
     transition-property: transform;
 }
-
 .custombox-overlay-open.custombox-overlay-scale {
     transform: scale(1);
     transition-property: transform;
@@ -126,7 +124,6 @@
     transform: translateX(-50%);
     transition-property: width ease-in-out;
 }
-
 .custombox-overlay-open.custombox-overlay-door {
     visibility: visible;
     width: 100%;

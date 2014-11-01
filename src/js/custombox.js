@@ -22,6 +22,7 @@ var Custombox = (function () {
         size:       [],
         close:      [],
         open:       [],
+        scroll:     [],
         item:       -1
     },
     /*
@@ -145,7 +146,9 @@ var Custombox = (function () {
 
             // Add class perspective.
             if ( _config.overlay.perspective.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) {
+                _cache.scroll.push(_cache.h && _cache.h.scrollTop || _cache.b && _cache.b.scrollTop || 0);
                 _cache.h.classList.add('custombox-perspective');
+                _cache.w.scrollTo(0, 0);
             }
 
             // Container
@@ -333,12 +336,11 @@ var Custombox = (function () {
                     _cache.wrapper[_cache.item].classList.add('custombox-modal-open');
                 } else {
                     _cache.overlay[_cache.item].addEventListener('transitionend', function ( event ) {
-                        if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' || event.propertyName === 'transform-origin' || event.propertyName === '-webkit-transform-origin' ) && _cache.close[_cache.item] === undefined ) {
+                        if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'transform-origin' || event.propertyName === 'opacity' || event.propertyName.match('^-webkit-transform-origin') ) && _cache.close[_cache.item] === undefined ) {
                             _cache.wrapper[_cache.item].classList.add('custombox-modal-open');
                         }
                     }, false);
                 }
-
             } else {
                 _cache.wrapper[_cache.item].classList.add('custombox-modal-open');
                 _cache.main.classList.add('custombox-container-open');
@@ -415,7 +417,11 @@ var Custombox = (function () {
                 // Remove classes from html tag.
                 if ( !_cache.item ) {
                     _cache.h.classList.remove('custombox-perspective', 'custombox-open');
+                    if ( typeof _cache.scroll[_cache.item] !== 'undefined' ) {
+                        _cache.w.scrollTo(0, _cache.scroll[_cache.item]);
+                    }
                 }
+
                 _cache.h.classList.remove('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
 
                 if ( _cache.inline[_cache.item] ) {
@@ -453,6 +459,7 @@ var Custombox = (function () {
                 _cache.modal.pop();
                 _cache.size.pop();
                 _cache.settings.pop();
+                _cache.scroll.pop();
                 _cache.item--;
                 _cache.close[_cache.item] = true;
             };
