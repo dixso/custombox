@@ -1,7 +1,10 @@
-## About Custombox:
-jQuery Modal Window Effects with transitions CSS3. See the [project page](http://dixso.github.io/custombox/) for documentation and a demonstration.
-
-## Changelog:
+### Version 2.0.0 - 2014/11/01
+* The code is 100% rewritten.
+* Update effects.
+* New effects.
+* Responsive 100%.
+* Native and pure 100% JavaScript.
+* Combine and minify CSS and JS.
 
 ### Version 1.1.3 - 2014/02/18
 * Remove unnecessary code.

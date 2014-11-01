@@ -22,6 +22,14 @@ module.exports = function ( grunt ) {
             ]
         },
 
+        banner: '/*\n *  <%= pkg.name %> v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                ' *  Modal Window Effects with transitions CSS3.\n' +
+                ' *  http://dixso.github.io/custombox/\n' +
+                ' *  (c) 2014 Julio de la Calle - @dixso9\n' +
+                ' *\n' +
+                ' *  Under MIT License - http://www.opensource.org/licenses/mit-license.php\n' +
+                ' */\n',
+
         connect: {
             default: {
                 options: {
@@ -76,8 +84,7 @@ module.exports = function ( grunt ) {
         cssmin: {
             default: {
                 options: {
-                    banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-                    '<%= grunt.template.today("yyyy-mm-dd") %> */'
+                    banner: '<%= banner %>'
                 },
                 files: {
                     'dist/custombox.min.css': ['dist/custombox.min.css']
@@ -92,8 +99,7 @@ module.exports = function ( grunt ) {
         uglify: {
             default: {
                 options: {
-                    banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-                    '<%= grunt.template.today("yyyy-mm-dd") %> */'
+                    banner: '<%= banner %>'
                 },
                 files: {
                     'dist/custombox.min.js': ['src/js/*.js']
