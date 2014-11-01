@@ -3,18 +3,16 @@
  Demo
  ----------------------------
  */
-document.addEventListener('DOMContentLoaded', function () {
-    for ( var items = document.querySelectorAll('.list-group-item'), i = 0, t = items.length; i < t; i++ ) {
-        items[i].addEventListener('click', function ( e ) {
-            Custombox.open({
-                target: this.getAttribute('href'),
-                effect: this.firstChild.nodeValue.trim().replace(/ /g,'').toLowerCase()
-            });
-            e.preventDefault();
+$(function () {
+    $('.list-group-item').on('click', function ( e ) {
+        Custombox.open({
+            target: this.getAttribute('href'),
+            effect: this.firstChild.nodeValue.trim().replace(/ /g,'').toLowerCase()
         });
-    }
+        e.preventDefault();
+    });
 
-    $(document.getElementsByClassName('nav-tabs')).tab();
+    $('.nav-tabs').tab();
 
     var $custompopover = $(document.getElementById('custompopover'));
     $('.table-popover tbody > tr').on('mouseover mouseout', function ( e ) {
@@ -35,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     $.ajax({
-       url: 'package.json'
+        url: 'package.json'
     }).done(function ( response ) {
         document.getElementById('version').innerHTML =  'v' + response.version;
     });

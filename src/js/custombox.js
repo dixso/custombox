@@ -55,12 +55,7 @@ var Custombox = (function () {
      ----------------------------
      */
     _config = {
-        polyfills: {
-            es5shim:        '//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.3/es5-shim.min.js',
-            classlist:      '//cdnjs.cloudflare.com/ajax/libs/classlist/2014.01.31/classList.min.js',
-            eventlistener:  '//cdn.rawgit.com/jonathantneal/EventListener/master/EventListener.js'
-        },
-        isIE:               false,
+        isIE:               navigator.appVersion.indexOf('MSIE 8.') > -1 || navigator.appVersion.indexOf('MSIE 9.') > -1,
         overlay: {
             perspective:    ['letmein', 'makeway', 'slip'],
             together:       ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale', 'simplegenie', 'slit']
@@ -81,43 +76,6 @@ var Custombox = (function () {
          ----------------------------
          */
         init: function () {
-            var _this = this;
-            if ( navigator.appVersion.indexOf('MSIE 8.') > -1 || navigator.appVersion.indexOf('MSIE 9.') > -1 ) {
-                _config.isIE = true;
-                if ( navigator.appVersion.indexOf('MSIE 8.') > -1 ) {
-                    if ( _config.polyfills.es5shim ) {
-                        _utilities.script(_config.polyfills.es5shim, function () {
-                            if ( _config.polyfills.classlist ) {
-                                _utilities.script(_config.polyfills.classlist, function () {
-                                    if ( _config.polyfills.eventlistener ) {
-                                        _utilities.script(_config.polyfills.eventlistener, function () {
-                                            _this.manager();
-                                        });
-                                    } else {
-                                        _this.manager();
-                                    }
-                                });
-                            } else {
-                                _this.manager();
-                            }
-                        });
-                    } else {
-                        _this.manager();
-                    }
-                } else {
-                    if ( _config.polyfills.classlist ) {
-                        _utilities.script(_config.polyfills.classlist, function () {
-                            _this.manager();
-                        });
-                    } else {
-                        _this.manager();
-                    }
-                }
-            } else {
-                _this.manager();
-            }
-        },
-        manager: function () {
             this
                 .merge()
                 .built()
@@ -387,7 +345,7 @@ var Custombox = (function () {
         close: function () {
             var start = function () {
                 _cache.h.classList.remove('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
-                    
+
                 if ( _cache.settings[_cache.item].overlay ) {
                     // Add class from overlay.
                     _cache.overlay[_cache.item].classList.add('custombox-overlay-close');
@@ -400,17 +358,25 @@ var Custombox = (function () {
                     _cache.main.classList.remove('custombox-container-open');
 
                     // Listener overlay.
-                    _cache.overlay[_cache.item].addEventListener('transitionend', function ( event ) {
-                        if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' ) && _cache.close[_cache.item] === undefined ) {
-                            end();
-                        }
-                    }, false );
+                    if ( _config.isIE ) {
+                        end();
+                    } else {
+                        _cache.overlay[_cache.item].addEventListener('transitionend', function ( event ) {
+                            if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' ) && _cache.close[_cache.item] === undefined ) {
+                                end();
+                            }
+                        }, false );
+                    }
                 } else if ( _cache.close[_cache.item] === undefined ) {
-                    _cache.modal[_cache.item].addEventListener('transitionend', function ( event ) {
-                        if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' ) && _cache.close[_cache.item] === undefined ) {
-                            end();
-                        }
-                    });
+                    if ( _config.isIE ) {
+                        end();
+                    } else {
+                        _cache.modal[_cache.item].addEventListener('transitionend', function ( event ) {
+                            if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' ) && _cache.close[_cache.item] === undefined ) {
+                                end();
+                            }
+                        });
+                    }
                 }
             },
             end = function () {
@@ -426,8 +392,13 @@ var Custombox = (function () {
 
                 if ( _cache.inline[_cache.item] ) {
                     // Remove property width.
-                    _cache.content[_cache.item].style.removeProperty('width');
-                    _cache.content[_cache.item].style.removeProperty('display');
+                    if ( _config.isIE ) {
+                        _cache.content[_cache.item].removeAttribute('width');
+                        _cache.content[_cache.item].removeAttribute('display');
+                    } else {
+                        _cache.content[_cache.item].style.removeProperty('width');
+                        _cache.content[_cache.item].style.removeProperty('display');
+                    }
 
                     // Insert restore div.
                     _cache.inline[_cache.item].parentNode.replaceChild(_cache.content[_cache.item], _cache.inline[_cache.item]);
@@ -474,7 +445,7 @@ var Custombox = (function () {
                 // Remove classes.
                 _cache.wrapper[_cache.item].classList.remove('custombox-modal-open');
 
-                if ( _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) {
+                if ( _config.isIE || _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) {
                     start();
                 } else {
                     // Listener overlay.
@@ -526,22 +497,33 @@ var Custombox = (function () {
          */
         script: function ( url, callback, error ) {
             // Adding the script tag to the head.
-            var script = _cache.create.call(_cache.d, 'script');
-
-            script.type = 'text/javascript';
-            script.src = url;
-
-            // Then bind the event to the callback function.
-            script.onload = callback;
-            script.onerror = error;
-
-            // fire the loading
-            _cache.d.head.appendChild(script);
+            var script = document.createElement('script');
+            script.onload = script.onreadystatechange = function() {
+                callback();
+            };
+            script.text = url;
+            document.getElementsByTagName('head')[0].appendChild(script);
         },
         /**
          * @desc Get the highest z-index in the document.
          */
         zIndex: function () {
+            if ( !window.getComputedStyle ) {
+                window.getComputedStyle = function( el, pseudo ) {
+                    this.el = el;
+                    this.getPropertyValue = function(prop) {
+                        var re = /(\-([a-z]){1})/g;
+                        if (prop == 'float') prop = 'styleFloat';
+                        if (re.test(prop)) {
+                            prop = prop.replace(re, function () {
+                                return arguments[2].toUpperCase();
+                            });
+                        }
+                        return el.currentStyle[prop] ? el.currentStyle[prop] : null;
+                    }
+                    return this;
+                }
+            }
             var zIndex = 0;
             if ( isNaN ( _cache.settings[_cache.item].zIndex ) ) {
                 for ( var x = 0, elements = _cache.d.getElementsByTagName('*'), xLen = elements.length; x < xLen; x += 1 ) {
