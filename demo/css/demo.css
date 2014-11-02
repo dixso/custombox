@@ -1,198 +1,118 @@
 /*
  ----------------------------
- Styles
+ Demo
  ----------------------------
  */
-.me {
-    margin-top: -15px;
+.page-header {
+    margin-top: 0;
 }
-.icon {
-    width: 32px;
-    height: 32px;
-    text-indent: 100%;
-    overflow: hidden;
-    display: block;
+h1, h2, h4 {
+    font-family: 'Dosis', sans-serif;
+}
+h1 {
+    font-weight: 600;
+    line-height: 36px;
+    margin-bottom: 5px;
     float: left;
-    margin-left: 10px;
 }
-.twitter {
-    background-image: url(data:image/png;base64,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);
+h1 > em {
+    color: #fc5e5e;
+    font-style: normal;
 }
-.github {
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFYElEQVR42rVXW0xjVRQ9l0IpjxZaoOU9gCUjwfhITCb+ODFOE5gG0IHhoa1mwsSMGuOHxoH5MM6H/Ix8+OE4wSCZFILySIbyCGFMNNEPHx+DJAKVEALlWaCUd2mBuvZJ24jQ3lsdT3JCQ+89e+211177VGARrJaWFkVSUpIuISHhiejo6NyoqCgN/h11fHzsPDw8tO/t7U1vb28v19fX70k9UxB7oLm5WcjJyUlH4EuJiYmGuLi45+VyuTYmJkYhk8nk9MzR0ZEXANwHBwfrbrf70c7OzojL5Xo4Ojpqb2pq8v1rAF1dXerk5OSr2PXYzygUilhkzgTh7Nd8Ph8DEAYQ3s3NzfGNjY372B01NTWOiAFYrdZnEfRjrVZbiswVoDuSajGUhe3u7nqcTucPAPFJb2/vz62trafYOBPA4OCgIT09/TO1Wv10bGxsMLtIVoAlYmRtbW1qeXn5o7Gxsb7GxsYTB50CgOAv63S6e2lpaXrUOKKgoRY0wlZXV+dXVlbeMxqND0IC6OvrK87MzLQg+HMUPNKsw7HhB/Hn0tKSuby8/NdTADo7OxMR/MuMjAxTgPbHvbxeL1tYWBgAE29WV1c7TwAYHh5+LSsrq0WpVCb8L9H9Cy3qmZ+ff7+kpOReEACyV+fm5nah9pek1p3ERRlRmahDaNNn+AML1zHUHQ6H4xe73f4qWFjiACA8Y3Z2dieyV0oJDsPhNYU5MZgS29/fZ3BBHphAwSlDvkt6AAtusHCttLT0G8FgMAgNDQ13UP8P6DApdaQs8vPzGYyJZ02H0l8CMjU1xcTyIPYgxq8nJyffFtrb21Py8vJ6YTgXQznc39FTpigVw/MMvc22trYYwDOYFR1KSucMiHUQnvt9bm7ustDT03Me9I9oNJpcKfQTAADmAZFBEBA0xLOn8kjpIsyKFQCuEGC5F9F6PSqVKlUKAPg8g08wvMMZwPTjnzGkmM1m48/QvBBb0MEm3r8mDAwMGJGBBXVTSwFA4iMd6PX6INW00dt8ky7ESkkLc2IHz78j9Pf3lwJAh1QA/pcZRjTXAQXFwOHUk4ilDi0/gBsC7PcFAHiAEmilWi8BKCgoYBhWbGZmhq2vr/Pg5AFSsve3ogt+YBa6u7vzUcMRjF69lOAE0uPxcCFCuLwkpAPMf4axyxmQYmbonkUwcFno6OhQoY3acViZFPooOFFPrUcdQGyQAMEgjV02Ozsr2gWUBMD+uLi4eIXzhTlwC8r+lCgUW1TroqIirvSJiQkOIj4+nhUXF3Nxjo+PiwLw3xHuDA0N3eQAoIMLKSkpVghRKwVAYWEht2HUkBsRaSE1NZWLcXp6WhQAWNuEbq6WlZU95AAsFosCQvwKZTBRZqHESOIh9BSAjIeoD9gwMQFn4yUKdUbgXgATGoATvl5bW7sVlCxYeBEAvkVvp4dTMh1Mh9A8ICAkOAJFzNBnMRNC9i4w9QYuJf0cVOALXBijYcm3IaabOFhUxgEDCgyjwA63wI4P3XIXpfvQbDa7TwCghbmggw7uAsQV6uvHeSUjlhD8O7Ts9crKytngd/98GNdnPQbNFwBiQFeIu4qERd0BjfwE+t+tqKgYOwHurBcA4hy0cBtAasHEf7oggvZDuJ4VwW8hc9spdkK9CBBq9PcNDJe3oIlzEFhEbJBQIcwFTM/7CP55VVXVmb+Owh7a1tYmQ48/BQDXsV8BGxlwS1kox6TOwD4G5Q4EH8RuQc0fmUwmb6gYkrLCpVWOnj+PFnsJ+wLYeBIgtBBXwDoPEXcNWdsgtt8A4Htk/gf63C12dsQiA5g4AFABiAYglP7MdxF4HQC26urqJP80p/UXqZ3v0KK4GY8AAAAASUVORK5CYII=);
+#version {
+    float: left;
+    margin: 37px 0 0 10px;
 }
-.panel {
-    box-shadow: none;
-}
-.panel h4 {
-    display: inline-block;
-}
-.panel p:not(.without) {
-    display: inline-block;
-}
-pre,
-code {
-    background: none;
-}
-code {
-    padding: 0;
-}
-.code .container {
-    width: 100%;
-}
-.clearfix:after {
-    content: ".";
-    display: block;
+h2 {
+    font-weight: 500;
+    margin-bottom: 15px;
+    font-size: 25px;
     clear: both;
-    visibility: hidden;
-    line-height: 0;
-    height: 0;
 }
-.clearfix {
-    display: inline-block;
-}
-.list-group-item.active {
-    z-index: 1;
-}
-.nogutter {
-    border: 1px solid #CCC;
-    border-radius: 4px;
-    color: #333;
-    display: block;
-    font-size: 13px;
-    line-height: 1.42857;
-    margin: 0 0 10px;
-    padding: 10px;
-    word-break: break-all;
-    word-wrap: break-word;
-}
-.author {
-    float: left;
-    margin: 5px 0 20px 0;
-}
-#sidebar {
-    position: relative;
-}
-.popover {
-    display: block;
-    opacity: 0;
-    position: absolute;
-    right: -50px;
-    top: -65px;
-    left: auto;
-    z-index: 3;
-}
-a.download {
+h4 {
+    font-weight: 400;
     font-size: 22px;
-    margin: 5px 0 10px 0;
-    display: inline-block;
+    line-height: 22px;
 }
-a.download em {
-    margin-right: 5px;
+.share-github {
+    float: left;
+    margin-right: 10px;
 }
-a.download:hover {
-    color: #000;
-    text-decoration: none;
+.demo-content > h4 {
+    margin-top: 25px;
+}
+.modal-demo {
+    background-color: #FFF;
+    width: 600px;
+    border: #000 solid 1px;
+    border-radius: 10px;
+    box-shadow: 0 8px 6px -6px black;
+    text-align: left;
+    display: none;
+}
+.title {
+    padding: 10px 20px 15px 20px;
+    line-height: 18px;
+    font-size: 18px;
+    border-bottom: #CCC solid 1px;
+}
+.text {
+    padding: 0 20px 20px 20px;
+}
+.close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+.bs-callout {
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+.bs-callout > h4,
+.bs-callout-support {
+    margin-top: 0;
+}
+.bs-callout:not(.bs-callout-support) > p:last-of-type {
+    margin-bottom: 0;
+}
+.bs-callout-info {
+    border-left-color: #D9EDF7;
 }
 #forkme {
+    display: block;
     position: absolute;
     top: 0;
     right: 0;
-    border: 0;
+    z-index: 2;
 }
-#tutorial {
-    display: none;
+#custompopover {
+    width: 265px;
 }
-#tutorial p {
-    display: block;
+.table-popover > tbody > tr:hover td {
+    background-color: #D9EDF7;
 }
-h3 em {
-    font-size: 18px;
-}
-#countdown {
-    display: none;
-}
-
-/*
- ----------------------------
- Modal Example 1
- ----------------------------
- */
-.modal-example-content {
-    width: 600px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-    background-color: #FFF;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 6px;
-    outline: 0 none;
-}
-.modal-example-header {
-    border-bottom: 1px solid #E5E5E5;
-    padding: 15px;
-}
-.modal-example-body p,
-.modal-example-header h4 {
-    margin: 0;
-}
-.modal-example-body {
-    padding: 20px;
-}
-
-/*
- ----------------------------
- Modal Example 2
- ----------------------------
- */
-#modal2 {
-    width: 600px;
-    height: 300px;
-    background: #FFF;
-    border-radius: 300px / 150px;
+.footer {
+    font-size: 11px;
     text-align: center;
-    position: relative;
+    padding-bottom: 20px;
 }
-#modal2 p {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+.download {
+    margin-bottom: 10px;
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: normal;
 }
-
-/*
- ----------------------------
- Modal Example 3
- ----------------------------
- */
-.justme .modal-example-content {
-    box-shadow: none;
-    border: none;
+#gitfork {
+    display: none;
 }
-.justme .modal-example-header {
-    border: none;
-}
-
-/*
- ----------------------------
- Modal Example 4
- ----------------------------
- */
-#modal3 {
-    margin-top: 70px;
-}
-
-/*
- ----------------------------
- Custom animation
- ----------------------------
- */
-.custombox-close.customslide .custombox-modal-content {
-    -webkit-transform: scale(2);
-    -ms-transform: scale(2);
-    transform: scale(2);
-    opacity: 1;
-    -webkit-transition-property: all;
-    -ms-transition-property: all;
-    transition-property: all !important;
+@media only screen and (max-device-width: 480px) {
+    #forkme {
+        display: none;
+    }
+    #gitfork {
+        display: block;
+    }
 }

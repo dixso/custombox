@@ -1,35 +1,45 @@
 ## About Custombox:
-jQuery Modal Window Effects with transitions CSS3. See the [project page](http://dixso.github.io/custombox/) for documentation and a demonstration.
+Modal Window Effects with transitions CSS3. See the [project page](http://dixso.github.io/custombox/) for documentation and a demonstration.
 
-## Changelog:
+Runs in IE 8-11, Firefox, Chrome, Safari and Opera.
 
-### Version 1.1.3 - 2014/02/18
-* Remove unnecessary code.
-* Bug fix on the text to be displayed when there is an error.
+## Bug Reports & Improvements
 
-### Version 1.1.2 - 2013/12/10
-* Bug fix on callback that fires once is closed in the overlay.
-* Bug fix IE8 when open the modal.
-* Changes in the sample page.
+Found a bug? Please create an issue and include a publicly-accessible demonstration of the bug JSFiddle work well for demonstrating reproducible bugs, but you can use anything as long as it's publicly accessible.
 
-### Version 1.1.1 - 2013/11/05
-* Bug fix on the position scrollbar.
+Have an idea that improves Custombox? Please fork this repository, implement your idea (including documentation, if necessary), and submit a pull request.
 
-### Version 1.1.0 - 2013/10/22
-* Added new property of the position to the output.
-* Added support responsive.
-* Added property hide scrollbar automatically.
-* Cleaning stylesheets for the modern browsers.
-* Bug fixes.
+## Installation
 
-### Version 1.0.2 - 2013/10/08
-* Bug fix on callback that fires once is closed.
+Include the `custombox.min.js` script:
 
-### Version 1.0.1 - 2013/10/04
-* Bug fix IE10.
+    <script src="custombox.min.js"></script>
+    
+Include the `custombox.min.css` stylesheet:
 
-### Version 1.0.0 - 2013/10/01
-* First release.
+    <link rel="stylesheet" href="custombox.min.css">
+    
+## Basic usage
+    document.getElementById('element').addEventListener('click', function ( e ) {
+        Custombox.open({
+            target: '#modal',
+            effect: 'fadein'
+        });
+        e.preventDefault();
+    });
+    
+## Building Custombox
+Before you can build Custombox, you must install and configure the following dependencies on your machine:
 
-### Version 0.1b - 2013/09/06
-* First beta release.
+- [Node.js](http://nodejs.org/): We use Node to run a development web server, run tests, and generate distributable files. Depending on your system, you can install Node either from source or as a pre-packaged bundle.
+- [Grunt](http://gruntjs.com/): We use Grunt as our build system. Install the grunt command-line tool globally with:
+        
+        npm install -g grunt-cli
+        
+Once you have your environment setup just run:
+    
+    grunt init
+    
+To execute end-to-end (e2e) tests, use:
+    
+    grunt
