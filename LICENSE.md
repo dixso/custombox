@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2014 Julio De La Calle
+Copyright (c) 2014 Julio de la Calle <juliodlcp@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
