@@ -480,7 +480,7 @@ var Custombox = (function () {
             }
         },
         error: function () {
-            alert('Error!');
+            alert('Error to load ' + _cache.settings[_cache.item].target);
         }
     },
     /*
@@ -489,21 +489,6 @@ var Custombox = (function () {
      ----------------------------
      */
     _utilities = {
-        /**
-         * @desc Create dynamic external JavaScript file.
-         * @param {string} url - URL to link the JavaScript file.
-         * @param {function} callback - Callback function when is load.
-         * @param {function} error - Callback function when an error.
-         */
-        script: function ( url, callback, error ) {
-            // Adding the script tag to the head.
-            var script = document.createElement('script');
-            script.onload = script.onreadystatechange = function() {
-                callback();
-            };
-            script.text = url;
-            document.getElementsByTagName('head')[0].appendChild(script);
-        },
         /**
          * @desc Get the highest z-index in the document.
          */
