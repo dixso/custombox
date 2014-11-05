@@ -19,6 +19,9 @@ module.exports = function ( grunt ) {
             html: [
                 './index.html',
                 './demo/xhr/*.html'
+            ],
+            json: [
+                'package.json'
             ]
         },
 
@@ -45,7 +48,8 @@ module.exports = function ( grunt ) {
                 files: [
                     '<%= files.js %>',
                     '<%= files.css %>',
-                    '<%= files.html %>'
+                    '<%= files.html %>',
+                    '<%= files.json %>'
                 ],
                 options: {
                     livereload: true
