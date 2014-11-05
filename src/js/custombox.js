@@ -9,7 +9,6 @@ var Custombox = (function () {
         w:          window,
         d:          document,
         h:          document.documentElement,
-        b:          document.body,
         qS:         document.querySelector,
         create:     document.createElement,
         settings:   [],
@@ -104,7 +103,7 @@ var Custombox = (function () {
 
             // Add class perspective.
             if ( _config.overlay.perspective.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) {
-                _cache.scroll.push(_cache.h && _cache.h.scrollTop || _cache.b && _cache.b.scrollTop || 0);
+                _cache.scroll.push(_cache.h && _cache.h.scrollTop || _cache.d.body && _cache.d.body.scrollTop || 0);
                 _cache.h.classList.add('custombox-perspective');
                 _cache.w.scrollTo(0, 0);
             }
@@ -116,10 +115,10 @@ var Custombox = (function () {
                     'custombox-container',
                     'custombox-container-' + _cache.settings[_cache.item].overlayEffect
                 );
-                while ( _cache.b.firstChild ) {
-                    _cache.main.appendChild(_cache.b.firstChild);
+                while ( _cache.d.body.firstChild ) {
+                    _cache.main.appendChild(_cache.d.body.firstChild);
                 }
-                _cache.b.appendChild(_cache.main);
+                _cache.d.body.appendChild(_cache.main);
 
                 if ( _cache.settings[_cache.item].overlayEffect === 'push' ) {
                     _cache.main.style.transitionDuration = _cache.settings[_cache.item].speed + 'ms';
@@ -154,7 +153,7 @@ var Custombox = (function () {
                 }
 
                 // Append overlay in to the DOM.
-                _cache.b.insertBefore(_cache.overlay[_cache.item], _cache.b.lastChild.nextSibling);
+                _cache.d.body.insertBefore(_cache.overlay[_cache.item], _cache.d.body.lastChild.nextSibling);
             }
 
             // Modal
@@ -164,7 +163,7 @@ var Custombox = (function () {
                 'custombox-modal-wrapper-' + _cache.settings[_cache.item].effect
             );
             _cache.wrapper[_cache.item].style.zIndex = zIndex + 2;
-            _cache.b.insertBefore(_cache.wrapper[_cache.item], _cache.b.firstChild);
+            _cache.d.body.insertBefore(_cache.wrapper[_cache.item], _cache.d.body.firstChild);
 
             _cache.container.push(_cache.create.call(_cache.d, 'div'));
             _cache.container[_cache.item].classList.add(
@@ -480,7 +479,7 @@ var Custombox = (function () {
             }
         },
         error: function () {
-            alert('Error!');
+            alert('Error to load ' + _cache.settings[_cache.item].target);
         }
     },
     /*
@@ -489,21 +488,6 @@ var Custombox = (function () {
      ----------------------------
      */
     _utilities = {
-        /**
-         * @desc Create dynamic external JavaScript file.
-         * @param {string} url - URL to link the JavaScript file.
-         * @param {function} callback - Callback function when is load.
-         * @param {function} error - Callback function when an error.
-         */
-        script: function ( url, callback, error ) {
-            // Adding the script tag to the head.
-            var script = document.createElement('script');
-            script.onload = script.onreadystatechange = function() {
-                callback();
-            };
-            script.text = url;
-            document.getElementsByTagName('head')[0].appendChild(script);
-        },
         /**
          * @desc Get the highest z-index in the document.
          */
