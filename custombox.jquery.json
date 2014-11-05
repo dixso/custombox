@@ -35,8 +35,5 @@
     "bugs": "https://github.com/dixso/custombox/issues",
     "homepage": "http://dixso.github.io/custombox/",
     "docs": "http://dixso.github.io/custombox/",
-    "download": "https://github.com/dixso/custombox/archive/master.zip",
-    "dependencies": {
-        "jquery": ">=1.9"
-    }
+    "download": "https://github.com/dixso/custombox/archive/master.zip"
 }
