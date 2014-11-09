@@ -321,6 +321,7 @@ var Custombox = (function () {
             if ( _cache.settings[_cache.item].overlayClose ) {
                 _cache.wrapper[_cache.item].addEventListener('click', function ( event ) {
                     if ( event.target === _cache.wrapper[_cache.item] && _cache.close[_cache.item] === undefined ) {
+                        _cache.open[_cache.item] = undefined;
                         _this.close();
                     }
                 }, false);
