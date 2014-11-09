@@ -417,6 +417,7 @@ var Custombox = (function () {
                 }
 
                 if ( typeof _cache.settings[_cache.item].close === 'function' ) {
+                    _cache.open[_cache.item] = undefined;
                     _cache.settings[_cache.item].close.call();
                 }
 
