@@ -30,7 +30,7 @@ module.exports = function ( grunt ) {
                 ' *  http://dixso.github.io/custombox/\n' +
                 ' *  (c) 2014 Julio de la Calle - @dixso9\n' +
                 ' *\n' +
-                ' *  Under MIT License - http://www.opensource.org/licenses/mit-license.php\n' +
+                ' *  Under MIT License - http://opensource.org/licenses/MIT\n' +
                 ' */\n',
 
         connect: {
@@ -110,6 +110,7 @@ module.exports = function ( grunt ) {
                 }
             }
         }
+
     });
 
     /*
@@ -131,5 +132,30 @@ module.exports = function ( grunt ) {
      Task development
      ----------------------------
      */
-    grunt.registerTask('default', ['clean', 'csslint', 'autoprefixer', 'cssmin', 'jshint', 'uglify']);
+    grunt.registerTask('default', ['clean', 'csslint', 'autoprefixer', 'cssmin', 'jshint', 'uglify', 'updatejson']);
+
+    /*
+     ----------------------------
+     Task replace
+     ----------------------------
+     */
+    grunt.registerTask('updatejson', function (key, value) {
+        var files = ['bower.json', 'custombox.jquery.json'],
+            pkg = grunt.file.readJSON('package.json'),
+            replace = ['version', 'description', 'name', 'homepage'];
+
+        for ( var e = 0, te = files.length; e < te; e ++ ) {
+            var project = grunt.file.readJSON(files[e]);
+            if ( !grunt.file.exists(files[e]) ) {
+                grunt.log.error("file " + files[e] + " not found");
+                return true;
+            }
+
+            for ( var i = 0, t = replace.length; i < t; i++ ) {
+                project[replace[i]] = pkg[replace[i]];
+            }
+
+            grunt.file.write(files[e], JSON.stringify(project, null, 2));
+        }
+    });
 };

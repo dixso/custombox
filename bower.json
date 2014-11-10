@@ -1,39 +1,40 @@
 {
-    "name": "custombox",
-    "title": "Custombox",
-    "description": "Modal Window Effects with transitions CSS3.",
-    "keywords": [
-        "modal",
-        "animation",
-        "lightbox",
-        "window",
-        "css3",
-        "html5",
-        "popup",
-        "effects",
-        "transitions",
-        "dialog",
-        "ajax",
-        "jquery",
-        "responsive"
-    ],
-    "version": "2.0.1",
-    "author": {
-        "name": "Julio de la Calle",
-        "email": "juliodlcp@gmail.com"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/dixso/custombox.git"
-    },
-    "licenses": [
-        {
-            "type": "MIT",
-            "url": "http://www.opensource.org/licenses/mit-license.php"
-        }
-    ],
-    "bugs": "https://github.com/dixso/custombox/issues",
-    "homepage": "http://dixso.github.io/custombox/",
-    "docs": "http://dixso.github.io/custombox/",
-    "download": "https://github.com/dixso/custombox/archive/master.zip"
+  "name": "Custombox",
+  "description": "Modal Window Effects with transitions CSS3.",
+  "keywords": [
+    "modal",
+    "animation",
+    "lightbox",
+    "window",
+    "css3",
+    "html5",
+    "popup",
+    "effects",
+    "transitions",
+    "dialog",
+    "ajax",
+    "jquery",
+    "responsive",
+    "mobile",
+    "ui"
+  ],
+  "version": "2.0.2",
+  "author": {
+    "name": "Julio de la Calle",
+    "email": "juliodlcp@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dixso/custombox.git"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  ],
+  "bugs": "https://github.com/dixso/custombox/issues",
+  "homepage": "http://dixso.github.io/custombox/",
+  "docs": "http://dixso.github.io/custombox/",
+  "download": "https://github.com/dixso/custombox/archive/master.zip"
 }
