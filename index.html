@@ -51,7 +51,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="page-header clearfix">
                         <h1>custom<em>box</em></h1>
-                        <span id="version" class="label label-default"></span>
+                        <a id="version" href="https://github.com/dixso/custombox/releases" class="label label-default" target="_blank"></a>
                         <h2>Modal window effects with transitions CSS3.</h2>
                         <div class="share-github"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://dixso.github.io/custombox/" data-via="dixso9">Tweet</a></div>
                         <div class="share-github"><iframe src="http://ghbtns.com/github-btn.html?user=dixso&repo=custombox&type=watch&count=true" height="30" width="118" frameborder="0" scrolling="0" style="width:118px; height: 30px;" allowTransparency="true"></iframe></div>
@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                     <a href="https://github.com/dixso/custombox/archive/master.zip" class="btn btn-success btn-large btn-group-justified download"><i class="glyphicon glyphicon-download"></i> Download</a>
                     <div class="panel panel-info">
                         <div class="panel-heading">Effects</div>
@@ -126,7 +126,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 demo-content">
+                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 demo-content">
                     <div class="bs-callout bs-callout-info bs-callout-support">
                         <h4>
                             <span class="glyphicon glyphicon-bullhorn"></span>
@@ -165,7 +165,7 @@
                                 <li class="active"><a href="#native" data-toggle="tab">Native</a></li>
                                 <li><a href="#jquery" data-toggle="tab">jQuery</a></li>
                             </ul>
-                            <div class="tab-content">
+                            <div class="tab-content tab-content-demo">
                                 <div class="tab-pane active" id="native">
                                     <code class="prettyprint linenums">
                                         &lt;script&gt;<br>
@@ -212,150 +212,156 @@
                         <span class="glyphicon glyphicon-cog"></span>
                         Options
                     </h4>
-                    <table class="table table-bordered table-striped table-popover">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Type</th>
-                                <th>Property</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>target</td>
-                                <td>string</td>
-                                <td>null</td>
-                                <td>Set the URL, ID or Class.</td>
-                            </tr>
-                            <tr>
-                                <td>cache</td>
-                                <td>boolean</td>
-                                <td>false</td>
-                                <td>If set to false, it will force requested pages not to be cached by the browser only when send by AJAX.</td>
-                            </tr>
-                            <tr>
-                                <td>escKey</td>
-                                <td>boolean</td>
-                                <td>true</td>
-                                <td>Allows the user to close the modal when press escape key.</td>
-                            </tr>
-                            <tr>
-                                <td>zIndex</td>
-                                <td>string | number</td>
-                                <td>auto</td>
-                                <td>Overlay z-index: Auto or number.</td>
-                            </tr>
-                            <tr>
-                                <td>overlay</td>
-                                <td>boolean</td>
-                                <td>true</td>
-                                <td>Show the overlay.</td>
-                            </tr>
-                            <tr>
-                                <td>overlayColor</td>
-                                <td>string</td>
-                                <td>#000</td>
-                                <td>Overlay color.</td>
-                            </tr>
-                            <tr>
-                                <td>overlayOpacity</td>
-                                <td>number</td>
-                                <td>0.8</td>
-                                <td>The overlay opacity level. Range: 0 to 1.</td>
-                            </tr>
-                            <tr>
-                                <td>overlayClose</td>
-                                <td>boolean</td>
-                                <td>true</td>
-                                <td>Allows the user to close the modal by clicking the overlay.</td>
-                            </tr>
-                            <tr>
-                                <td>overlaySpeed</td>
-                                <td>number</td>
-                                <td>300</td>
-                                <td>Sets the speed of the overlay, in milliseconds.</td>
-                            </tr>
-                            <tr>
-                                <td>overlayEffect</td>
-                                <td>string</td>
-                                <td>auto</td>
-                                <td>fadein | letmein.</td>
-                            </tr>
-                            <tr>
-                                <td>width</td>
-                                <td>number | null</td>
-                                <td>null</td>
-                                <td>Set a fixed total width.</td>
-                            </tr>
-                            <tr>
-                                <td>effect</td>
-                                <td>string</td>
-                                <td>fadein</td>
-                                <td>fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale.</td>
-                            </tr>
-                            <tr>
-                                <td>position</td>
-                                <td>string | null</td>
-                                <td>null</td>
-                                <td>Only with effects: slide, flip and rotate. (top, right, bottom, left and center) | (vertical or horizontal) and output position separated by commas. Ex: 'top, bottom'.</td>
-                            </tr>
-                            <tr>
-                                <td>speed</td>
-                                <td>number</td>
-                                <td>600</td>
-                                <td>Sets the speed of the transitions, in milliseconds.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-popover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Property</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>target</td>
+                                    <td>string</td>
+                                    <td>null</td>
+                                    <td>Set the URL, ID or Class.</td>
+                                </tr>
+                                <tr>
+                                    <td>cache</td>
+                                    <td>boolean</td>
+                                    <td>false</td>
+                                    <td>If set to false, it will force requested pages not to be cached by the browser only when send by AJAX.</td>
+                                </tr>
+                                <tr>
+                                    <td>escKey</td>
+                                    <td>boolean</td>
+                                    <td>true</td>
+                                    <td>Allows the user to close the modal when press escape key.</td>
+                                </tr>
+                                <tr>
+                                    <td>zIndex</td>
+                                    <td>string | number</td>
+                                    <td>auto</td>
+                                    <td>Overlay z-index: Auto or number.</td>
+                                </tr>
+                                <tr>
+                                    <td>overlay</td>
+                                    <td>boolean</td>
+                                    <td>true</td>
+                                    <td>Show the overlay.</td>
+                                </tr>
+                                <tr>
+                                    <td>overlayColor</td>
+                                    <td>string</td>
+                                    <td>#000</td>
+                                    <td>Overlay color.</td>
+                                </tr>
+                                <tr>
+                                    <td>overlayOpacity</td>
+                                    <td>number</td>
+                                    <td>0.8</td>
+                                    <td>The overlay opacity level. Range: 0 to 1.</td>
+                                </tr>
+                                <tr>
+                                    <td>overlayClose</td>
+                                    <td>boolean</td>
+                                    <td>true</td>
+                                    <td>Allows the user to close the modal by clicking the overlay.</td>
+                                </tr>
+                                <tr>
+                                    <td>overlaySpeed</td>
+                                    <td>number</td>
+                                    <td>300</td>
+                                    <td>Sets the speed of the overlay, in milliseconds.</td>
+                                </tr>
+                                <tr>
+                                    <td>overlayEffect</td>
+                                    <td>string</td>
+                                    <td>auto</td>
+                                    <td>fadein | letmein.</td>
+                                </tr>
+                                <tr>
+                                    <td>width</td>
+                                    <td>number | null</td>
+                                    <td>null</td>
+                                    <td>Set a fixed total width.</td>
+                                </tr>
+                                <tr>
+                                    <td>effect</td>
+                                    <td>string</td>
+                                    <td>fadein</td>
+                                    <td>fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale.</td>
+                                </tr>
+                                <tr>
+                                    <td>position</td>
+                                    <td>string | null</td>
+                                    <td>null</td>
+                                    <td>Only with effects: slide, flip and rotate. (top, right, bottom, left and center) | (vertical or horizontal) and output position separated by commas. Ex: 'top, bottom'.</td>
+                                </tr>
+                                <tr>
+                                    <td>speed</td>
+                                    <td>number</td>
+                                    <td>600</td>
+                                    <td>Sets the speed of the transitions, in milliseconds.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <h4>
                         <span class="glyphicon glyphicon-flash"></span>
                         Events
                     </h4>
-                    <table class="table table-bordered table-striped table-popover">
-                        <thead>
-                            <tr>
-                                <th>Event Type</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-demo="callback-open">
-                                <td>open</td>
-                                <td>Callback that fires right before begins to open.</td>
-                            </tr>
-                            <tr data-demo="callback-complete">
-                                <td>complete</td>
-                                <td>Callback that fires right after loaded content is displayed.</td>
-                            </tr>
-                            <tr data-demo="callback-close">
-                                <td>close</td>
-                                <td>Callback that fires once is closed.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-popover">
+                            <thead>
+                                <tr>
+                                    <th>Event Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-demo="callback-open">
+                                    <td>open</td>
+                                    <td>Callback that fires right before begins to open.</td>
+                                </tr>
+                                <tr data-demo="callback-complete">
+                                    <td>complete</td>
+                                    <td>Callback that fires right after loaded content is displayed.</td>
+                                </tr>
+                                <tr data-demo="callback-close">
+                                    <td>close</td>
+                                    <td>Callback that fires once is closed.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <h4>
                         <span class="glyphicon glyphicon-plus"></span>
                         Methods
                     </h4>
-                    <table class="table table-bordered table-striped table-popover">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>open</td>
-                                <td>Open Custombox.</td>
-                            </tr>
-                            <tr>
-                                <td>close</td>
-                                <td>Close Custombox.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-popover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>open</td>
+                                    <td>Open Custombox.</td>
+                                </tr>
+                                <tr>
+                                    <td>close</td>
+                                    <td>Close Custombox.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="bs-callout bs-callout-info">
                         <h4>
                             <span class="glyphicon glyphicon-search"></span>

@@ -108,6 +108,9 @@ h4 {
 #gitfork {
     display: none;
 }
+.tab-content-demo {
+    overflow: auto;
+}
 @media only screen and (max-device-width: 480px) {
     #forkme {
         display: none;
