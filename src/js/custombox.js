@@ -322,7 +322,6 @@ var Custombox = (function () {
             if ( _cache.settings[_cache.item].overlayClose ) {
                 _cache.wrapper[_cache.item].addEventListener('click', function ( event ) {
                     if ( event.target === _cache.wrapper[_cache.item] && _cache.close[_cache.item] === undefined ) {
-                        _cache.open[_cache.item] = undefined;
                         _this.close();
                     }
                 }, false);
@@ -334,9 +333,9 @@ var Custombox = (function () {
             }, false);
 
             // Callback oncomplete.
-            _cache.wrapper[_cache.item].addEventListener('transitionend', function ( event ) {
+            _cache.modal[_cache.item].addEventListener('transitionend', function ( event ) {
                 if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' ) && _cache.open[_cache.item] === undefined ) {
-                    _cache.open[_cache.item] = true;
+                    _cache.open.push(true);
                     if ( _cache.settings[_cache.item] && typeof _cache.settings[_cache.item].complete === 'function' ) {
                         _cache.settings[_cache.item].complete.call();
                     }
@@ -424,6 +423,7 @@ var Custombox = (function () {
 
                 // Remove items.
                 _cache.wrapper.pop();
+                _cache.open.pop();
                 _cache.close.pop();
                 _cache.inline.pop();
                 _cache.content.pop();
