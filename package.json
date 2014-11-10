@@ -1,8 +1,13 @@
 {
   "name": "Custombox",
   "description": "Modal Window Effects with transitions CSS3.",
-  "version": "2.0.1",
-  "license": "MIT",
+  "version": "2.0.2",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  ],
   "homepage": "http://dixso.github.io/custombox/",
   "bugs": {
       "url": "https://github.com/dixso/custombox/issues"

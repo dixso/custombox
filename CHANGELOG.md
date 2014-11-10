@@ -1,3 +1,13 @@
+### Version 2.0.2 - 2014/11/10
+* Bug fix on callback complete.
+* Bug fix on responsive mode (old devices).
+* Bug fix in responsive tables on the demo page.
+
+### Version 2.0.1 - 2014/11/05
+* Code cleanup.
+* Remove dependencies.
+* Bug fix cache.
+
 ### Version 2.0.0 - 2014/11/01
 * The code is 100% rewritten.
 * Update effects.

@@ -261,6 +261,7 @@ var Custombox = (function () {
             if ( _cache.size[_cache.item] + 60 >= _cache.w.innerWidth ) {
                 _cache.container[_cache.item].style.width = 'auto';
                 _cache.container[_cache.item].style.margin = '5%';
+                _cache.wrapper[_cache.item].style.width = _cache.w.innerWidth + 'px';
             } else {
                 _cache.container[_cache.item].style.width = _cache.size[_cache.item] + 'px';
             }
@@ -321,6 +322,7 @@ var Custombox = (function () {
             if ( _cache.settings[_cache.item].overlayClose ) {
                 _cache.wrapper[_cache.item].addEventListener('click', function ( event ) {
                     if ( event.target === _cache.wrapper[_cache.item] && _cache.close[_cache.item] === undefined ) {
+                        _cache.open[_cache.item] = undefined;
                         _this.close();
                     }
                 }, false);
@@ -463,10 +465,12 @@ var Custombox = (function () {
                     _cache.container[i].style.width = 'auto';
                     _cache.container[i].style.marginLeft = '5%';
                     _cache.container[i].style.marginRight = '5%';
+                    _cache.wrapper[_cache.item].style.width = _cache.w.innerWidth + 'px';
                 } else {
                     _cache.container[i].style.width = _cache.size[i] + 'px';
                     _cache.container[i].style.marginLeft = 'auto';
                     _cache.container[i].style.marginRight = 'auto';
+                    _cache.wrapper[_cache.item].style.width = 'auto';
                 }
 
                 // Height.
@@ -504,9 +508,9 @@ var Custombox = (function () {
                             });
                         }
                         return el.currentStyle[prop] ? el.currentStyle[prop] : null;
-                    }
+                    };
                     return this;
-                }
+                };
             }
             var zIndex = 0;
             if ( isNaN ( _cache.settings[_cache.item].zIndex ) ) {
