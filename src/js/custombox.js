@@ -54,7 +54,7 @@ var Custombox = (function () {
      ----------------------------
      */
     _config = {
-        isIE:               navigator.appVersion.indexOf('MSIE 8.') > -1 || navigator.appVersion.indexOf('MSIE 9.') > -1,
+        oldBrowser:               navigator.appVersion.indexOf('MSIE 8.') > -1 || navigator.appVersion.indexOf('MSIE 9.') > -1 || /(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent),
         overlay: {
             perspective:    ['letmein', 'makeway', 'slip'],
             together:       ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale', 'simplegenie', 'slit']
@@ -109,24 +109,19 @@ var Custombox = (function () {
             }
 
             // Container
-            if ( typeof _cache.main === 'undefined' ) {
-                _cache.main = _cache.create.call(_cache.d, 'div');
-                _cache.main.classList.add(
-                    'custombox-container',
-                    'custombox-container-' + _cache.settings[_cache.item].overlayEffect
-                );
-                while ( _cache.d.body.firstChild ) {
-                    _cache.main.appendChild(_cache.d.body.firstChild);
-                }
-                _cache.d.body.appendChild(_cache.main);
+            _cache.main = _cache.create.call(_cache.d, 'div');
+            _cache.main.classList.add(
+                'custombox-container',
+                'custombox-container-' + _cache.settings[_cache.item].overlayEffect
+            );
 
-                if ( _cache.settings[_cache.item].overlayEffect === 'push' ) {
-                    _cache.main.style.transitionDuration = _cache.settings[_cache.item].speed + 'ms';
-                }
-            } else {
-                _cache.main.classList.add(
-                    'custombox-container-' + _cache.settings[_cache.item].overlayEffect
-                );
+            while ( _cache.d.body.firstChild ) {
+                _cache.main.appendChild(_cache.d.body.firstChild);
+            }
+            _cache.d.body.appendChild(_cache.main);
+
+            if ( _cache.settings[_cache.item].overlayEffect === 'push' ) {
+                _cache.main.style.transitionDuration = _cache.settings[_cache.item].speed + 'ms';
             }
 
             // Overlay.
@@ -136,7 +131,7 @@ var Custombox = (function () {
                     'custombox-overlay',
                     'custombox-overlay-' + _cache.settings[_cache.item].overlayEffect
                 );
-                _cache.overlay[_cache.item].style.zIndex = zIndex + 1;
+                _cache.overlay[_cache.item].style.zIndex = zIndex + 2;
                 _cache.overlay[_cache.item].style.backgroundColor = _cache.settings[_cache.item].overlayColor;
 
                 // Add class perspective.
@@ -162,7 +157,7 @@ var Custombox = (function () {
                 'custombox-modal-wrapper',
                 'custombox-modal-wrapper-' + _cache.settings[_cache.item].effect
             );
-            _cache.wrapper[_cache.item].style.zIndex = zIndex + 2;
+            _cache.wrapper[_cache.item].style.zIndex = zIndex + 3;
             _cache.d.body.insertBefore(_cache.wrapper[_cache.item], _cache.d.body.firstChild);
 
             _cache.container.push(_cache.create.call(_cache.d, 'div'));
@@ -170,7 +165,7 @@ var Custombox = (function () {
                 'custombox-modal-container',
                 'custombox-modal-container-' + _cache.settings[_cache.item].effect
             );
-            _cache.container[_cache.item].style.zIndex = zIndex + 3;
+            _cache.container[_cache.item].style.zIndex = zIndex + 4;
 
             // Position.
             if ( _config.modal.position.indexOf( _cache.settings[_cache.item].effect ) > -1 ) {
@@ -210,7 +205,7 @@ var Custombox = (function () {
                 _cache.settings[_cache.item].open.call();
             }
 
-            if ( _cache.settings[_cache.item].target.charAt(0) === '#' || _cache.settings[_cache.item].target.charAt(0) === '.' ) {
+            if ( _cache.settings[_cache.item].target.charAt(0) === '#' || ( _cache.settings[_cache.item].target.charAt(0) === '.' && _cache.settings[_cache.item].target.charAt(1) !== '/' ) ) {
                 if ( _cache.qS.call(_cache.d, _cache.settings[_cache.item].target) ) {
                     _cache.inline.push(_cache.create.call(_cache.d, 'div'));
                     _cache.content.push(_cache.qS.call(_cache.d, _cache.settings[_cache.item].target));
@@ -358,7 +353,7 @@ var Custombox = (function () {
                     _cache.main.classList.remove('custombox-container-open');
 
                     // Listener overlay.
-                    if ( _config.isIE ) {
+                    if ( _config.oldBrowser ) {
                         end();
                     } else {
                         _cache.overlay[_cache.item].addEventListener('transitionend', function ( event ) {
@@ -368,7 +363,7 @@ var Custombox = (function () {
                         }, false );
                     }
                 } else if ( _cache.close[_cache.item] === undefined ) {
-                    if ( _config.isIE ) {
+                    if ( _config.oldBrowser ) {
                         end();
                     } else {
                         _cache.modal[_cache.item].addEventListener('transitionend', function ( event ) {
@@ -391,8 +386,8 @@ var Custombox = (function () {
                 _cache.h.classList.remove('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
 
                 if ( _cache.inline[_cache.item] ) {
-                    // Remove property width.
-                    if ( _config.isIE ) {
+                    // Remove property width and display.
+                    if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
                         _cache.content[_cache.item].removeAttribute('width');
                         _cache.content[_cache.item].removeAttribute('display');
                     } else {
@@ -421,6 +416,13 @@ var Custombox = (function () {
                     _cache.settings[_cache.item].close.call();
                 }
 
+                // Unwrap.
+                for ( var contents = _cache.d.querySelectorAll('.custombox-container > *'), i = 0, t = contents.length; i < t; i++ ) {
+                    document.body.insertBefore(contents[i], _cache.main);
+                }
+
+                _cache.main.parentNode.removeChild(_cache.main);
+
                 // Remove items.
                 _cache.wrapper.pop();
                 _cache.open.pop();
@@ -446,7 +448,7 @@ var Custombox = (function () {
                 // Remove classes.
                 _cache.wrapper[_cache.item].classList.remove('custombox-modal-open');
 
-                if ( _config.isIE || _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) {
+                if ( _config.oldBrowser || _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) {
                     start();
                 } else {
                     // Listener overlay.
@@ -512,10 +514,9 @@ var Custombox = (function () {
                     return this;
                 };
             }
-            var zIndex = 0;
             if ( isNaN ( _cache.settings[_cache.item].zIndex ) ) {
-                for ( var x = 0, elements = _cache.d.getElementsByTagName('*'), xLen = elements.length; x < xLen; x += 1 ) {
-                    var val = _cache.w.getComputedStyle(elements[x]).getPropertyValue('z-index');
+                for ( var zIndex = 0, x = 0, elements = document.getElementsByTagName('*'), xLen = elements.length; x < xLen; x += 1 ) {
+                    var val = window.getComputedStyle(elements[x]).getPropertyValue('z-index');
                     if ( val ) {
                         val =+ val;
                         if ( val > zIndex ) {
