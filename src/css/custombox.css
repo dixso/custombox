@@ -50,6 +50,10 @@
     margin: 0 auto;
     position: relative;
 }
+.custombox-modal img {
+    max-width: 100%;
+    height: auto;
+}
 
 /*
  ----------------------------

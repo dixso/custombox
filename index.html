@@ -70,7 +70,7 @@
                             </a>
                             <a class="list-group-item" href="#modal">
                                 Slide
-                                <span class="label label-default pull-right">custom positions</span>
+                                <span class="label label-default pull-right">custom animation</span>
                             </a>
                             <a class="list-group-item" href="#modal">Newspaper</a>
                             <a class="list-group-item" href="#modal">Fall</a>
@@ -78,14 +78,14 @@
                             <a class="list-group-item" href="#modal">Blur</a>
                             <a class="list-group-item" href="#modal">
                                 Flip
-                                <span class="label label-default pull-right">custom positions</span>
+                                <span class="label label-default pull-right">custom animation</span>
                             </a>
                             <a class="list-group-item" href="#modal">Sign</a>
                             <a class="list-group-item" href="#modal">Superscaled</a>
                             <a class="list-group-item" href="#modal">Slit</a>
                             <a class="list-group-item" href="#modal">
                                 Rotate
-                                <span class="label label-default pull-right">custom positions</span>
+                                <span class="label label-default pull-right">custom animation</span>
                             </a>
                             <a class="list-group-item" href="#modal">
                                 Letmein
@@ -210,7 +210,7 @@
                     </div>
                     <h4>
                         <span class="glyphicon glyphicon-cog"></span>
-                        Options
+                        Options <em>(click on the rows)</em>
                     </h4>
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped table-popover">
@@ -281,7 +281,7 @@
                                     <td>overlayEffect</td>
                                     <td>string</td>
                                     <td>auto</td>
-                                    <td>fadein | letmein.</td>
+                                    <td>Combine any of the effects.</td>
                                 </tr>
                                 <tr>
                                     <td>width</td>
@@ -297,9 +297,15 @@
                                 </tr>
                                 <tr>
                                     <td>position</td>
+                                    <td>string</td>
+                                    <td>center, center</td>
+                                    <td>Set position of modal. First position 'x': left, center and right. Second position 'y': top, center, bottom.</td>
+                                </tr>
+                                <tr>
+                                    <td>animation</td>
                                     <td>string | null</td>
                                     <td>null</td>
-                                    <td>Only with effects: slide, flip and rotate. (top, right, bottom, left and center) | (vertical or horizontal) and output position separated by commas. Ex: 'top, bottom'.</td>
+                                    <td>Only with effects: slide, flip and rotate (top, right, bottom, left and center) | (vertical or horizontal) and output position separated by commas.</td>
                                 </tr>
                                 <tr>
                                     <td>speed</td>
@@ -343,7 +349,7 @@
                         Methods
                     </h4>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-popover">
+                        <table class="table table-bordered table-striped table-methods table-popover">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -368,7 +374,7 @@
                             Support:
                         </h4>
                         <p>- Find any bugs? <a target="_blank" rel="nofollow" href="https://github.com/dixso/custombox/issues">Issues</a>.</p>
-                        <p>- Get old <a target="_blank" rel="nofollow" href="https://github.com/dixso/custombox/releases">versions</a>?</p>
+                        <p>- Get old <a target="_blank" rel="nofollow" href="https://github.com/dixso/custombox/releases">versions</a>.</p>
                     </div>
                     <div class="bs-callout bs-callout-info">
                         <h4>
@@ -379,6 +385,7 @@
                         <p>- This script can run with <a target="_blank" rel="nofollow" href="http://jquery.com/">jQuery</a>.</p>
                         <p>- The example page is built with <a target="_blank" rel="nofollow" href="http://getbootstrap.com/">Bootstrap 3</a>.</p>
                         <p>- The page example code is built with <a target="_blank" rel="nofollow" href="//code.google.com/p/google-code-prettify/">Google Code Prettify</a>.</p>
+                        <p>- Support for old browsers <a target="_blank" rel="nofollow" href="//github.com/jonathantneal/polyfill">polyfill.io</a>.</p>
                     </div>
                 </div>
             </div>
@@ -396,91 +403,98 @@
             <div class="popover-content">
                 <code id="demo-target" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: 'xhr/ajax.html'
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: 'demo/xhr/ajax.html'
                     <br>});
                 </code>
                 <code id="demo-cache" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;cache:&nbsp;&nbsp;false
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: 'demo/xhr/ajax.html',
+                    &nbsp;&nbsp;&nbsp;&nbsp;cache:&nbsp;&nbsp;true
                     <br>});
                 </code>
                 <code id="demo-escKey" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;escKey: true
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;escKey: false
                     <br>});
                 </code>
                 <code id="demo-zIndex" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: 'auto'
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;zIndex: 9999
                     <br>});
                 </code>
                 <code id="demo-overlay" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp'#modal'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;overlay: true
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp'#modal',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;overlay: false
                     <br>});
                 </code>
                 <code id="demo-overlayColor" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;overlayColor: '#000'
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;overlayColor: '#00F'
                     <br>});
                 </code>
                 <code id="demo-overlayOpacity" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;overlayOpacity: 0.8
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;overlayOpacity: 0.2
                     <br>});
                 </code>
                 <code id="demo-overlayClose" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;overlayClose: true
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;overlayClose: false
                     <br>});
                 </code>
                 <code id="demo-overlaySpeed" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;overlaySpeed: 300
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;overlaySpeed: 1200
                     <br>});
                 </code>
                 <code id="demo-overlayEffect" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;overlayEffect: 'fadein'
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'#modal',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;overlayEffect: 'makeway'
                     <br>});
                 </code>
                 <code id="demo-width" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;width:  &nbsp;600
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;width:  &nbsp;1200
                     <br>});
                 </code>
                 <code id="demo-effect" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal',<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;effect: 'newspaper'
                     <br>});
                 </code>
                 <code id="demo-position" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;'#modal'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;effect: &nbsp;&nbsp;'slide'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;position: 'bottom'
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;'#modal',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;effect: &nbsp;&nbsp;'fadein',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;position: 'center, top'
+                    <br>});
+                </code>
+                <code id="demo-animation" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;'#modal',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;effect: &nbsp;&nbsp;'slide',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;animation: 'top, bottom'
                     <br>});
                 </code>
                 <code id="demo-speed" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;speed: &nbsp;600
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;speed: &nbsp;1200
                     <br>});
                 </code>
                 <code id="demo-callback-open" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal',<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;open: &nbsp;&nbsp;function () {<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert('open');<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;}
@@ -488,7 +502,7 @@
                 </code>
                 <code id="demo-callback-complete" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;'#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;&nbsp;'#modal',<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;complete: &nbsp;&nbsp;function () {<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert('complete');<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;}
@@ -497,7 +511,7 @@
                 </code>
                 <code id="demo-callback-close" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;'#modal'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;'#modal',<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;close: &nbsp;&nbsp;function () {<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert('close');<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;}

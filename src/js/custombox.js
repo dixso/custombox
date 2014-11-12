@@ -6,23 +6,22 @@ var Custombox = (function () {
      ----------------------------
      */
     var _cache = {
-        w:          window,
-        d:          document,
-        h:          document.documentElement,
-        qS:         document.querySelector,
-        create:     document.createElement,
-        settings:   [],
-        overlay:    [],
-        wrapper:    [],
-        container:  [],
-        modal:      [],
-        content:    [],
-        inline:     [],
-        size:       [],
-        close:      [],
-        open:       [],
-        scroll:     [],
-        item:       -1
+        w:          window,                     // Performance call window.
+        d:          document,                   // Performance call document.
+        h:          document.documentElement,   // Performance call documentElement.
+        create:     document.createElement,     // Performance call create.
+        settings:   [],                         // Storage settings.
+        overlay:    [],                         // Storage of the overlay.
+        wrapper:    [],                         // Storage the wrapper.
+        container:  [],                         // Storage the container of the modal.
+        modal:      [],                         // Storage the modal.
+        content:    [],                         // Storage the content of the modal.
+        inline:     [],                         // Storage the element inline.
+        size:       [],                         // Storage the size of the modal.
+        close:      [],                         // Storage the callback open.
+        open:       [],                         // Storage the callback open.
+        scroll:     [],                         // Storage the position of top.
+        item:       -1                          // Number the modals.
     },
     /*
      ----------------------------
@@ -30,23 +29,24 @@ var Custombox = (function () {
      ----------------------------
      */
     _defaults = {
-        target:         null,       // Set the URL, ID or Class.
-        cache:          false,      // If set to false, it will force requested pages not to be cached by the browser only when send by AJAX.
-        escKey:         true,       // Allows the user to close the modal by pressing 'ESC'.
-        zIndex:         'auto',     // Overlay z-index: Auto or number.
-        overlay:        true,       // Show the overlay.
-        overlayColor:   '#000',     // Overlay color.
-        overlayOpacity: 0.8,        // The overlay opacity level. Range: 0 to 1.
-        overlayClose:   true,       // Allows the user to close the modal by clicking the overlay.
-        overlaySpeed:   300,        // Sets the speed of the overlay, in milliseconds.
-        overlayEffect:  'auto',     // fadein | letmein.
-        width:          null,       // Set a fixed total width.
-        effect:         'fadein',   // fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale.
-        position:       null,       // Only with effects: slide, flip and rotate. (top, right, bottom, left and center) | (vertical or horizontal) and output position separated by commas. Ex: 'top, bottom'.
-        speed:          500,        // Sets the speed of the transitions, in milliseconds.
-        open:           null,       // Callback that fires right before begins to open.
-        complete:       null,       // Callback that fires right after loaded content is displayed.
-        close:          null        // Callback that fires once is closed.
+        target:         null,               // Set the URL, ID or Class.
+        cache:          false,              // If set to false, it will force requested pages not to be cached by the browser only when send by AJAX.
+        escKey:         true,               // Allows the user to close the modal by pressing 'ESC'.
+        zIndex:         'auto',             // Overlay z-index: Auto or number.
+        overlay:        true,               // Show the overlay.
+        overlayColor:   '#000',             // Overlay color.
+        overlayOpacity: 0.8,                // The overlay opacity level. Range: 0 to 1.
+        overlayClose:   true,               // Allows the user to close the modal by clicking the overlay.
+        overlaySpeed:   300,                // Sets the speed of the overlay, in milliseconds.
+        overlayEffect:  'auto',             // Combine any of the effects.
+        width:          null,               // Set a fixed total width.
+        effect:         'fadein',           // fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale.
+        position:       'center, center',   // Set position of modal. First position 'x': left, center and right. Second position 'y': top, center, bottom.
+        animation:      null,               // Only with effects: slide, flip and rotate (top, right, bottom, left and center) | (vertical or horizontal) and output position separated by commas. Example: 'top, bottom'.
+        speed:          500,                // Sets the speed of the transitions, in milliseconds.
+        open:           null,               // Callback that fires right before begins to open.
+        complete:       null,               // Callback that fires right after loaded content is displayed.
+        close:          null                // Callback that fires once is closed.
     },
     /*
      ----------------------------
@@ -54,13 +54,13 @@ var Custombox = (function () {
      ----------------------------
      */
     _config = {
-        oldBrowser:               navigator.appVersion.indexOf('MSIE 8.') > -1 || navigator.appVersion.indexOf('MSIE 9.') > -1 || /(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent),
+        oldBrowser:         navigator.appVersion.indexOf('MSIE 8.') > -1 || navigator.appVersion.indexOf('MSIE 9.') > -1 || /(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent),  // Check if is a old browser.
         overlay: {
-            perspective:    ['letmein', 'makeway', 'slip'],
-            together:       ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale', 'simplegenie', 'slit']
+            perspective:    ['letmein', 'makeway', 'slip'],                                                                                                                         // Custom effects overlay.
+            together:       ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale', 'simplegenie', 'slit']                                                             // Animation together (overlay and modal).
         },
         modal: {
-            position:       ['slide', 'flip', 'rotate']
+            position:       ['slide', 'flip', 'rotate']                                                                                                                             // Custom animation of the modal.
         }
     },
     /*
@@ -169,21 +169,21 @@ var Custombox = (function () {
 
             // Position.
             if ( _config.modal.position.indexOf( _cache.settings[_cache.item].effect ) > -1 ) {
-                if ( _cache.settings[_cache.item].position !== null ) {
-                    if ( _cache.settings[_cache.item].position.indexOf(',') > -1 ) {
+                if ( _cache.settings[_cache.item].animation !== null ) {
+                    if ( _cache.settings[_cache.item].animation.indexOf(',') > -1 ) {
                         // Convert the string to array.
-                        _cache.settings[_cache.item].position = _cache.settings[_cache.item].position.split(',');
+                        _cache.settings[_cache.item].animation = _cache.settings[_cache.item].animation.split(',');
                     } else {
-                        _cache.settings[_cache.item].position = [_cache.settings[_cache.item].position];
+                        _cache.settings[_cache.item].animation = [_cache.settings[_cache.item].animation];
                     }
                 } else {
                     // Defaults.
                     if ( _cache.settings[_cache.item].effect === 'slide' ) {
-                        _cache.settings[_cache.item].position = ['top'];
+                        _cache.settings[_cache.item].animation = ['top'];
                     } else if ( _cache.settings[_cache.item].effect === 'flip' ) {
-                        _cache.settings[_cache.item].position = ['horizontal'];
+                        _cache.settings[_cache.item].animation = ['horizontal'];
                     } else {
-                        _cache.settings[_cache.item].position = ['bottom'];
+                        _cache.settings[_cache.item].animation = ['bottom'];
                     }
                 }
             }
@@ -191,7 +191,7 @@ var Custombox = (function () {
             _cache.modal.push(_cache.create.call(_cache.d, 'div'));
             _cache.modal[_cache.item].classList.add(
                 'custombox-modal',
-                'custombox-modal-' + _cache.settings[_cache.item].effect + ( _config.modal.position.indexOf( _cache.settings[_cache.item].effect ) > -1 ? '-' + _cache.settings[_cache.item].position[0].trim() : '' )
+                'custombox-modal-' + _cache.settings[_cache.item].effect + ( _config.modal.position.indexOf( _cache.settings[_cache.item].effect ) > -1 ? '-' + _cache.settings[_cache.item].animation[0].trim() : '' )
             );
             _cache.modal[_cache.item].style.transitionDuration = _cache.settings[_cache.item].speed + 'ms';
             _cache.modal[_cache.item].style.zIndex = zIndex + 4;
@@ -206,9 +206,9 @@ var Custombox = (function () {
             }
 
             if ( _cache.settings[_cache.item].target.charAt(0) === '#' || ( _cache.settings[_cache.item].target.charAt(0) === '.' && _cache.settings[_cache.item].target.charAt(1) !== '/' ) ) {
-                if ( _cache.qS.call(_cache.d, _cache.settings[_cache.item].target) ) {
+                if ( _cache.d.querySelector(_cache.settings[_cache.item].target) ) {
                     _cache.inline.push(_cache.create.call(_cache.d, 'div'));
-                    _cache.content.push(_cache.qS.call(_cache.d, _cache.settings[_cache.item].target));
+                    _cache.content.push(_cache.d.querySelector(_cache.settings[_cache.item].target));
                     _cache.content[_cache.item].style.display = 'block';
                     _cache.content[_cache.item].parentNode.insertBefore(_cache.inline[_cache.item], _cache.content[_cache.item]);
                     this.size().open();
@@ -228,7 +228,7 @@ var Custombox = (function () {
                 if( xhr.readyState === 4 ) {
                     if( xhr.status === 200 ) {
                         modal.innerHTML = xhr.responseText;
-                        _cache.content.push( ( modal.childNodes.length === 3 ? modal.childNodes[2] : modal ));
+                        _cache.content.push( ( modal.childNodes.length === 3 ? modal.childNodes[2] : modal ) );
                         _cache.content[_cache.item].style.display = 'block';
                         _cache.container[_cache.item].appendChild(_cache.content[_cache.item]);
                         _this.size().open();
@@ -253,23 +253,51 @@ var Custombox = (function () {
             // Storage.
             _cache.size.push(w);
 
+            // Convert the string to array.
+            if ( _cache.settings[_cache.item].position.indexOf(',') > -1 ) {
+                _cache.settings[_cache.item].position = _cache.settings[_cache.item].position.split(',');
+            } else {
+                _cache.settings[_cache.item].position = [_cache.settings[_cache.item].position.trim()];
+            }
+
+            // Width.
             if ( _cache.size[_cache.item] + 60 >= _cache.w.innerWidth ) {
                 _cache.container[_cache.item].style.width = 'auto';
                 _cache.container[_cache.item].style.margin = '5%';
                 _cache.wrapper[_cache.item].style.width = _cache.w.innerWidth + 'px';
             } else {
+                switch ( _cache.settings[_cache.item].position[0].trim() ) {
+                    case 'left':
+                        _cache.container[_cache.item].style.marginLeft = 0;
+                        break;
+                    case 'right':
+                        _cache.container[_cache.item].style.marginRight = 0;
+                        break;
+                }
                 _cache.container[_cache.item].style.width = _cache.size[_cache.item] + 'px';
             }
 
             _cache.content[_cache.item].style.width = 'auto';
             _cache.modal[_cache.item].appendChild(_cache.content[_cache.item]);
 
-            // Height.
+            // Top.
             if ( _cache.content[_cache.item].offsetHeight >= _cache.w.innerHeight ) {
                 _cache.container[_cache.item].style.marginTop = '5%';
                 _cache.container[_cache.item].style.marginBottom = '5%';
             } else {
-                _cache.container[_cache.item].style.marginTop = _cache.w.innerHeight / 2 - _cache.content[_cache.item].offsetHeight / 2 + 'px';
+                var result;
+                switch ( _cache.settings[_cache.item].position[1].trim() ) {
+                    case 'top':
+                        result = 0;
+                        break;
+                    case 'bottom':
+                        result = _cache.w.innerHeight - _cache.content[_cache.item].offsetHeight + 'px';
+                        break;
+                    default:
+                        result = _cache.w.innerHeight / 2 - _cache.content[_cache.item].offsetHeight / 2 + 'px';
+                        break;
+                 }
+                _cache.container[_cache.item].style.marginTop = result;
             }
 
             return this;
@@ -440,9 +468,9 @@ var Custombox = (function () {
 
             if ( _cache.item > -1 ) {
                 // Modal
-                if ( _config.modal.position.indexOf( _cache.settings[_cache.item].effect ) > -1 && _cache.settings[_cache.item].position.length > 1 ) {
-                    _cache.modal[_cache.item].classList.remove('custombox-modal-' + _cache.settings[_cache.item].effect + '-' + _cache.settings[_cache.item].position[0]);
-                    _cache.modal[_cache.item].classList.add('custombox-modal-' + _cache.settings[_cache.item].effect + '-' + _cache.settings[_cache.item].position[1].trim());
+                if ( _config.modal.position.indexOf( _cache.settings[_cache.item].effect ) > -1 && _cache.settings[_cache.item].animation.length > 1 ) {
+                    _cache.modal[_cache.item].classList.remove('custombox-modal-' + _cache.settings[_cache.item].effect + '-' + _cache.settings[_cache.item].animation[0]);
+                    _cache.modal[_cache.item].classList.add('custombox-modal-' + _cache.settings[_cache.item].effect + '-' + _cache.settings[_cache.item].animation[1].trim());
                 }
 
                 // Remove classes.
@@ -461,7 +489,7 @@ var Custombox = (function () {
             }
         },
         responsive: function () {
-            for ( var i = 0, t = _cache.container.length; i < t; i++ ) {
+            for ( var i = 0, t = _cache.container.length, result; i < t; i++ ) {
                 // Width.
                 if ( _cache.size[i] + 60 >= _cache.w.innerWidth ) {
                     _cache.container[i].style.width = 'auto';
@@ -469,23 +497,44 @@ var Custombox = (function () {
                     _cache.container[i].style.marginRight = '5%';
                     _cache.wrapper[_cache.item].style.width = _cache.w.innerWidth + 'px';
                 } else {
+                    switch ( _cache.settings[_cache.item].position[0].trim() ) {
+                        case 'left':
+                            _cache.container[i].style.marginLeft = 0;
+                            break;
+                        case 'right':
+                            _cache.container[i].style.marginRight = 0;
+                            break;
+                        default:
+                            _cache.container[i].style.marginLeft = 'auto';
+                            _cache.container[i].style.marginRight = 'auto';
+                            break;
+                    }
                     _cache.container[i].style.width = _cache.size[i] + 'px';
-                    _cache.container[i].style.marginLeft = 'auto';
-                    _cache.container[i].style.marginRight = 'auto';
                     _cache.wrapper[_cache.item].style.width = 'auto';
                 }
 
-                // Height.
+                // Top.
                 if ( _cache.content[i].offsetHeight >= _cache.w.innerHeight ) {
                     _cache.container[i].style.marginTop = '5%';
                     _cache.container[i].style.marginBottom = '5%';
                 } else {
-                    _cache.container[i].style.marginTop = _cache.w.innerHeight / 2 - _cache.content[i].offsetHeight / 2 + 'px';
+                    switch ( _cache.settings[_cache.item].position[1] ) {
+                        case 'top':
+                            result = 0;
+                            break;
+                        case 'bottom':
+                            result = _cache.w.innerHeight - _cache.content[i].offsetHeight + 'px';
+                            break;
+                        default:
+                            result = _cache.w.innerHeight / 2 - _cache.content[i].offsetHeight / 2 + 'px';
+                            break;
+                    }
+                    _cache.container[i].style.marginTop = result;
                 }
             }
         },
         error: function () {
-            alert('Error to load ' + _cache.settings[_cache.item].target);
+            alert('Error to load this target: ' + _cache.settings[_cache.item].target);
         }
     },
     /*
@@ -514,8 +563,9 @@ var Custombox = (function () {
                     return this;
                 };
             }
+            var zIndex = 0;
             if ( isNaN ( _cache.settings[_cache.item].zIndex ) ) {
-                for ( var zIndex = 0, x = 0, elements = document.getElementsByTagName('*'), xLen = elements.length; x < xLen; x += 1 ) {
+                for ( var x = 0, elements = document.getElementsByTagName('*'), xLen = elements.length; x < xLen; x += 1 ) {
                     var val = window.getComputedStyle(elements[x]).getPropertyValue('z-index');
                     if ( val ) {
                         val =+ val;
@@ -551,7 +601,7 @@ var Custombox = (function () {
     return {
         /**
          * @desc Open Custombox.
-         * @param {object} - Options.
+         * @param {object}.
          */
         open: function ( options ) {
             _cache.options = options;

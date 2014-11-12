@@ -34,6 +34,12 @@ h4 {
     font-size: 22px;
     line-height: 22px;
 }
+h4 > em {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 12px;
+    font-style: normal;
+}
 .share-github {
     float: left;
     margin-right: 10px;
@@ -91,7 +97,7 @@ h4 {
 #custompopover {
     width: 265px;
 }
-.table-popover > tbody > tr:hover td {
+.table-popover:not(.table-methods) > tbody > tr:hover td {
     background-color: #D9EDF7;
 }
 .footer {
@@ -112,7 +118,8 @@ h4 {
     overflow: auto;
 }
 @media only screen and (max-device-width: 480px) {
-    #forkme {
+    #forkme,
+    #custompopover {
         display: none;
     }
     #gitfork {
