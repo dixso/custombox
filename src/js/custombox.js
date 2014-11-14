@@ -228,10 +228,15 @@ var Custombox = (function () {
                 if( xhr.readyState === 4 ) {
                     if( xhr.status === 200 ) {
                         modal.innerHTML = xhr.responseText;
-                        _cache.content.push( ( modal.childNodes.length === 3 ? modal.childNodes[2] : modal ));
-                        _cache.content[_cache.item].style.display = 'block';
-                        _cache.container[_cache.item].appendChild(_cache.content[_cache.item]);
-                        _this.size().open();
+                        if ( modal.childNodes.length > 3 ) {
+                            alert('Error need a wrapper div in the: ' + _cache.settings[_cache.item].target);
+                            _this.close(true);
+                        } else {
+                            _cache.content.push(modal.childNodes[2]);
+                            _cache.content[_cache.item].style.display = 'block';
+                            _cache.container[_cache.item].appendChild(_cache.content[_cache.item]);
+                            _this.size().open();
+                        }
                     } else {
                         _this.error();
                     }
@@ -331,13 +336,21 @@ var Custombox = (function () {
             _cache.modal[_cache.item].addEventListener('transitionend', function ( event ) {
                 if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' ) && _cache.open[_cache.item] === undefined ) {
                     _cache.open.push(true);
+
+                    // Execute the scripts.
+                    if ( !_cache.inline[_cache.item] ) {
+                        for ( var i = 0, script = _cache.modal[_cache.item].getElementsByTagName('script'), t = script.length; i < t; i++ ) {
+                            new Function( script[i].text )();
+                        }
+                    }
+
                     if ( _cache.settings[_cache.item] && typeof _cache.settings[_cache.item].complete === 'function' ) {
                         _cache.settings[_cache.item].complete.call();
                     }
                 }
             }, false);
         },
-        close: function () {
+        close: function ( force ) {
             var start = function () {
                 _cache.h.classList.remove('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
 
@@ -353,7 +366,7 @@ var Custombox = (function () {
                     _cache.main.classList.remove('custombox-container-open');
 
                     // Listener overlay.
-                    if ( _config.oldBrowser ) {
+                    if ( _config.oldBrowser || force ) {
                         end();
                     } else {
                         _cache.overlay[_cache.item].addEventListener('transitionend', function ( event ) {
@@ -448,7 +461,7 @@ var Custombox = (function () {
                 // Remove classes.
                 _cache.wrapper[_cache.item].classList.remove('custombox-modal-open');
 
-                if ( _config.oldBrowser || _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) {
+                if ( ( _config.oldBrowser || _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) || force ) {
                     start();
                 } else {
                     // Listener overlay.
@@ -514,8 +527,9 @@ var Custombox = (function () {
                     return this;
                 };
             }
+            var zIndex = 0;
             if ( isNaN ( _cache.settings[_cache.item].zIndex ) ) {
-                for ( var zIndex = 0, x = 0, elements = document.getElementsByTagName('*'), xLen = elements.length; x < xLen; x += 1 ) {
+                for ( var x = 0, elements = document.getElementsByTagName('*'), xLen = elements.length; x < xLen; x += 1 ) {
                     var val = window.getComputedStyle(elements[x]).getPropertyValue('z-index');
                     if ( val ) {
                         val =+ val;
