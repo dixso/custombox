@@ -98,6 +98,9 @@ module.exports = function ( grunt ) {
         },
 
         jshint: {
+            options: {
+                '-W054': true
+            },
             default: ['src/js/*.js']
         },
 
