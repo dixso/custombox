@@ -54,10 +54,10 @@ var Custombox = (function () {
      ----------------------------
      */
     _config = {
-        oldBrowser:               navigator.appVersion.indexOf('MSIE 8.') > -1 || navigator.appVersion.indexOf('MSIE 9.') > -1 || /(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent),
+        oldBrowser:         navigator.appVersion.indexOf('MSIE 8.') > -1 || navigator.appVersion.indexOf('MSIE 9.') > -1 || /(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent),
         overlay: {
             perspective:    ['letmein', 'makeway', 'slip'],
-            together:       ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale', 'simplegenie', 'slit']
+            together:       ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale', 'simplegenie', 'slit', 'slip']
         },
         modal: {
             position:       ['slide', 'flip', 'rotate']
@@ -228,15 +228,15 @@ var Custombox = (function () {
                 if( xhr.readyState === 4 ) {
                     if( xhr.status === 200 ) {
                         modal.innerHTML = xhr.responseText;
-                        if ( modal.childNodes.length > 3 ) {
-                            alert('Error need a wrapper div in the: ' + _cache.settings[_cache.item].target);
-                            _this.close(true);
+                        _cache.content.push(modal);
+                        _cache.content[_cache.item].style.display = 'block';
+                        if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
+                            _cache.content[_cache.item].style.styleFloat = 'left';
                         } else {
-                            _cache.content.push(modal.childNodes[2]);
-                            _cache.content[_cache.item].style.display = 'block';
-                            _cache.container[_cache.item].appendChild(_cache.content[_cache.item]);
-                            _this.size().open();
+                            _cache.content[_cache.item].style.cssFloat = 'left';
                         }
+                        _cache.container[_cache.item].appendChild(_cache.content[_cache.item]);
+                        _this.size().open();
                     } else {
                         _this.error();
                     }
@@ -249,6 +249,13 @@ var Custombox = (function () {
         size: function () {
             var w = _cache.content[_cache.item].offsetWidth,
                 h = _cache.content[_cache.item].offsetHeight;
+            if ( !_cache.inline[_cache.item] ) {
+                if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
+                    _cache.content[_cache.item].style.styleFloat = 'none';
+                } else {
+                    _cache.content[_cache.item].style.cssFloat = "none";
+                }
+            }
 
             // Check width.
             if ( !isNaN( _cache.settings[_cache.item].width ) && _cache.settings[_cache.item].width !== null ) {
