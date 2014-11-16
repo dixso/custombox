@@ -57,7 +57,7 @@ var Custombox = (function () {
         oldBrowser:         navigator.appVersion.indexOf('MSIE 8.') > -1 || navigator.appVersion.indexOf('MSIE 9.') > -1 || /(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent),  // Check if is a old browser.
         overlay: {
             perspective:    ['letmein', 'makeway', 'slip'],                                                                                                                         // Custom effects overlay.
-            together:       ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale', 'simplegenie', 'slit']                                                             // Animation together (overlay and modal).
+            together:       ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale', 'simplegenie', 'slit', 'slip']                                                     // Animation together (overlay and modal).
         },
         modal: {
             position:       ['slide', 'flip', 'rotate']                                                                                                                             // Custom animation of the modal.
@@ -228,8 +228,13 @@ var Custombox = (function () {
                 if( xhr.readyState === 4 ) {
                     if( xhr.status === 200 ) {
                         modal.innerHTML = xhr.responseText;
-                        _cache.content.push( ( modal.childNodes.length === 3 ? modal.childNodes[2] : modal ) );
+                        _cache.content.push(modal);
                         _cache.content[_cache.item].style.display = 'block';
+                        if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
+                            _cache.content[_cache.item].style.styleFloat = 'left';
+                        } else {
+                            _cache.content[_cache.item].style.cssFloat = 'left';
+                        }
                         _cache.container[_cache.item].appendChild(_cache.content[_cache.item]);
                         _this.size().open();
                     } else {
@@ -244,6 +249,13 @@ var Custombox = (function () {
         size: function () {
             var w = _cache.content[_cache.item].offsetWidth,
                 h = _cache.content[_cache.item].offsetHeight;
+            if ( !_cache.inline[_cache.item] ) {
+                if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
+                    _cache.content[_cache.item].style.styleFloat = 'none';
+                } else {
+                    _cache.content[_cache.item].style.cssFloat = "none";
+                }
+            }
 
             // Check width.
             if ( !isNaN( _cache.settings[_cache.item].width ) && _cache.settings[_cache.item].width !== null ) {
@@ -359,13 +371,21 @@ var Custombox = (function () {
             _cache.modal[_cache.item].addEventListener('transitionend', function ( event ) {
                 if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' ) && _cache.open[_cache.item] === undefined ) {
                     _cache.open.push(true);
+
+                    // Execute the scripts.
+                    if ( !_cache.inline[_cache.item] ) {
+                        for ( var i = 0, script = _cache.modal[_cache.item].getElementsByTagName('script'), t = script.length; i < t; i++ ) {
+                            new Function( script[i].text )();
+                        }
+                    }
+
                     if ( _cache.settings[_cache.item] && typeof _cache.settings[_cache.item].complete === 'function' ) {
                         _cache.settings[_cache.item].complete.call();
                     }
                 }
             }, false);
         },
-        close: function () {
+        close: function ( force ) {
             var start = function () {
                 _cache.h.classList.remove('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
 
@@ -381,7 +401,7 @@ var Custombox = (function () {
                     _cache.main.classList.remove('custombox-container-open');
 
                     // Listener overlay.
-                    if ( _config.oldBrowser ) {
+                    if ( _config.oldBrowser || force ) {
                         end();
                     } else {
                         _cache.overlay[_cache.item].addEventListener('transitionend', function ( event ) {
@@ -476,7 +496,7 @@ var Custombox = (function () {
                 // Remove classes.
                 _cache.wrapper[_cache.item].classList.remove('custombox-modal-open');
 
-                if ( _config.oldBrowser || _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) {
+                if ( ( _config.oldBrowser || _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) || force ) {
                     start();
                 } else {
                     // Listener overlay.
