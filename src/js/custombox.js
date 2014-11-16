@@ -205,18 +205,24 @@ var Custombox = (function () {
                 _cache.settings[_cache.item].open.call();
             }
 
-            if ( _cache.settings[_cache.item].target.charAt(0) === '#' || ( _cache.settings[_cache.item].target.charAt(0) === '.' && _cache.settings[_cache.item].target.charAt(1) !== '/' ) ) {
-                if ( _cache.d.querySelector(_cache.settings[_cache.item].target) ) {
-                    _cache.inline.push(_cache.create.call(_cache.d, 'div'));
-                    _cache.content.push(_cache.d.querySelector(_cache.settings[_cache.item].target));
-                    _cache.content[_cache.item].style.display = 'block';
-                    _cache.content[_cache.item].parentNode.insertBefore(_cache.inline[_cache.item], _cache.content[_cache.item]);
-                    this.size().open();
+            // Convert the string to array.
+            if ( _cache.settings[_cache.item].position.indexOf(',') > -1 ) {
+                _cache.settings[_cache.item].position = _cache.settings[_cache.item].position.split(',');
+                if ( _cache.settings[_cache.item].target.charAt(0) === '#' || ( _cache.settings[_cache.item].target.charAt(0) === '.' && _cache.settings[_cache.item].target.charAt(1) !== '/' ) ) {
+                    if ( _cache.d.querySelector(_cache.settings[_cache.item].target) || typeof _cache.settings[_cache.item].position[1] !== 'undefined' ) {
+                        _cache.inline.push(_cache.create.call(_cache.d, 'div'));
+                        _cache.content.push(_cache.d.querySelector(_cache.settings[_cache.item].target));
+                        _cache.content[_cache.item].style.display = 'block';
+                        _cache.content[_cache.item].parentNode.insertBefore(_cache.inline[_cache.item], _cache.content[_cache.item]);
+                        this.size().open();
+                    } else {
+                        this.error();
+                    }
                 } else {
-                    this.error();
+                    this.ajax();
                 }
             } else {
-                this.ajax();
+                this.error();
             }
             return this;
         },
@@ -264,13 +270,6 @@ var Custombox = (function () {
 
             // Storage.
             _cache.size.push(w);
-
-            // Convert the string to array.
-            if ( _cache.settings[_cache.item].position.indexOf(',') > -1 ) {
-                _cache.settings[_cache.item].position = _cache.settings[_cache.item].position.split(',');
-            } else {
-                _cache.settings[_cache.item].position = [_cache.settings[_cache.item].position.trim()];
-            }
 
             // Width.
             if ( _cache.size[_cache.item] + 60 >= _cache.w.innerWidth ) {

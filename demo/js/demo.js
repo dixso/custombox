@@ -7,8 +7,7 @@ $(function () {
     $('.list-group-item').on('click', function ( e ) {
         Custombox.open({
             target:     this.getAttribute('href'),
-            effect:     this.firstChild.nodeValue.trim().replace(/ /g,'').toLowerCase(),
-            position:   'left'
+            effect:     this.firstChild.nodeValue.trim().replace(/ /g,'').toLowerCase()
         });
         e.preventDefault();
     });
