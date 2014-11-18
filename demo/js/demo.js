@@ -13,6 +13,7 @@ $(function () {
     });
 
     $('.nav-tabs').tab();
+    $('[data-toggle="tooltip"]').tooltip();
 
     var $custompopover = $(document.getElementById('custompopover'));
     $('.table-popover tbody > tr').on('mouseover mouseout click', function ( e ) {

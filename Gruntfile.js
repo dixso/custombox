@@ -113,6 +113,15 @@ module.exports = function ( grunt ) {
                     'dist/custombox.min.js': ['src/js/*.js']
                 }
             }
+        },
+
+        copy: {
+            default: {
+                expand: true,
+                cwd: 'src/svg/',
+                src: ['**'],
+                dest: 'dist/'
+            }
         }
 
     });
@@ -129,21 +138,24 @@ module.exports = function ( grunt ) {
      Task dev
      ----------------------------
      */
-    grunt.registerTask('dev', ['clean', 'autoprefixer', 'cssmin', 'uglify']);
+    grunt.registerTask('dev', ['clean', 'autoprefixer', 'cssmin', 'uglify', 'copy']);
 
     /*
      ----------------------------
      Task development
      ----------------------------
      */
-    grunt.registerTask('default', ['clean', 'csslint', 'autoprefixer', 'cssmin', 'jshint', 'uglify', 'updatejson']);
+    grunt.registerTask('default', ['clean', 'csslint', 'autoprefixer', 'cssmin', 'jshint', 'uglify', 'copy', 'updatejson']);
+
+    // Need exclude this rule: @-moz-document url-prefix()
+    grunt.option('force', true);
 
     /*
      ----------------------------
      Task replace
      ----------------------------
      */
-    grunt.registerTask('updatejson', function (key, value) {
+    grunt.registerTask('updatejson', function ( key, value ) {
         var files = ['bower.json', 'custombox.jquery.json'],
             pkg = grunt.file.readJSON('package.json'),
             replace = ['version', 'description', 'name', 'homepage'];
