@@ -41,4 +41,17 @@ $(function () {
     }).done(function ( response ) {
         document.getElementById('version').innerHTML =  'v' + response.version;
     });
+
+    var effects = ['fadein', 'slide', 'newspaper', 'fall', 'sidefall', 'blur', 'flip', 'sign', 'superscaled', 'slit', 'rotate', 'letmein', 'slip', 'corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale'];
+    $(document).on('click', '.infinite', function ( e ) {
+        Custombox.open({
+            target:     'demo/xhr/ajax.html',
+            effect:     effects[Math.floor(Math.random() * effects.length)],
+            overlay:    Math.random() >= 0.5,
+            complete:   function () {
+                $('.modal-ajax').find('.infinite').show();
+            }
+        });
+        e.preventDefault();
+    });
 });

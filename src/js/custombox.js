@@ -108,21 +108,24 @@ var Custombox = (function () {
                 _cache.w.scrollTo(0, 0);
             }
 
-            // Container
-            _cache.main = _cache.create.call(_cache.d, 'div');
-            _cache.main.classList.add(
-                'custombox-container',
-                'custombox-container-' + _cache.settings[_cache.item].overlayEffect
-            );
+            // Container.
+            if ( !_cache.main ) {
+                _cache.main = _cache.create.call(_cache.d, 'div');
 
-            while ( _cache.d.body.firstChild ) {
-                _cache.main.appendChild(_cache.d.body.firstChild);
+                while ( _cache.d.body.firstChild ) {
+                    _cache.main.appendChild(_cache.d.body.firstChild);
+                }
+                _cache.d.body.appendChild(_cache.main);
             }
-            _cache.d.body.appendChild(_cache.main);
 
             if ( _cache.settings[_cache.item].overlayEffect === 'push' ) {
                 _cache.main.style.transitionDuration = _cache.settings[_cache.item].speed + 'ms';
             }
+
+            _cache.main.classList.add(
+                'custombox-container',
+                'custombox-container-' + _cache.settings[_cache.item].overlayEffect
+            );
 
             // Overlay.
             if ( _cache.settings[_cache.item].overlay ) {
@@ -149,6 +152,8 @@ var Custombox = (function () {
 
                 // Append overlay in to the DOM.
                 _cache.d.body.insertBefore(_cache.overlay[_cache.item], _cache.d.body.lastChild.nextSibling);
+            } else {
+                _cache.overlay.push(null);
             }
 
             // Modal
@@ -381,13 +386,17 @@ var Custombox = (function () {
 
             // Callback complete.
             var complete = function () {
-                _cache.modal[_cache.item].removeEventListener('transitionend', complete);
                 callback();
+                _cache.modal[_cache.item].removeEventListener('transitionend', complete);
             };
             if ( _config.oldBrowser ) {
                 callback();
             } else {
-                _cache.modal[_cache.item].addEventListener('transitionend', complete, false);
+                if ( _cache.settings[_cache.item].effect !== 'slit' ) {
+                    _cache.modal[_cache.item].addEventListener('transitionend', complete, false);
+                } else {
+                    _cache.modal[_cache.item].addEventListener('animationend', complete, false);
+                }
             }
         },
         close: function () {
@@ -451,54 +460,56 @@ var Custombox = (function () {
                 // Remove overlay.
                 if ( _cache.settings[_cache.item].overlay ) {
                     _cache.overlay[_cache.item].parentNode.removeChild(_cache.overlay[_cache.item]);
-                    _cache.overlay.pop();
                 }
 
+                // Callback close.
                 if ( typeof _cache.settings[_cache.item].close === 'function' ) {
                     _cache.settings[_cache.item].close.call();
                 }
 
+                // Unwrap.
                 if ( !_cache.item ) {
-                    // Unwrap.
                     for ( var contents = _cache.d.querySelectorAll('.custombox-container > *'), i = 0, t = contents.length; i < t; i++ ) {
                         document.body.insertBefore(contents[i], _cache.main);
                     }
-
-                    _cache.main.parentNode.removeChild(_cache.main);
+                    if ( _cache.main.parentNode ) {
+                        _cache.main.parentNode.removeChild(_cache.main);
+                    }
                 }
 
                 // Remove items.
                 _cache.wrapper.pop();
-                _cache.inline.pop();
+                if ( _cache.inline[_cache.item] ) {
+                    _cache.inline.pop();
+                }
                 _cache.content.pop();
                 _cache.container.pop();
                 _cache.modal.pop();
+                _cache.overlay.pop();
                 _cache.size.pop();
                 _cache.settings.pop();
                 _cache.scroll.pop();
                 _cache.item--;
             };
 
-            if ( _cache.item > -1 ) {
-                // Modal
-                if ( _config.modal.position.indexOf( _cache.settings[_cache.item].effect ) > -1 && _cache.settings[_cache.item].animation.length > 1 ) {
-                    _cache.modal[_cache.item].classList.remove('custombox-modal-' + _cache.settings[_cache.item].effect + '-' + _cache.settings[_cache.item].animation[0]);
-                    _cache.modal[_cache.item].classList.add('custombox-modal-' + _cache.settings[_cache.item].effect + '-' + _cache.settings[_cache.item].animation[1].trim());
-                }
+            // Modal
+            if ( _config.modal.position.indexOf( _cache.settings[_cache.item].effect ) > -1 && _cache.settings[_cache.item].animation.length > 1 ) {
+                _cache.modal[_cache.item].classList.remove('custombox-modal-' + _cache.settings[_cache.item].effect + '-' + _cache.settings[_cache.item].animation[0]);
+                _cache.modal[_cache.item].classList.add('custombox-modal-' + _cache.settings[_cache.item].effect + '-' + _cache.settings[_cache.item].animation[1].trim());
+            }
 
-                // Remove classes.
-                _cache.wrapper[_cache.item].classList.remove('custombox-modal-open');
+            // Remove classes.
+            _cache.wrapper[_cache.item].classList.remove('custombox-modal-open');
 
-                if ( ( _config.oldBrowser || _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) ) {
+            if ( ( _config.oldBrowser || _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) ) {
+                start();
+            } else {
+                // Listener wrapper.
+                var wrapper = function () {
+                    _cache.wrapper[_cache.item].removeEventListener('transitionend', wrapper);
                     start();
-                } else {
-                    // Listener wrapper.
-                    var wrapper = function () {
-                        _cache.wrapper[_cache.item].removeEventListener('transitionend', wrapper);
-                        start();
-                    };
-                    _cache.wrapper[_cache.item].addEventListener('transitionend', wrapper, false);
-                }
+                };
+                _cache.wrapper[_cache.item].addEventListener('transitionend', wrapper, false);
             }
         },
         responsive: function () {
