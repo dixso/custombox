@@ -1,4 +1,4 @@
-var Custombox = (function () {
+var Custombox = (function ( w, d, h ) {
     'use strict';
     /*
      ----------------------------
@@ -6,22 +6,19 @@ var Custombox = (function () {
      ----------------------------
      */
     var _cache = {
-        w:          window,                     // Performance call window.
-        d:          document,                   // Performance call document.
-        h:          document.documentElement,   // Performance call documentElement.
-        create:     document.createElement,     // Performance call create.
-        settings:   [],                         // Storage settings.
-        overlay:    [],                         // Storage of the overlay.
-        wrapper:    [],                         // Storage the wrapper.
-        container:  [],                         // Storage the container of the modal.
-        modal:      [],                         // Storage the modal.
-        content:    [],                         // Storage the content of the modal.
-        inline:     [],                         // Storage the element inline.
-        size:       [],                         // Storage the size of the modal.
-        close:      [],                         // Storage the callback open.
-        open:       [],                         // Storage the callback open.
-        scroll:     [],                         // Storage the position of top.
-        item:       -1                          // Number the modals.
+        create:     document.createElement, // Performance call create.
+        settings:   [],                     // Storage settings.
+        overlay:    [],                     // Storage of the overlay.
+        wrapper:    [],                     // Storage the wrapper.
+        container:  [],                     // Storage the container of the modal.
+        modal:      [],                     // Storage the modal.
+        content:    [],                     // Storage the content of the modal.
+        inline:     [],                     // Storage the element inline.
+        size:       [],                     // Storage the size of the modal.
+        close:      [],                     // Storage the callback open.
+        open:       [],                     // Storage the callback open.
+        scroll:     [],                     // Storage the position of top.
+        item:       -1                      // Number the modals.
     },
     /*
      ----------------------------
@@ -98,24 +95,28 @@ var Custombox = (function () {
             // Get zIndex.
             var zIndex = _utilities.zIndex();
 
+            // zIndex overflow.
+            if ( zIndex === 2147483647 ) {
+                zIndex = this.w.getComputedStyle(_cache.modal[_cache.item]).getPropertyValue('z-index');
+            }
+
             // Add class open.
-            _cache.h.classList.add('custombox-open', 'custombox-open-' + _cache.settings[_cache.item].overlayEffect);
+            h.classList.add('custombox-open', 'custombox-open-' + _cache.settings[_cache.item].overlayEffect);
 
             // Add class perspective.
             if ( _config.overlay.perspective.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) {
-                _cache.scroll.push(_cache.h && _cache.h.scrollTop || _cache.d.body && _cache.d.body.scrollTop || 0);
-                _cache.h.classList.add('custombox-perspective');
-                _cache.w.scrollTo(0, 0);
+                _cache.scroll.push(h && h.scrollTop || d.body && d.body.scrollTop || 0);
+                h.classList.add('custombox-perspective');
+                w.scrollTo(0, 0);
             }
 
             // Container.
-            if ( !_cache.main ) {
-                _cache.main = _cache.create.call(_cache.d, 'div');
-
-                while ( _cache.d.body.firstChild ) {
-                    _cache.main.appendChild(_cache.d.body.firstChild);
+            if ( !_cache.item ) {
+                _cache.main = _cache.create.call(d, 'div');
+                while ( d.body.firstChild ) {
+                    _cache.main.appendChild(d.body.firstChild);
                 }
-                _cache.d.body.appendChild(_cache.main);
+                d.body.appendChild(_cache.main);
             }
 
             if ( _cache.settings[_cache.item].overlayEffect === 'push' ) {
@@ -129,7 +130,7 @@ var Custombox = (function () {
 
             // Overlay.
             if ( _cache.settings[_cache.item].overlay ) {
-                _cache.overlay.push(_cache.create.call(_cache.d, 'div'));
+                _cache.overlay.push(_cache.create.call(d, 'div'));
                 _cache.overlay[_cache.item].classList.add(
                     'custombox-overlay',
                     'custombox-overlay-' + _cache.settings[_cache.item].overlayEffect
@@ -151,21 +152,21 @@ var Custombox = (function () {
                 }
 
                 // Append overlay in to the DOM.
-                _cache.d.body.insertBefore(_cache.overlay[_cache.item], _cache.d.body.lastChild.nextSibling);
+                d.body.insertBefore(_cache.overlay[_cache.item], d.body.lastChild.nextSibling);
             } else {
                 _cache.overlay.push(null);
             }
 
             // Modal
-            _cache.wrapper.push(_cache.create.call(_cache.d, 'div'));
+            _cache.wrapper.push(_cache.create.call(d, 'div'));
             _cache.wrapper[_cache.item].classList.add(
                 'custombox-modal-wrapper',
                 'custombox-modal-wrapper-' + _cache.settings[_cache.item].effect
             );
             _cache.wrapper[_cache.item].style.zIndex = zIndex + 3;
-            _cache.d.body.insertBefore(_cache.wrapper[_cache.item], _cache.d.body.firstChild);
+            d.body.insertBefore(_cache.wrapper[_cache.item], d.body.lastChild.nextSibling);
 
-            _cache.container.push(_cache.create.call(_cache.d, 'div'));
+            _cache.container.push(_cache.create.call(d, 'div'));
             _cache.container[_cache.item].classList.add(
                 'custombox-modal-container',
                 'custombox-modal-container-' + _cache.settings[_cache.item].effect
@@ -193,7 +194,7 @@ var Custombox = (function () {
                 }
             }
 
-            _cache.modal.push(_cache.create.call(_cache.d, 'div'));
+            _cache.modal.push(_cache.create.call(d, 'div'));
             _cache.modal[_cache.item].classList.add(
                 'custombox-modal',
                 'custombox-modal-' + _cache.settings[_cache.item].effect + ( _config.modal.position.indexOf( _cache.settings[_cache.item].effect ) > -1 ? '-' + _cache.settings[_cache.item].animation[0].trim() : '' )
@@ -214,9 +215,9 @@ var Custombox = (function () {
             if ( _cache.settings[_cache.item].position.indexOf(',') > -1 ) {
                 _cache.settings[_cache.item].position = _cache.settings[_cache.item].position.split(',');
                 if ( _cache.settings[_cache.item].target.charAt(0) === '#' || ( _cache.settings[_cache.item].target.charAt(0) === '.' && _cache.settings[_cache.item].target.charAt(1) !== '/' ) ) {
-                    if ( _cache.d.querySelector(_cache.settings[_cache.item].target) ) {
-                        _cache.inline.push(_cache.create.call(_cache.d, 'div'));
-                        _cache.content.push(_cache.d.querySelector(_cache.settings[_cache.item].target));
+                    if ( d.querySelector(_cache.settings[_cache.item].target) ) {
+                        _cache.inline.push(_cache.create.call(d, 'div'));
+                        _cache.content.push(d.querySelector(_cache.settings[_cache.item].target));
                         _cache.content[_cache.item].style.display = 'block';
                         _cache.content[_cache.item].parentNode.insertBefore(_cache.inline[_cache.item], _cache.content[_cache.item]);
                         this.size().open();
@@ -234,7 +235,7 @@ var Custombox = (function () {
         ajax: function () {
             var _this = this,
                 xhr = new XMLHttpRequest(),
-                modal = _cache.create.call(_cache.d, 'div');
+                modal = _cache.create.call(d, 'div');
             xhr.onreadystatechange = function () {
                 if( xhr.readyState === 4 ) {
                     if( xhr.status === 200 ) {
@@ -258,8 +259,7 @@ var Custombox = (function () {
             xhr.send(null);
         },
         size: function () {
-            var w = _cache.content[_cache.item].offsetWidth,
-                h = _cache.content[_cache.item].offsetHeight;
+            var customw = _cache.content[_cache.item].offsetWidth;
             if ( !_cache.inline[_cache.item] ) {
                 if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
                     _cache.content[_cache.item].style.styleFloat = 'none';
@@ -270,17 +270,17 @@ var Custombox = (function () {
 
             // Check width.
             if ( !isNaN( _cache.settings[_cache.item].width ) && _cache.settings[_cache.item].width !== null ) {
-                w = parseInt( _cache.settings[_cache.item].width, 0);
+                customw = parseInt( _cache.settings[_cache.item].width, 0);
             }
 
             // Storage.
-            _cache.size.push(w);
+            _cache.size.push(customw);
 
             // Width.
-            if ( _cache.size[_cache.item] + 60 >= _cache.w.innerWidth ) {
+            if ( _cache.size[_cache.item] + 60 >= w.innerWidth ) {
                 _cache.container[_cache.item].style.width = 'auto';
                 _cache.container[_cache.item].style.margin = '5%';
-                _cache.wrapper[_cache.item].style.width = _cache.w.innerWidth + 'px';
+                _cache.wrapper[_cache.item].style.width = w.innerWidth + 'px';
             } else {
                 switch ( _cache.settings[_cache.item].position[0].trim() ) {
                     case 'left':
@@ -297,7 +297,7 @@ var Custombox = (function () {
             _cache.modal[_cache.item].appendChild(_cache.content[_cache.item]);
 
             // Top.
-            if ( _cache.content[_cache.item].offsetHeight >= _cache.w.innerHeight ) {
+            if ( _cache.content[_cache.item].offsetHeight >= w.innerHeight ) {
                 _cache.container[_cache.item].style.marginTop = '5%';
                 _cache.container[_cache.item].style.marginBottom = '5%';
             } else {
@@ -307,10 +307,10 @@ var Custombox = (function () {
                         result = 0;
                         break;
                     case 'bottom':
-                        result = _cache.w.innerHeight - _cache.content[_cache.item].offsetHeight + 'px';
+                        result = w.innerHeight - _cache.content[_cache.item].offsetHeight + 'px';
                         break;
                     default:
-                        result = _cache.w.innerHeight / 2 - _cache.content[_cache.item].offsetHeight / 2 + 'px';
+                        result = w.innerHeight / 2 - _cache.content[_cache.item].offsetHeight / 2 + 'px';
                         break;
                  }
                 _cache.container[_cache.item].style.marginTop = result;
@@ -349,8 +349,8 @@ var Custombox = (function () {
 
             // Esc.
             if ( _cache.settings[_cache.item].escKey ) {
-                _cache.d.onkeydown = function ( event ) {
-                    event = event || _cache.w.event;
+                d.onkeydown = function ( event ) {
+                    event = event || w.event;
                     if ( event.keyCode === 27 ) {
                         _this.close();
                     }
@@ -367,7 +367,7 @@ var Custombox = (function () {
             }
 
             // Listener responsive.
-            _cache.w.addEventListener('onorientationchange' in _cache.w ? 'orientationchange' : 'resize', function () {
+            w.addEventListener('onorientationchange' in w ? 'orientationchange' : 'resize', function () {
                 _this.responsive();
             }, false);
 
@@ -401,7 +401,7 @@ var Custombox = (function () {
         },
         close: function () {
             var start = function () {
-                _cache.h.classList.remove('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
+                h.classList.remove('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
 
                 if ( _cache.settings[_cache.item].overlay ) {
                     // Add class from overlay.
@@ -428,13 +428,13 @@ var Custombox = (function () {
             end = function () {
                 // Remove classes from html tag.
                 if ( !_cache.item ) {
-                    _cache.h.classList.remove('custombox-perspective', 'custombox-open');
+                    h.classList.remove('custombox-perspective', 'custombox-open');
                     if ( typeof _cache.scroll[_cache.item] !== 'undefined' ) {
-                        _cache.w.scrollTo(0, _cache.scroll[_cache.item]);
+                        w.scrollTo(0, _cache.scroll[_cache.item]);
                     }
                 }
 
-                _cache.h.classList.remove('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
+                h.classList.remove('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
 
                 if ( _cache.inline[_cache.item] ) {
                     // Remove property width and display.
@@ -469,7 +469,7 @@ var Custombox = (function () {
 
                 // Unwrap.
                 if ( !_cache.item ) {
-                    for ( var contents = _cache.d.querySelectorAll('.custombox-container > *'), i = 0, t = contents.length; i < t; i++ ) {
+                    for ( var contents = d.querySelectorAll('.custombox-container > *'), i = 0, t = contents.length; i < t; i++ ) {
                         document.body.insertBefore(contents[i], _cache.main);
                     }
                     if ( _cache.main.parentNode ) {
@@ -515,11 +515,11 @@ var Custombox = (function () {
         responsive: function () {
             for ( var i = 0, t = _cache.container.length, result; i < t; i++ ) {
                 // Width.
-                if ( _cache.size[i] + 60 >= _cache.w.innerWidth ) {
+                if ( _cache.size[i] + 60 >= w.innerWidth ) {
                     _cache.container[i].style.width = 'auto';
                     _cache.container[i].style.marginLeft = '5%';
                     _cache.container[i].style.marginRight = '5%';
-                    _cache.wrapper[_cache.item].style.width = _cache.w.innerWidth + 'px';
+                    _cache.wrapper[_cache.item].style.width = w.innerWidth + 'px';
                 } else {
                     switch ( _cache.settings[_cache.item].position[0].trim() ) {
                         case 'left':
@@ -538,7 +538,7 @@ var Custombox = (function () {
                 }
 
                 // Top.
-                if ( _cache.content[i].offsetHeight >= _cache.w.innerHeight ) {
+                if ( _cache.content[i].offsetHeight >= w.innerHeight ) {
                     _cache.container[i].style.marginTop = '5%';
                     _cache.container[i].style.marginBottom = '5%';
                 } else {
@@ -547,10 +547,10 @@ var Custombox = (function () {
                             result = 0;
                             break;
                         case 'bottom':
-                            result = _cache.w.innerHeight - _cache.content[i].offsetHeight + 'px';
+                            result = w.innerHeight - _cache.content[i].offsetHeight + 'px';
                             break;
                         default:
-                            result = _cache.w.innerHeight / 2 - _cache.content[i].offsetHeight / 2 + 'px';
+                            result = w.innerHeight / 2 - _cache.content[i].offsetHeight / 2 + 'px';
                             break;
                     }
                     _cache.container[i].style.marginTop = result;
@@ -571,8 +571,8 @@ var Custombox = (function () {
          * @desc Get the highest z-index in the document.
          */
         zIndex: function () {
-            if ( !window.getComputedStyle ) {
-                window.getComputedStyle = function( el ) {
+            if ( !w.getComputedStyle ) {
+                w.getComputedStyle = function( el ) {
                     this.el = el;
                     this.getPropertyValue = function( prop ) {
                         var re = /(\-([a-z]){1})/g;
@@ -590,7 +590,7 @@ var Custombox = (function () {
             var zIndex = 0;
             if ( isNaN ( _cache.settings[_cache.item].zIndex ) ) {
                 for ( var x = 0, elements = document.getElementsByTagName('*'), xLen = elements.length; x < xLen; x += 1 ) {
-                    var val = window.getComputedStyle(elements[x]).getPropertyValue('z-index');
+                    var val = w.getComputedStyle(elements[x]).getPropertyValue('z-index');
                     if ( val ) {
                         val =+ val;
                         if ( val > zIndex ) {
@@ -638,4 +638,4 @@ var Custombox = (function () {
             _private.close();
         }
     };
-})();
+})( window, document, document.documentElement );
