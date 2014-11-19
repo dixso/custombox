@@ -209,7 +209,7 @@ var Custombox = (function () {
             if ( _cache.settings[_cache.item].position.indexOf(',') > -1 ) {
                 _cache.settings[_cache.item].position = _cache.settings[_cache.item].position.split(',');
                 if ( _cache.settings[_cache.item].target.charAt(0) === '#' || ( _cache.settings[_cache.item].target.charAt(0) === '.' && _cache.settings[_cache.item].target.charAt(1) !== '/' ) ) {
-                    if ( _cache.d.querySelector(_cache.settings[_cache.item].target) || typeof _cache.settings[_cache.item].position[1] !== 'undefined' ) {
+                    if ( _cache.d.querySelector(_cache.settings[_cache.item].target) ) {
                         _cache.inline.push(_cache.create.call(_cache.d, 'div'));
                         _cache.content.push(_cache.d.querySelector(_cache.settings[_cache.item].target));
                         _cache.content[_cache.item].style.display = 'block';
@@ -327,11 +327,11 @@ var Custombox = (function () {
                 if ( _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) {
                     _cache.wrapper[_cache.item].classList.add('custombox-modal-open');
                 } else {
-                    _cache.overlay[_cache.item].addEventListener('transitionend', function ( event ) {
-                        if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'transform-origin' || event.propertyName === 'opacity' || event.propertyName.match('^-webkit-transform-origin') ) && _cache.close[_cache.item] === undefined ) {
-                            _cache.wrapper[_cache.item].classList.add('custombox-modal-open');
-                        }
-                    }, false);
+                    var open = function () {
+                        _cache.overlay[_cache.item].removeEventListener('transitionend', open);
+                        _cache.wrapper[_cache.item].classList.add('custombox-modal-open');
+                    };
+                    _cache.overlay[_cache.item].addEventListener('transitionend', open, false);
                 }
             } else {
                 _cache.wrapper[_cache.item].classList.add('custombox-modal-open');
@@ -355,7 +355,7 @@ var Custombox = (function () {
             // Overlay close.
             if ( _cache.settings[_cache.item].overlayClose ) {
                 _cache.wrapper[_cache.item].addEventListener('click', function ( event ) {
-                    if ( event.target === _cache.wrapper[_cache.item] && _cache.close[_cache.item] === undefined ) {
+                    if ( event.target === _cache.wrapper[_cache.item] ) {
                         _this.close();
                     }
                 }, false);
@@ -366,25 +366,31 @@ var Custombox = (function () {
                 _this.responsive();
             }, false);
 
-            // Callback oncomplete.
-            _cache.modal[_cache.item].addEventListener('transitionend', function ( event ) {
-                if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' ) && _cache.open[_cache.item] === undefined ) {
-                    _cache.open.push(true);
-
-                    // Execute the scripts.
-                    if ( !_cache.inline[_cache.item] ) {
-                        for ( var i = 0, script = _cache.modal[_cache.item].getElementsByTagName('script'), t = script.length; i < t; i++ ) {
-                            new Function( script[i].text )();
-                        }
-                    }
-
-                    if ( _cache.settings[_cache.item] && typeof _cache.settings[_cache.item].complete === 'function' ) {
-                        _cache.settings[_cache.item].complete.call();
+            var callback = function () {
+                // Execute the scripts.
+                if ( !_cache.inline[_cache.item] ) {
+                    for ( var i = 0, script = _cache.modal[_cache.item].getElementsByTagName('script'), t = script.length; i < t; i++ ) {
+                        new Function( script[i].text )();
                     }
                 }
-            }, false);
+
+                if ( _cache.settings[_cache.item] && typeof _cache.settings[_cache.item].complete === 'function' ) {
+                    _cache.settings[_cache.item].complete.call();
+                }
+            };
+
+            // Callback complete.
+            var complete = function () {
+                _cache.modal[_cache.item].removeEventListener('transitionend', complete);
+                callback();
+            };
+            if ( _config.oldBrowser ) {
+                callback();
+            } else {
+                _cache.modal[_cache.item].addEventListener('transitionend', complete, false);
+            }
         },
-        close: function ( force ) {
+        close: function () {
             var start = function () {
                 _cache.h.classList.remove('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
 
@@ -398,27 +404,16 @@ var Custombox = (function () {
 
                     _cache.overlay[_cache.item].classList.remove('custombox-overlay-open');
                     _cache.main.classList.remove('custombox-container-open');
-
-                    // Listener overlay.
-                    if ( _config.oldBrowser || force ) {
+                }
+                // Listener overlay.
+                if ( _config.oldBrowser || !_cache.overlay[_cache.item] ) {
+                    end();
+                } else {
+                    var overlay = function () {
+                        _cache.overlay[_cache.item].removeEventListener('transitionend', overlay);
                         end();
-                    } else {
-                        _cache.overlay[_cache.item].addEventListener('transitionend', function ( event ) {
-                            if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' ) && _cache.close[_cache.item] === undefined ) {
-                                end();
-                            }
-                        }, false );
-                    }
-                } else if ( _cache.close[_cache.item] === undefined ) {
-                    if ( _config.oldBrowser ) {
-                        end();
-                    } else {
-                        _cache.modal[_cache.item].addEventListener('transitionend', function ( event ) {
-                            if ( ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'opacity' ) && _cache.close[_cache.item] === undefined ) {
-                                end();
-                            }
-                        });
-                    }
+                    };
+                    _cache.overlay[_cache.item].addEventListener('transitionend', overlay, false);
                 }
             },
             end = function () {
@@ -463,17 +458,17 @@ var Custombox = (function () {
                     _cache.settings[_cache.item].close.call();
                 }
 
-                // Unwrap.
-                for ( var contents = _cache.d.querySelectorAll('.custombox-container > *'), i = 0, t = contents.length; i < t; i++ ) {
-                    document.body.insertBefore(contents[i], _cache.main);
-                }
+                if ( !_cache.item ) {
+                    // Unwrap.
+                    for ( var contents = _cache.d.querySelectorAll('.custombox-container > *'), i = 0, t = contents.length; i < t; i++ ) {
+                        document.body.insertBefore(contents[i], _cache.main);
+                    }
 
-                _cache.main.parentNode.removeChild(_cache.main);
+                    _cache.main.parentNode.removeChild(_cache.main);
+                }
 
                 // Remove items.
                 _cache.wrapper.pop();
-                _cache.open.pop();
-                _cache.close.pop();
                 _cache.inline.pop();
                 _cache.content.pop();
                 _cache.container.pop();
@@ -482,7 +477,6 @@ var Custombox = (function () {
                 _cache.settings.pop();
                 _cache.scroll.pop();
                 _cache.item--;
-                _cache.close[_cache.item] = true;
             };
 
             if ( _cache.item > -1 ) {
@@ -495,15 +489,15 @@ var Custombox = (function () {
                 // Remove classes.
                 _cache.wrapper[_cache.item].classList.remove('custombox-modal-open');
 
-                if ( ( _config.oldBrowser || _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) || force ) {
+                if ( ( _config.oldBrowser || _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) ) {
                     start();
                 } else {
-                    // Listener overlay.
-                    _cache.wrapper[_cache.item].addEventListener('transitionend', function ( event ) {
-                        if ( event.propertyName === 'transform' || event.propertyName === '-webkit-transform' || event.propertyName === 'visibility' || event.propertyName === 'opacity' ) {
-                            start();
-                        }
-                    }, false);
+                    // Listener wrapper.
+                    var wrapper = function () {
+                        _cache.wrapper[_cache.item].removeEventListener('transitionend', wrapper);
+                        start();
+                    };
+                    _cache.wrapper[_cache.item].addEventListener('transitionend', wrapper, false);
                 }
             }
         },
@@ -567,12 +561,12 @@ var Custombox = (function () {
          */
         zIndex: function () {
             if ( !window.getComputedStyle ) {
-                window.getComputedStyle = function( el, pseudo ) {
+                window.getComputedStyle = function( el ) {
                     this.el = el;
-                    this.getPropertyValue = function(prop) {
+                    this.getPropertyValue = function( prop ) {
                         var re = /(\-([a-z]){1})/g;
-                        if (prop == 'float') prop = 'styleFloat';
-                        if (re.test(prop)) {
+                        if ( prop == 'float' ) prop = 'styleFloat';
+                        if ( re.test(prop) ) {
                             prop = prop.replace(re, function () {
                                 return arguments[2].toUpperCase();
                             });
