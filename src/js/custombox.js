@@ -211,6 +211,11 @@ var Custombox = (function ( w, d, h ) {
                 _cache.settings[_cache.item].open.call();
             }
 
+            // Trigger open.
+            var topen = d.createEvent('Event');
+            topen.initEvent('custombox.open', true, true);
+            d.dispatchEvent(topen);
+
             // Convert the string to array.
             if ( _cache.settings[_cache.item].position.indexOf(',') > -1 ) {
                 _cache.settings[_cache.item].position = _cache.settings[_cache.item].position.split(',');
@@ -382,6 +387,11 @@ var Custombox = (function ( w, d, h ) {
                 if ( _cache.settings[_cache.item] && typeof _cache.settings[_cache.item].complete === 'function' ) {
                     _cache.settings[_cache.item].complete.call();
                 }
+
+                // Trigger complete.
+                var tcomplete = d.createEvent('Event');
+                tcomplete.initEvent('custombox.complete', true, true);
+                d.dispatchEvent(tcomplete);
             };
 
             // Callback complete.
@@ -466,6 +476,11 @@ var Custombox = (function ( w, d, h ) {
                 if ( typeof _cache.settings[_cache.item].close === 'function' ) {
                     _cache.settings[_cache.item].close.call();
                 }
+
+                // Trigger close.
+                var tclose = d.createEvent('Event');
+                tclose.initEvent('custombox.close', true, true);
+                d.dispatchEvent(tclose);
 
                 // Unwrap.
                 if ( !_cache.item ) {

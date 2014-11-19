@@ -368,6 +368,18 @@
                                     <td>close</td>
                                     <td>Close Custombox.</td>
                                 </tr>
+                                <tr>
+                                    <td>custombox.open</td>
+                                    <td>Invoke the open method.</td>
+                                </tr>
+                                <tr>
+                                    <td>custombox.complete</td>
+                                    <td>Invoke the complete method.</td>
+                                </tr>
+                                <tr>
+                                    <td>custombox.close</td>
+                                    <td>Invoke the close method.</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -536,6 +548,27 @@
                 </code>
                 <code id="demo-close" class="prettyprint">
                     Custombox.close();
+                </code>
+                <code id="demo-custombox.open" class="prettyprint">
+                    document.addEventListener(
+                    'custombox.open',<br>
+                    function () {
+                    &nbsp;&nbsp;&nbsp;&nbsp;alert('open');
+                    <br>}, false);
+                </code>
+                <code id="demo-custombox.complete" class="prettyprint">
+                    document.addEventListener(
+                    'custombox.complete',<br>
+                    function () {
+                    &nbsp;&nbsp;&nbsp;&nbsp;alert('complete');
+                    <br>}, false);
+                </code>
+                <code id="demo-custombox.close" class="prettyprint">
+                    document.addEventListener(
+                    'custombox.close',<br>
+                    function () {
+                    &nbsp;&nbsp;&nbsp;&nbsp;alert('close');
+                    <br>}, false);
                 </code>
             </div>
         </div>
