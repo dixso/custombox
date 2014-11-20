@@ -652,5 +652,9 @@ var Custombox = (function ( w, d, h ) {
         close: function () {
             _private.close();
         }
+        /**
+         * @desc Testing.
+         */
+        //,test: _private
     };
 })( window, document, document.documentElement );
