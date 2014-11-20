@@ -56,6 +56,10 @@ module.exports = function ( grunt ) {
                     livereload: true
                 },
                 tasks: ['dev']
+            },
+            karma: {
+                files: ['test/spec/*.js'],
+                tasks: ['karma:default']
             }
         },
 
@@ -113,6 +117,63 @@ module.exports = function ( grunt ) {
                     'dist/custombox.min.js': ['src/js/*.js']
                 }
             }
+        },
+
+        copy: {
+            default: {
+                expand: true,
+                cwd: 'src/svg/',
+                src: ['**'],
+                dest: 'dist/'
+            }
+        },
+
+        karma: {
+            default: {
+                configFile: 'karma.conf.js',
+                runnerPort: 9999,
+                autoWatch:  true,
+                browsers:   ['Chrome', 'Firefox']
+            }
+        },
+
+        replace: {
+            start: {
+                options: {
+                    patterns: [
+                        {
+                            match: /\/\/,test: _private/g,
+                            replacement: ',test: _private'
+                        }
+                    ]
+                },
+                files: [
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['src/js/*.js'],
+                        dest: 'src/js/'
+                    }
+                ]
+            },
+            end: {
+                options: {
+                    patterns: [
+                        {
+                            match: /,test: _private/g,
+                            replacement: '//,test: _private'
+                        }
+                    ]
+                },
+                files: [
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['src/js/*.js'],
+                        dest: 'src/js/'
+                    }
+                ]
+            }
         }
 
     });
@@ -129,21 +190,31 @@ module.exports = function ( grunt ) {
      Task dev
      ----------------------------
      */
-    grunt.registerTask('dev', ['clean', 'autoprefixer', 'cssmin', 'uglify']);
+    grunt.registerTask('dev', ['clean', 'autoprefixer', 'cssmin', 'uglify', 'copy']);
+
+    /*
+     ----------------------------
+     Task test
+     ----------------------------
+     */
+    grunt.registerTask('test', ['replace:start', 'karma', 'replace:end']);
 
     /*
      ----------------------------
      Task development
      ----------------------------
      */
-    grunt.registerTask('default', ['clean', 'csslint', 'autoprefixer', 'cssmin', 'jshint', 'uglify', 'updatejson']);
+    grunt.registerTask('default', ['test', 'clean', 'csslint', 'autoprefixer', 'cssmin', 'jshint', 'uglify', 'copy', 'updatejson']);
+
+    // Need exclude this rule: @-moz-document url-prefix()
+    grunt.option('force', true);
 
     /*
      ----------------------------
      Task replace
      ----------------------------
      */
-    grunt.registerTask('updatejson', function (key, value) {
+    grunt.registerTask('updatejson', function ( key, value ) {
         var files = ['bower.json', 'custombox.jquery.json'],
             pkg = grunt.file.readJSON('package.json'),
             replace = ['version', 'description', 'name', 'homepage'];
@@ -151,7 +222,7 @@ module.exports = function ( grunt ) {
         for ( var e = 0, te = files.length; e < te; e ++ ) {
             var project = grunt.file.readJSON(files[e]);
             if ( !grunt.file.exists(files[e]) ) {
-                grunt.log.error("file " + files[e] + " not found");
+                grunt.log.error('file ' + files[e] + ' not found');
                 return true;
             }
 
