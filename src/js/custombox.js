@@ -265,6 +265,7 @@ var Custombox = (function ( w, d, h ) {
         },
         size: function () {
             var customw = _cache.content[_cache.item].offsetWidth;
+
             if ( !_cache.inline[_cache.item] ) {
                 if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
                     _cache.content[_cache.item].style.styleFloat = 'none';
@@ -286,6 +287,11 @@ var Custombox = (function ( w, d, h ) {
                 _cache.container[_cache.item].style.width = 'auto';
                 _cache.container[_cache.item].style.margin = '5%';
                 _cache.wrapper[_cache.item].style.width = w.innerWidth + 'px';
+                for ( var i = 0, elements = _cache.content[_cache.item].querySelectorAll(':scope > *'), t = elements.length; i < t; i++ ) {
+                    if ( elements[i].offsetWidth > w.innerWidth ) {
+                        elements[i].style.width = 'auto';
+                    }
+                }
             } else {
                 switch ( _cache.settings[_cache.item].position[0].trim() ) {
                     case 'left':
