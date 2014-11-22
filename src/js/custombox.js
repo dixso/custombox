@@ -97,7 +97,7 @@ var Custombox = (function ( w, d, h ) {
 
             // zIndex overflow.
             if ( zIndex === 2147483647 ) {
-                zIndex = this.w.getComputedStyle(_cache.modal[_cache.item]).getPropertyValue('z-index');
+                zIndex = w.getComputedStyle(_cache.modal[_cache.item]).getPropertyValue('z-index');
             }
 
             // Add class open.
