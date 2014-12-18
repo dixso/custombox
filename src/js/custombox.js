@@ -101,7 +101,8 @@ var Custombox = (function ( w, d, h ) {
             }
 
             // Add class open.
-            h.classList.add('custombox-open', 'custombox-open-' + _cache.settings[_cache.item].overlayEffect);
+            h.classList.add('custombox-open');
+            h.classList.add('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
 
             // Add class perspective.
             if ( _config.overlay.perspective.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) {
@@ -123,18 +124,14 @@ var Custombox = (function ( w, d, h ) {
                 _cache.main.style.transitionDuration = _cache.settings[_cache.item].speed + 'ms';
             }
 
-            _cache.main.classList.add(
-                'custombox-container',
-                'custombox-container-' + _cache.settings[_cache.item].overlayEffect
-            );
+            _cache.main.classList.add('custombox-container');
+            _cache.main.classList.add('custombox-container-' + _cache.settings[_cache.item].overlayEffect);
 
             // Overlay.
             if ( _cache.settings[_cache.item].overlay ) {
                 _cache.overlay.push(_cache.create.call(d, 'div'));
-                _cache.overlay[_cache.item].classList.add(
-                    'custombox-overlay',
-                    'custombox-overlay-' + _cache.settings[_cache.item].overlayEffect
-                );
+                _cache.overlay[_cache.item].classList.add('custombox-overlay');
+                _cache.overlay[_cache.item].classList.add('custombox-overlay-' + _cache.settings[_cache.item].overlayEffect);
                 _cache.overlay[_cache.item].style.zIndex = zIndex + 2;
                 _cache.overlay[_cache.item].style.backgroundColor = _cache.settings[_cache.item].overlayColor;
 
@@ -159,18 +156,14 @@ var Custombox = (function ( w, d, h ) {
 
             // Modal
             _cache.wrapper.push(_cache.create.call(d, 'div'));
-            _cache.wrapper[_cache.item].classList.add(
-                'custombox-modal-wrapper',
-                'custombox-modal-wrapper-' + _cache.settings[_cache.item].effect
-            );
+            _cache.wrapper[_cache.item].classList.add('custombox-modal-wrapper');
+            _cache.wrapper[_cache.item].classList.add('custombox-modal-wrapper-' + _cache.settings[_cache.item].effect);
             _cache.wrapper[_cache.item].style.zIndex = zIndex + 3;
             d.body.insertBefore(_cache.wrapper[_cache.item], d.body.lastChild.nextSibling);
 
             _cache.container.push(_cache.create.call(d, 'div'));
-            _cache.container[_cache.item].classList.add(
-                'custombox-modal-container',
-                'custombox-modal-container-' + _cache.settings[_cache.item].effect
-            );
+            _cache.container[_cache.item].classList.add('custombox-modal-container');
+            _cache.container[_cache.item].classList.add('custombox-modal-container-' + _cache.settings[_cache.item].effect);
             _cache.container[_cache.item].style.zIndex = zIndex + 4;
 
             // Position.
@@ -195,8 +188,8 @@ var Custombox = (function ( w, d, h ) {
             }
 
             _cache.modal.push(_cache.create.call(d, 'div'));
+            _cache.modal[_cache.item].classList.add('custombox-modal');
             _cache.modal[_cache.item].classList.add(
-                'custombox-modal',
                 'custombox-modal-' + _cache.settings[_cache.item].effect + ( _config.modal.position.indexOf( _cache.settings[_cache.item].effect ) > -1 ? '-' + _cache.settings[_cache.item].animation[0].trim() : '' )
             );
             _cache.modal[_cache.item].style.transitionDuration = _cache.settings[_cache.item].speed + 'ms';
@@ -212,9 +205,11 @@ var Custombox = (function ( w, d, h ) {
             }
 
             // Trigger open.
-            var topen = d.createEvent('Event');
-            topen.initEvent('custombox.open', true, true);
-            d.dispatchEvent(topen);
+            if( d.createEvent ) {
+                var topen = d.createEvent('Event');
+                topen.initEvent('custombox.open', true, true);
+                d.dispatchEvent(topen);
+            }
 
             // Convert the string to array.
             if ( _cache.settings[_cache.item].position.indexOf(',') > -1 ) {
@@ -270,7 +265,7 @@ var Custombox = (function ( w, d, h ) {
                 if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
                     _cache.content[_cache.item].style.styleFloat = 'none';
                 } else {
-                    _cache.content[_cache.item].style.cssFloat = "none";
+                    _cache.content[_cache.item].style.cssFloat = 'none';
                 }
             }
 
@@ -395,9 +390,11 @@ var Custombox = (function ( w, d, h ) {
                 }
 
                 // Trigger complete.
-                var tcomplete = d.createEvent('Event');
-                tcomplete.initEvent('custombox.complete', true, true);
-                d.dispatchEvent(tcomplete);
+                if ( d.createEvent ) {
+                    var tcomplete = d.createEvent('Event');
+                    tcomplete.initEvent('custombox.complete', true, true);
+                    d.dispatchEvent(tcomplete);
+                }
             };
 
             // Callback complete.
@@ -444,7 +441,8 @@ var Custombox = (function ( w, d, h ) {
             end = function () {
                 // Remove classes from html tag.
                 if ( !_cache.item ) {
-                    h.classList.remove('custombox-perspective', 'custombox-open');
+                    h.classList.remove('custombox-perspective');
+                    h.classList.remove('custombox-open');
                     if ( typeof _cache.scroll[_cache.item] !== 'undefined' ) {
                         w.scrollTo(0, _cache.scroll[_cache.item]);
                     }
@@ -466,9 +464,7 @@ var Custombox = (function ( w, d, h ) {
                     _cache.inline[_cache.item].parentNode.replaceChild(_cache.content[_cache.item], _cache.inline[_cache.item]);
                 }
 
-                _cache.main.classList.remove(
-                    'custombox-container-' + _cache.settings[_cache.item].overlayEffect
-                );
+                _cache.main.classList.remove('custombox-container-' + _cache.settings[_cache.item].overlayEffect);
 
                 // Remove modal.
                 _cache.wrapper[_cache.item].parentNode.removeChild(_cache.wrapper[_cache.item]);
@@ -484,9 +480,11 @@ var Custombox = (function ( w, d, h ) {
                 }
 
                 // Trigger close.
-                var tclose = d.createEvent('Event');
-                tclose.initEvent('custombox.close', true, true);
-                d.dispatchEvent(tclose);
+                if ( d.createEvent ) {
+                    var tclose = d.createEvent('Event');
+                    tclose.initEvent('custombox.close', true, true);
+                    d.dispatchEvent(tclose);
+                }
 
                 // Unwrap.
                 if ( !_cache.item ) {

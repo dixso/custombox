@@ -74,7 +74,8 @@ module.exports = function ( grunt ) {
                 options: {
                     'adjoining-classes':    false,
                     'vendor-prefix':        false,
-                    'universal-selector':   false
+                    'universal-selector':   false,
+                    'fallback-colors':      false
                 },
                 src: ['src/css/*.css']
             }
