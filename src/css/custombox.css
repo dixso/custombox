@@ -379,7 +379,14 @@
  */
 .custombox-open-blur .custombox-container-blur {
     filter: blur(3px);
-    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='3');
+}
+@media all and (-ms-high-contrast: none) {
+    .custombox-open-blur .custombox-container-blur {
+        text-shadow: 0 0 8px #000;
+        color: rgba(255,255,255,0);
+        filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='3');
+        zoom: 1;
+    }
 }
 @-moz-document url-prefix() {
     .custombox-open-blur .custombox-container-blur {
