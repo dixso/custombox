@@ -95,11 +95,6 @@ var Custombox = (function ( w, d, h ) {
             // Get zIndex.
             var zIndex = _utilities.zIndex();
 
-            // zIndex overflow.
-            if ( zIndex === 2147483647 ) {
-                zIndex = w.getComputedStyle(_cache.modal[_cache.item]).getPropertyValue('z-index');
-            }
-
             // Add class open.
             h.classList.add('custombox-open');
             h.classList.add('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
@@ -259,6 +254,10 @@ var Custombox = (function ( w, d, h ) {
             xhr.send(null);
         },
         size: function () {
+            if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
+                w.innerHeight = h.clientHeight;
+            }
+
             var customw = _cache.content[_cache.item].offsetWidth;
 
             if ( !_cache.inline[_cache.item] ) {
@@ -335,7 +334,7 @@ var Custombox = (function ( w, d, h ) {
 
                 _cache.main.classList.add('custombox-container-open');
 
-                if ( _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) {
+                if ( _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 || !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
                     _cache.wrapper[_cache.item].classList.add('custombox-modal-open');
                 } else {
                     var open = function () {
@@ -403,7 +402,9 @@ var Custombox = (function ( w, d, h ) {
                 _cache.modal[_cache.item].removeEventListener('transitionend', complete);
             };
             if ( _config.oldBrowser ) {
-                callback();
+                setTimeout(function () {
+                    callback();
+                }, _cache.settings[_cache.item].overlaySpeed);
             } else {
                 if ( _cache.settings[_cache.item].effect !== 'slit' ) {
                     _cache.modal[_cache.item].addEventListener('transitionend', complete, false);
@@ -453,8 +454,8 @@ var Custombox = (function ( w, d, h ) {
                 if ( _cache.inline[_cache.item] ) {
                     // Remove property width and display.
                     if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
-                        _cache.content[_cache.item].removeAttribute('width');
-                        _cache.content[_cache.item].removeAttribute('display');
+                        _cache.content[_cache.item].style.removeAttribute('width');
+                        _cache.content[_cache.item].style.removeAttribute('display');
                     } else {
                         _cache.content[_cache.item].style.removeProperty('width');
                         _cache.content[_cache.item].style.removeProperty('display');
@@ -532,6 +533,10 @@ var Custombox = (function ( w, d, h ) {
             }
         },
         responsive: function () {
+            if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
+                w.innerHeight = h.clientHeight;
+            }
+
             for ( var i = 0, t = _cache.container.length, result; i < t; i++ ) {
                 // Width.
                 if ( _cache.size[i] + 60 >= w.innerWidth ) {
