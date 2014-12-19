@@ -27,6 +27,7 @@ var Custombox = (function ( w, d, h ) {
      */
     _defaults = {
         target:         null,               // Set the URL, ID or Class.
+        id:             null,               // Set the ID for the modal.
         cache:          false,              // If set to false, it will force requested pages not to be cached by the browser only when send by AJAX.
         escKey:         true,               // Allows the user to close the modal by pressing 'ESC'.
         zIndex:         'auto',             // Overlay z-index: Auto or number.
@@ -51,13 +52,14 @@ var Custombox = (function ( w, d, h ) {
      ----------------------------
      */
     _config = {
-        oldBrowser:         navigator.appVersion.indexOf('MSIE 8.') > -1 || navigator.appVersion.indexOf('MSIE 9.') > -1 || /(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent),  // Check if is a old browser.
+        oldIE:              navigator.appVersion.indexOf('MSIE 8.') > -1 || navigator.appVersion.indexOf('MSIE 9.') > -1,       // Check if is a old IE.
+        oldMobile:          /(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent),                                              // Check if is a old browser mobile.
         overlay: {
-            perspective:    ['letmein', 'makeway', 'slip'],                                                                                                                         // Custom effects overlay.
-            together:       ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale', 'simplegenie', 'slit', 'slip']                                                     // Animation together (overlay and modal).
+            perspective:    ['letmein', 'makeway', 'slip'],                                                                     // Custom effects overlay.
+            together:       ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale', 'simplegenie', 'slit', 'slip'] // Animation together (overlay and modal).
         },
         modal: {
-            position:       ['slide', 'flip', 'rotate']                                                                                                                             // Custom animation of the modal.
+            position:       ['slide', 'flip', 'rotate']                                                                         // Custom animation of the modal.
         }
     },
     /*
@@ -79,16 +81,14 @@ var Custombox = (function ( w, d, h ) {
                 .binds();
         },
         merge: function () {
-            _cache.item++;
-
             // Merge objects.
             _cache.settings.push(_utilities.extend( {}, _defaults, _cache.options ));
             delete _cache.options;
 
+            _cache.item = _cache.settings.length - 1;
             if ( _cache.settings[_cache.item].overlayEffect === 'auto' ) {
                 _cache.settings[_cache.item].overlayEffect = _cache.settings[_cache.item].effect;
             }
-
             return this;
         },
         built: function () {
@@ -129,6 +129,7 @@ var Custombox = (function ( w, d, h ) {
                 _cache.overlay[_cache.item].classList.add('custombox-overlay-' + _cache.settings[_cache.item].overlayEffect);
                 _cache.overlay[_cache.item].style.zIndex = zIndex + 2;
                 _cache.overlay[_cache.item].style.backgroundColor = _cache.settings[_cache.item].overlayColor;
+                _cache.overlay[_cache.item].dataset.custombox = _cache.settings[_cache.item].id;
 
                 // Add class perspective.
                 if ( _config.overlay.perspective.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 || _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) {
@@ -154,6 +155,7 @@ var Custombox = (function ( w, d, h ) {
             _cache.wrapper[_cache.item].classList.add('custombox-modal-wrapper');
             _cache.wrapper[_cache.item].classList.add('custombox-modal-wrapper-' + _cache.settings[_cache.item].effect);
             _cache.wrapper[_cache.item].style.zIndex = zIndex + 3;
+            _cache.wrapper[_cache.item].dataset.custombox = _cache.settings[_cache.item].id;
             d.body.insertBefore(_cache.wrapper[_cache.item], d.body.lastChild.nextSibling);
 
             _cache.container.push(_cache.create.call(d, 'div'));
@@ -237,7 +239,7 @@ var Custombox = (function ( w, d, h ) {
                         modal.innerHTML = xhr.responseText;
                         _cache.content.push(modal);
                         _cache.content[_cache.item].style.display = 'block';
-                        if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
+                        if ( _config.oldIE ) {
                             _cache.content[_cache.item].style.styleFloat = 'left';
                         } else {
                             _cache.content[_cache.item].style.cssFloat = 'left';
@@ -254,14 +256,14 @@ var Custombox = (function ( w, d, h ) {
             xhr.send(null);
         },
         size: function () {
-            if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
+            if ( _config.oldIE ) {
                 w.innerHeight = h.clientHeight;
             }
 
             var customw = _cache.content[_cache.item].offsetWidth;
 
             if ( !_cache.inline[_cache.item] ) {
-                if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
+                if ( _config.oldIE ) {
                     _cache.content[_cache.item].style.styleFloat = 'none';
                 } else {
                     _cache.content[_cache.item].style.cssFloat = 'none';
@@ -334,7 +336,7 @@ var Custombox = (function ( w, d, h ) {
 
                 _cache.main.classList.add('custombox-container-open');
 
-                if ( _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 || !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
+                if ( _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 || _config.oldIE ) {
                     _cache.wrapper[_cache.item].classList.add('custombox-modal-open');
                 } else {
                     var open = function () {
@@ -401,7 +403,7 @@ var Custombox = (function ( w, d, h ) {
                 callback();
                 _cache.modal[_cache.item].removeEventListener('transitionend', complete);
             };
-            if ( _config.oldBrowser ) {
+            if ( _config.oldIE || _config.oldMobile ) {
                 setTimeout(function () {
                     callback();
                 }, _cache.settings[_cache.item].overlaySpeed);
@@ -413,71 +415,89 @@ var Custombox = (function ( w, d, h ) {
                 }
             }
         },
-        close: function () {
+        close: function ( options ) {
+            // Check ID.
+            var item;
+            if ( options === 'first' ) {
+                item = 0;
+            } else if ( typeof options !== 'undefined' ) {
+                for ( var i = 0, t = _cache.settings.length; i < t; i++ ) {
+                    if ( _cache.settings[i].id == options ) {
+                        item = i;
+                        break;
+                    }
+                }
+                if ( item === undefined ) {
+                    item = _cache.settings.length - 1;
+                }
+            } else {
+                item = _cache.settings.length - 1;
+            }
+
             var start = function () {
-                h.classList.remove('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
+                h.classList.remove('custombox-open-' + _cache.settings[item].overlayEffect);
 
-                if ( _cache.settings[_cache.item].overlay ) {
+                if ( _cache.settings[item].overlay ) {
                     // Add class from overlay.
-                    _cache.overlay[_cache.item].classList.add('custombox-overlay-close');
+                    _cache.overlay[item].classList.add('custombox-overlay-close');
 
-                    if ( _cache.overlay[_cache.item].style.opacity ) {
-                        _cache.overlay[_cache.item].style.opacity = 0;
+                    if ( _cache.overlay[item].style.opacity ) {
+                        _cache.overlay[item].style.opacity = 0;
                     }
 
-                    _cache.overlay[_cache.item].classList.remove('custombox-overlay-open');
+                    _cache.overlay[item].classList.remove('custombox-overlay-open');
                     _cache.main.classList.remove('custombox-container-open');
                 }
                 // Listener overlay.
-                if ( _config.oldBrowser || !_cache.overlay[_cache.item] ) {
+                if ( _config.oldIE || _config.oldMobile || !_cache.overlay[item] ) {
                     end();
                 } else {
                     var overlay = function () {
-                        _cache.overlay[_cache.item].removeEventListener('transitionend', overlay);
+                        _cache.overlay[item].removeEventListener('transitionend', overlay);
                         end();
                     };
-                    _cache.overlay[_cache.item].addEventListener('transitionend', overlay, false);
+                    _cache.overlay[item].addEventListener('transitionend', overlay, false);
                 }
             },
             end = function () {
                 // Remove classes from html tag.
-                if ( !_cache.item ) {
+                if ( _cache.settings.length === 1 ) {
                     h.classList.remove('custombox-perspective');
                     h.classList.remove('custombox-open');
-                    if ( typeof _cache.scroll[_cache.item] !== 'undefined' ) {
-                        w.scrollTo(0, _cache.scroll[_cache.item]);
+                    if ( typeof _cache.scroll[item] !== 'undefined' ) {
+                        w.scrollTo(0, _cache.scroll[item]);
                     }
                 }
 
-                h.classList.remove('custombox-open-' + _cache.settings[_cache.item].overlayEffect);
+                h.classList.remove('custombox-open-' + _cache.settings[item].overlayEffect);
 
-                if ( _cache.inline[_cache.item] ) {
+                if ( _cache.inline[item] ) {
                     // Remove property width and display.
-                    if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
-                        _cache.content[_cache.item].style.removeAttribute('width');
-                        _cache.content[_cache.item].style.removeAttribute('display');
+                    if ( _config.oldIE ) {
+                        _cache.content[item].style.removeAttribute('width');
+                        _cache.content[item].style.removeAttribute('display');
                     } else {
-                        _cache.content[_cache.item].style.removeProperty('width');
-                        _cache.content[_cache.item].style.removeProperty('display');
+                        _cache.content[item].style.removeProperty('width');
+                        _cache.content[item].style.removeProperty('display');
                     }
 
                     // Insert restore div.
-                    _cache.inline[_cache.item].parentNode.replaceChild(_cache.content[_cache.item], _cache.inline[_cache.item]);
+                    _cache.inline[item].parentNode.replaceChild(_cache.content[item], _cache.inline[item]);
                 }
 
-                _cache.main.classList.remove('custombox-container-' + _cache.settings[_cache.item].overlayEffect);
+                _cache.main.classList.remove('custombox-container-' + _cache.settings[item].overlayEffect);
 
                 // Remove modal.
-                _cache.wrapper[_cache.item].parentNode.removeChild(_cache.wrapper[_cache.item]);
+                _cache.wrapper[item].parentNode.removeChild(_cache.wrapper[item]);
 
                 // Remove overlay.
-                if ( _cache.settings[_cache.item].overlay ) {
-                    _cache.overlay[_cache.item].parentNode.removeChild(_cache.overlay[_cache.item]);
+                if ( _cache.settings[item].overlay ) {
+                    _cache.overlay[item].parentNode.removeChild(_cache.overlay[item]);
                 }
 
                 // Callback close.
-                if ( typeof _cache.settings[_cache.item].close === 'function' ) {
-                    _cache.settings[_cache.item].close.call();
+                if ( typeof _cache.settings[item].close === 'function' ) {
+                    _cache.settings[item].close.call();
                 }
 
                 // Trigger close.
@@ -488,7 +508,7 @@ var Custombox = (function ( w, d, h ) {
                 }
 
                 // Unwrap.
-                if ( !_cache.item ) {
+                if ( _cache.settings.length === 1 ) {
                     for ( var contents = d.querySelectorAll('.custombox-container > *'), i = 0, t = contents.length; i < t; i++ ) {
                         document.body.insertBefore(contents[i], _cache.main);
                     }
@@ -498,42 +518,41 @@ var Custombox = (function ( w, d, h ) {
                 }
 
                 // Remove items.
-                _cache.wrapper.pop();
-                if ( _cache.inline[_cache.item] ) {
-                    _cache.inline.pop();
+                _cache.wrapper.splice(item, 1);
+                if ( _cache.inline[item] ) {
+                    _cache.inline.splice(item, 1);
                 }
-                _cache.content.pop();
-                _cache.container.pop();
-                _cache.modal.pop();
-                _cache.overlay.pop();
-                _cache.size.pop();
-                _cache.settings.pop();
-                _cache.scroll.pop();
-                _cache.item--;
+                _cache.content.splice(item, 1);
+                _cache.container.splice(item, 1);
+                _cache.modal.splice(item, 1);
+                _cache.overlay.splice(item, 1);
+                _cache.size.splice(item, 1);
+                _cache.settings.splice(item, 1);
+                _cache.scroll.splice(item, 1);
             };
 
             // Modal
-            if ( _config.modal.position.indexOf( _cache.settings[_cache.item].effect ) > -1 && _cache.settings[_cache.item].animation.length > 1 ) {
-                _cache.modal[_cache.item].classList.remove('custombox-modal-' + _cache.settings[_cache.item].effect + '-' + _cache.settings[_cache.item].animation[0]);
-                _cache.modal[_cache.item].classList.add('custombox-modal-' + _cache.settings[_cache.item].effect + '-' + _cache.settings[_cache.item].animation[1].trim());
+            if ( _config.modal.position.indexOf( _cache.settings[item].effect ) > -1 && _cache.settings[item].animation.length > 1 ) {
+                _cache.modal[item].classList.remove('custombox-modal-' + _cache.settings[item].effect + '-' + _cache.settings[item].animation[0]);
+                _cache.modal[item].classList.add('custombox-modal-' + _cache.settings[item].effect + '-' + _cache.settings[item].animation[1].trim());
             }
 
             // Remove classes.
-            _cache.wrapper[_cache.item].classList.remove('custombox-modal-open');
+            _cache.wrapper[item].classList.remove('custombox-modal-open');
 
-            if ( ( _config.oldBrowser || _config.overlay.together.indexOf( _cache.settings[_cache.item].overlayEffect ) > -1 ) ) {
+            if ( _config.oldIE || _config.oldMobile || _config.overlay.together.indexOf( _cache.settings[item].overlayEffect ) > -1 ) {
                 start();
             } else {
                 // Listener wrapper.
                 var wrapper = function () {
-                    _cache.wrapper[_cache.item].removeEventListener('transitionend', wrapper);
+                    _cache.wrapper[item].removeEventListener('transitionend', wrapper);
                     start();
                 };
-                _cache.wrapper[_cache.item].addEventListener('transitionend', wrapper, false);
+                _cache.wrapper[item].addEventListener('transitionend', wrapper, false);
             }
         },
         responsive: function () {
-            if ( !/(iPhone|iPad|iPod)\sOS\s6/.test(navigator.userAgent) && _config.oldBrowser ) {
+            if ( _config.oldIE ) {
                 w.innerHeight = h.clientHeight;
             }
 
@@ -657,9 +676,11 @@ var Custombox = (function ( w, d, h ) {
         },
         /**
          * @desc Close Custombox.
+         * @param {integer}.
+         * @param {string}.
          */
-        close: function () {
-            _private.close();
+        close: function ( options ) {
+            _private.close( options );
         }
         /**
          * @desc Testing.
