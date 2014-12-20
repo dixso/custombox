@@ -239,6 +239,12 @@
                                     <td>Set the URL, ID or Class.</td>
                                 </tr>
                                 <tr>
+                                    <td>id</td>
+                                    <td>string | number</td>
+                                    <td>null</td>
+                                    <td>Set the ID for the modal.</td>
+                                </tr>
+                                <tr>
                                     <td>cache</td>
                                     <td>boolean</td>
                                     <td>false</td>
@@ -362,28 +368,40 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Property</th>
                                     <th>Description</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>open</td>
+                                    <td>-</td>
+                                    <td>-</td>
                                     <td>Open Custombox.</td>
                                 </tr>
                                 <tr>
                                     <td>close</td>
+                                    <td>string | number</td>
+                                    <td>last</td>
                                     <td>Close Custombox.</td>
                                 </tr>
                                 <tr>
                                     <td>custombox.open</td>
+                                    <td>-</td>
+                                    <td>-</td>
                                     <td>Invoke the open method.</td>
                                 </tr>
                                 <tr>
                                     <td>custombox.complete</td>
+                                    <td>-</td>
+                                    <td>-</td>
                                     <td>Invoke the complete method.</td>
                                 </tr>
                                 <tr>
                                     <td>custombox.close</td>
+                                    <td>-</td>
+                                    <td>-</td>
                                     <td>Invoke the close method.</td>
                                 </tr>
                             </tbody>
@@ -436,9 +454,15 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;target: 'demo/xhr/ajax.html'
                     <br>});
                 </code>
+                <code id="demo-id" class="prettyprint">
+                    Custombox.open({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal',<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;id:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'modal123'
+                    <br>});
+                </code>
                 <code id="demo-cache" class="prettyprint">
                     Custombox.open({<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;target: 'demo/xhr/ajax.html',
+                    &nbsp;&nbsp;&nbsp;&nbsp;target: 'demo/xhr/ajax.html',<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;cache:&nbsp;&nbsp;true
                     <br>});
                 </code>
@@ -552,7 +576,7 @@
                     <br>});
                 </code>
                 <code id="demo-close" class="prettyprint">
-                    Custombox.close();
+                    Custombox.close('first');
                 </code>
                 <code id="demo-custombox.open" class="prettyprint">
                     document.addEventListener(
