@@ -3,6 +3,9 @@
  Demo
  ----------------------------
  */
+iframe {
+    border: none;
+}
 .page-header {
     margin-top: 0;
 }
