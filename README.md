@@ -7,7 +7,7 @@ Runs in IE 8-11, Firefox, Chrome, Safari and Opera.
 
 Found a bug? Please create an issue and include a publicly-accessible demonstration of the bug JSFiddle work well for demonstrating reproducible bugs, but you can use anything as long as it's publicly accessible.
 
-Have an idea that improves Custombox? Please fork this repository, implement your idea (including documentation, if necessary), and submit a pull request.
+Have an idea that improves Custombox? Please fork this repository, implement your idea (including documentation, if necessary), and submit a pull request to develop.
 
 ## Installation
 

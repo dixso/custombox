@@ -251,7 +251,7 @@ var Custombox = (function ( w, d, h ) {
                     }
                 }
             };
-            xhr.open('GET', _cache.settings[_cache.item].target + ( _cache.settings[_cache.item].cache ? '' : (/[?].+=/.test(_cache.settings[_cache.item].target) ? '&_=' : '?_=') + Date.now() ), true);
+            xhr.open('GET', _cache.settings[_cache.item].target + ( _cache.settings[_cache.item].cache ? '' : ( /[?].+=/.test(_cache.settings[_cache.item].target) ? '&_=' : '?_=' ) + Date.now() ), true);
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.send(null);
         },
@@ -612,6 +612,7 @@ var Custombox = (function ( w, d, h ) {
     _utilities = {
         /**
          * @desc Get the highest z-index in the document.
+         * @returns {integer}
          */
         zIndex: function () {
             if ( !w.getComputedStyle ) {
@@ -668,7 +669,7 @@ var Custombox = (function ( w, d, h ) {
     return {
         /**
          * @desc Open Custombox.
-         * @param {object}.
+         * @param {object} options - Options for the custombox.
          */
         open: function ( options ) {
             _cache.options = options;
@@ -676,8 +677,7 @@ var Custombox = (function ( w, d, h ) {
         },
         /**
          * @desc Close Custombox.
-         * @param {integer}.
-         * @param {string}.
+         * @param {integer, string} options - Custom close method.
          */
         close: function ( options ) {
             _private.close( options );
