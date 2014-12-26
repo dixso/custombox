@@ -251,7 +251,7 @@ var Custombox = (function ( w, d, h ) {
                     }
                 }
             };
-            xhr.open('GET', _cache.settings[_cache.item].target + ( !_cache.settings[_cache.item].cache ? '?_=' + Date.now() : '' ), true);
+            xhr.open('GET', _cache.settings[_cache.item].target + ( _cache.settings[_cache.item].cache ? '' : (/[?].+=/.test(_cache.settings[_cache.item].target) ? '&_=' : '?_=') + Date.now() ), true);
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.send(null);
         },
