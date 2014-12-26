@@ -5,9 +5,9 @@ module.exports = function( config ) {
         frameworks: ['jasmine'],
 
         files : [
-            'test/vendor/jquery-2.1.1.min.js',
-            'test/vendor/jasmine-jquery.js',
-            'dist/*.js',
+            'https://code.jquery.com/jquery-2.1.3.min.js',
+            'https://cdn.rawgit.com/velesin/jasmine-jquery/master/lib/jasmine-jquery.js',
+            'src/js/*.js',
             'test/spec/*.js'
         ],
 
