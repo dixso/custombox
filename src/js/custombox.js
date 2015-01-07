@@ -18,6 +18,7 @@ var Custombox = (function ( w, d, h ) {
         close:      [],                     // Storage the callback open.
         open:       [],                     // Storage the callback open.
         scroll:     [],                     // Storage the position of top.
+        display:    [],                     // Storage if the element is hidden.
         item:       -1                      // Number the modals.
     },
     /*
@@ -215,6 +216,7 @@ var Custombox = (function ( w, d, h ) {
                     if ( d.querySelector(_cache.settings[_cache.item].target) ) {
                         _cache.inline.push(_cache.create.call(d, 'div'));
                         _cache.content.push(d.querySelector(_cache.settings[_cache.item].target));
+                        _cache.display.push(_cache.content[_cache.item].style.display === 'none');
                         _cache.content[_cache.item].style.display = 'block';
                         _cache.content[_cache.item].parentNode.insertBefore(_cache.inline[_cache.item], _cache.content[_cache.item]);
                         this.size().open();
@@ -479,6 +481,10 @@ var Custombox = (function ( w, d, h ) {
                     } else {
                         _cache.content[item].style.removeProperty('width');
                         _cache.content[item].style.removeProperty('display');
+                    }
+
+                    if ( _cache.display[item] ) {
+                        _cache.content[item].style.display = 'none';
                     }
 
                     // Insert restore div.

@@ -1,7 +1,7 @@
 {
-  "name": "Custombox",
+  "name": "custombox",
   "description": "Modal Window Effects with transitions CSS3.",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "licenses": [
     {
       "type": "MIT",
