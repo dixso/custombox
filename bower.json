@@ -1,5 +1,5 @@
 {
-  "name": "Custombox",
+  "name": "custombox",
   "description": "Modal Window Effects with transitions CSS3.",
   "keywords": [
     "modal",
@@ -18,7 +18,7 @@
     "mobile",
     "ui"
   ],
-  "version": "2.2.1",
+  "version": "2.2.2",
   "author": {
     "name": "Julio de la Calle",
     "email": "juliodlcp@gmail.com"
