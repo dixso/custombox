@@ -33,6 +33,18 @@ module.exports = function ( grunt ) {
                 ' *  Under MIT License - http://opensource.org/licenses/MIT\n' +
                 ' */\n',
 
+        legacy: '/*\n *  <%= pkg.name %> v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                ' *  Modal Window Effects with transitions CSS3.\n' +
+                ' *  http://dixso.github.io/custombox/\n' +
+                ' *  (c) 2014 Julio de la Calle - @dixso9\n' +
+                ' *\n' +
+                ' *  dataset - https://gist.github.com/brettz9/4093766\n' +
+                ' *  classList - http://purl.eligrey.com/github/classList.js/blob/master/classList.js\n' +
+                ' *  addEventListener - https://gist.github.com/2864711/946225eb3822c203e8d6218095d888aac5e1748e\n' +
+                ' *\n' +
+                ' *  Under MIT License - http://opensource.org/licenses/MIT\n' +
+                ' */\n',
+
         connect: {
             default: {
                 options: {
@@ -84,7 +96,7 @@ module.exports = function ( grunt ) {
         autoprefixer: {
             default: {
                 options: {
-                    browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ios 7']
+                    browsers: ['last 8 versions']
                 },
                 src:    'src/css/*.css',
                 dest:   'dist/custombox.min.css'
@@ -106,16 +118,18 @@ module.exports = function ( grunt ) {
             options: {
                 '-W054': true
             },
-            default: ['src/js/*.js']
+            default: ['src/js/custombox.js']
         },
 
         uglify: {
             default: {
-                options: {
-                    banner: '<%= banner %>'
-                },
                 files: {
-                    'dist/custombox.min.js': ['src/js/*.js']
+                    'dist/custombox.min.js': ['src/js/custombox.js']
+                }
+            },
+            legacy: {
+                files: {
+                    'dist/legacy.min.js': ['src/js/legacy.js']
                 }
             }
         },
@@ -175,6 +189,51 @@ module.exports = function ( grunt ) {
                     }
                 ]
             }
+        },
+
+        injector: {
+            dev: {
+                files: {
+                    'index.html': [
+                        'src/js/legacy.js',
+                        'src/js/custombox.js',
+                        'src/css/*.css'
+                    ]
+                }
+            },
+            prod: {
+                files: {
+                    'index.html': ['dist/*.js', 'dist/*.css']
+                }
+            }
+        },
+
+        usebanner: {
+            custombox: {
+                options: {
+                    position:   'top',
+                    banner:     '<%= banner %>',
+                    linebreak:  true
+                },
+                files: {
+                    src: [
+                        'dist/custombox.min.js',
+                        'dist/*.css'
+                    ]
+                }
+            },
+            legacy: {
+                options: {
+                    position:   'top',
+                    banner:     '<%= legacy %>',
+                    linebreak:  true
+                },
+                files: {
+                    src: [
+                        'dist/legacy.min.js'
+                    ]
+                }
+            }
         }
 
     });
@@ -191,7 +250,7 @@ module.exports = function ( grunt ) {
      Task dev
      ----------------------------
      */
-    grunt.registerTask('dev', ['clean', 'autoprefixer', 'cssmin', 'uglify', 'copy']);
+    grunt.registerTask('dev', ['clean', 'autoprefixer', 'cssmin', 'uglify', 'copy', 'injector:dev']);
 
     /*
      ----------------------------
@@ -205,7 +264,7 @@ module.exports = function ( grunt ) {
      Task development
      ----------------------------
      */
-    grunt.registerTask('default', ['test', 'clean', 'csslint', 'autoprefixer', 'cssmin', 'jshint', 'uglify', 'copy', 'updatejson']);
+    grunt.registerTask('default', ['test', 'clean', 'csslint', 'autoprefixer', 'cssmin', 'jshint', 'uglify', 'copy', 'updatejson', 'usebanner', 'injector:prod']);
 
     // Need exclude this rule: @-moz-document url-prefix()
     grunt.option('force', true);
@@ -216,7 +275,7 @@ module.exports = function ( grunt ) {
      ----------------------------
      */
     grunt.registerTask('updatejson', function ( key, value ) {
-        var files = ['bower.json', 'custombox.jquery.json'],
+        var files = ['bower.json'],
             pkg = grunt.file.readJSON('package.json'),
             replace = ['version', 'description', 'name', 'homepage'];
 

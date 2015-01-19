@@ -19,6 +19,10 @@ Include the `custombox.min.css` stylesheet:
 
     <link rel="stylesheet" href="custombox.min.css">
     
+Make sure to also include the legacy.js file along for the older browsers.
+    
+    <script src="legacy.min.js"></script>
+
 ## Basic usage
     document.getElementById('element').addEventListener('click', function ( e ) {
         Custombox.open({
