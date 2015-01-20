@@ -192,6 +192,10 @@ module.exports = function ( grunt ) {
         },
 
         injector: {
+            options: {
+                addRootSlash:   false,
+                template:       'index.html'
+            },
             dev: {
                 files: {
                     'index.html': [
@@ -203,7 +207,10 @@ module.exports = function ( grunt ) {
             },
             prod: {
                 files: {
-                    'index.html': ['dist/*.js', 'dist/*.css']
+                    'index.html': [
+                        'dist/*.js',
+                        'dist/*.css'
+                    ]
                 }
             }
         },
