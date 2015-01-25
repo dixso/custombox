@@ -1,5 +1,5 @@
 /*
- *  custombox v2.2.3 - 2015-01-19
+ *  custombox v2.2.4 - 2015-01-25
  *  Modal Window Effects with transitions CSS3.
  *  http://dixso.github.io/custombox/
  *  (c) 2014 Julio de la Calle - @dixso9

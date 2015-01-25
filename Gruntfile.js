@@ -41,6 +41,7 @@ module.exports = function ( grunt ) {
                 ' *  dataset - https://gist.github.com/brettz9/4093766\n' +
                 ' *  classList - http://purl.eligrey.com/github/classList.js/blob/master/classList.js\n' +
                 ' *  addEventListener - https://gist.github.com/2864711/946225eb3822c203e8d6218095d888aac5e1748e\n' +
+                ' *  :scope polyfill - http://stackoverflow.com/questions/6481612/queryselector-search-immediate-children\n' +
                 ' *\n' +
                 ' *  Under MIT License - http://opensource.org/licenses/MIT\n' +
                 ' */\n',
