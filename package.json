@@ -1,7 +1,7 @@
 {
   "name": "custombox",
   "description": "Modal Window Effects with transitions CSS3.",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "licenses": [
     {
       "type": "MIT",
@@ -28,7 +28,6 @@
     "grunt-contrib-csslint": "~0.4.0",
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-uglify": "~0.7.0",
-    "grunt-contrib-copy": "~0.7.0",
     "grunt-autoprefixer": "~2.2.0",
     "grunt-replace": "~0.8.0",
     "grunt-karma": "~0.10.1",
