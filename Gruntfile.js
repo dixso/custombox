@@ -28,7 +28,7 @@ module.exports = function ( grunt ) {
         banner: '/*\n *  <%= pkg.name %> v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
                 ' *  Modal Window Effects with transitions CSS3.\n' +
                 ' *  http://dixso.github.io/custombox/\n' +
-                ' *  (c) 2014 Julio de la Calle - @dixso9\n' +
+                ' *  (c) 2015 Julio de la Calle - @dixso9\n' +
                 ' *\n' +
                 ' *  Under MIT License - http://opensource.org/licenses/MIT\n' +
                 ' */\n',
@@ -36,7 +36,7 @@ module.exports = function ( grunt ) {
         legacy: '/*\n *  <%= pkg.name %> v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
                 ' *  Modal Window Effects with transitions CSS3.\n' +
                 ' *  http://dixso.github.io/custombox/\n' +
-                ' *  (c) 2014 Julio de la Calle - @dixso9\n' +
+                ' *  (c) 2015 Julio de la Calle - @dixso9\n' +
                 ' *\n' +
                 ' *  dataset - https://gist.github.com/brettz9/4093766\n' +
                 ' *  classList - http://purl.eligrey.com/github/classList.js/blob/master/classList.js\n' +
@@ -106,9 +106,6 @@ module.exports = function ( grunt ) {
 
         cssmin: {
             default: {
-                options: {
-                    banner: '<%= banner %>'
-                },
                 files: {
                     'dist/custombox.min.css': ['dist/custombox.min.css']
                 }
@@ -132,15 +129,6 @@ module.exports = function ( grunt ) {
                 files: {
                     'dist/legacy.min.js': ['src/js/legacy.js']
                 }
-            }
-        },
-
-        copy: {
-            default: {
-                expand: true,
-                cwd: 'src/svg/',
-                src: ['**'],
-                dest: 'dist/'
             }
         },
 
@@ -258,7 +246,7 @@ module.exports = function ( grunt ) {
      Task dev
      ----------------------------
      */
-    grunt.registerTask('dev', ['clean', 'autoprefixer', 'cssmin', 'uglify', 'copy', 'injector:dev']);
+    grunt.registerTask('dev', ['clean', 'autoprefixer', 'cssmin', 'uglify', 'injector:dev']);
 
     /*
      ----------------------------
@@ -272,10 +260,7 @@ module.exports = function ( grunt ) {
      Task development
      ----------------------------
      */
-    grunt.registerTask('default', ['test', 'clean', 'csslint', 'autoprefixer', 'cssmin', 'jshint', 'uglify', 'copy', 'updatejson', 'usebanner', 'injector:prod']);
-
-    // Need exclude this rule: @-moz-document url-prefix()
-    grunt.option('force', true);
+    grunt.registerTask('default', ['test', 'clean', 'csslint', 'autoprefixer', 'cssmin', 'jshint', 'uglify', 'updatejson', 'injector:prod']);
 
     /*
      ----------------------------
@@ -299,6 +284,8 @@ module.exports = function ( grunt ) {
             }
 
             grunt.file.write(files[e], JSON.stringify(project, null, 2));
+
+            grunt.task.run(['usebanner']);
         }
     });
 };

@@ -388,11 +388,6 @@
         zoom: 1;
     }
 }
-@-moz-document url-prefix() {
-    .custombox-open-blur .custombox-container-blur {
-        filter: url(blur.svg#blur);
-    }
-}
 .custombox-modal-blur {
     transform: translateY(-5%);
     opacity: 0;
