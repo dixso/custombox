@@ -36,14 +36,13 @@
     opacity: 0;
 }
 .custombox-modal-wrapper {
+    right: 0;
+    top: 0;
     bottom: 0;
     left: 0;
     outline: 0 none;
-    overflow-x: auto;
-    overflow-y: scroll;
+    overflow: auto;
     position: fixed;
-    right: 0;
-    top: 0;
     text-align: center;
 }
 .custombox-modal-container {

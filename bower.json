@@ -18,11 +18,16 @@
     "mobile",
     "ui"
   ],
-  "version": "2.2.5",
+  "version": "2.2.6",
   "author": {
     "name": "Julio de la Calle",
     "email": "juliodlcp@gmail.com"
   },
+  "main": [
+    "./dist/custombox.min.css",
+    "./dist/custombox.min.js",
+    "./dist/legacy.min.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/dixso/custombox.git"
