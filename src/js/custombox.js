@@ -24,7 +24,7 @@
         overlayClose:   true,                   // Allows the user to close the modal by clicking the overlay.
         overlaySpeed:   300,                    // Sets the speed of the overlay, in milliseconds.
         overlayEffect:  'auto',                 // Combine any of the effects.
-        width:          null,                   // Set a fixed total width.
+        width:          null,                   // Set a fixed total width or 'full'.
         effect:         'fadein',               // fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale.
         position:       ['center', 'center'],   // Set position of modal. First position 'x': left, center and right. Second position 'y': top, center, bottom.
         animation:      null,                   // Only with effects: slide, flip and rotate (top, right, bottom, left and center) | (vertical or horizontal) and output position separated by commas. Example: 'top, bottom'.
@@ -275,8 +275,13 @@
             }
 
             // Check width.
-            if ( !isNaN( cb.settings.width ) && cb.settings.width !== null ) {
-                customw = parseInt( cb.settings.width, 0);
+            if ( cb.settings.width !== null ) {
+                if ( !isNaN( cb.settings.width ) ) {
+                    customw = parseInt( cb.settings.width, 0);
+                } else {
+                    customw = window.innerWidth;
+                    cb.content.style.height = window.innerHeight + 'px';
+                }
             }
 
             // Storage.
@@ -285,7 +290,9 @@
             // Width.
             if ( cb.size + 60 >= window.innerWidth ) {
                 cb.container.style.width = 'auto';
-                cb.container.style.margin = '5%';
+                if ( cb.settings.width !== 'full' ) {
+                    cb.container.style.margin = '5%';
+                }
                 cb.wrapper.style.width = window.innerWidth + 'px';
                 for ( var i = 0, elements = cb.content.querySelectorAll(':scope > *'), t = elements.length; i < t; i++ ) {
                     if ( elements[i].offsetWidth > window.innerWidth ) {
@@ -308,7 +315,7 @@
             cb.modal.appendChild(cb.content);
 
             // Top.
-            if ( cb.content.offsetHeight >= window.innerHeight ) {
+            if ( cb.content.offsetHeight >= window.innerHeight && cb.settings.width !== 'full' ) {
                 cb.container.style.marginTop = '5%';
                 cb.container.style.marginBottom = '5%';
             } else {
@@ -324,7 +331,7 @@
                         result = window.innerHeight / 2 - cb.content.offsetHeight / 2 + 'px';
                         break;
                 }
-                cb.container.style.marginTop = result;
+                cb.container.style.marginTop = 0;
             }
 
             return this;
@@ -544,9 +551,11 @@
             for ( var i = 0, t = this.cb.length, result; i < t; i++ ) {
                 // Width.
                 if ( this.cb[i].size + 60 >= window.innerWidth ) {
+                    if ( cb.settings.width !== 'full' ) {
+                        this.cb[i].container.style.marginLeft = '5%';
+                        this.cb[i].container.style.marginRight = '5%';
+                    }
                     this.cb[i].container.style.width = 'auto';
-                    this.cb[i].container.style.marginLeft = '5%';
-                    this.cb[i].container.style.marginRight = '5%';
                     this.cb[i].wrapper.style.width = window.innerWidth + 'px';
                 } else {
                     switch ( this.cb[i].settings.position[0].trim() ) {
@@ -566,7 +575,7 @@
                 }
 
                 // Top.
-                if ( this.cb[i].content.offsetHeight >= window.innerHeight ) {
+                if ( this.cb[i].content.offsetHeight >= window.innerHeight && cb.settings.width !== 'full' ) {
                     this.cb[i].container.style.marginTop = '5%';
                     this.cb[i].container.style.marginBottom = '5%';
                 } else {
