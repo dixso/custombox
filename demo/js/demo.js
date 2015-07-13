@@ -3,8 +3,8 @@
  Demo
  ----------------------------
  */
-$(function () {
-    $('.list-group-item').on('click', function ( e ) {
+$(function() {
+    $('.list-group-item').on('click', function( e ) {
         Custombox.open({
             target:     this.getAttribute('href'),
             effect:     this.firstChild.nodeValue.trim().replace(/ /g,'').toLowerCase()
@@ -16,10 +16,11 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
     var $custompopover = $(document.getElementById('custompopover'));
-    $('.table-popover tbody > tr').on('mouseover mouseout click', function ( e ) {
+    $('.table-popover tbody > tr').on('mouseover mouseout click', function( e ) {
         var $this = $(this),
             demo = $this.data('demo') ? $this.data('demo') : $this.find('td').first().text(),
-            $tooltip = $(document.getElementById('demo-' + demo));
+            $tooltip = $(document.getElementById('demo-' + demo.replace(/\s/g, '')));
+
         if ( e.type === 'mouseover' ) {
             var offset = $this.offset();
             $custompopover.find('.prettyprint').hide();
@@ -38,17 +39,17 @@ $(function () {
 
     $.ajax({
         url: 'package.json'
-    }).done(function ( response ) {
+    }).done(function( response ) {
         document.getElementById('version').innerHTML =  'v' + response.version;
     });
 
     var effects = ['fadein', 'slide', 'newspaper', 'fall', 'sidefall', 'blur', 'flip', 'sign', 'superscaled', 'slit', 'rotate', 'letmein', 'slip', 'corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale'];
-    $(document).on('click', '.infinite', function ( e ) {
+    $(document).on('click', '.infinite', function( e ) {
         Custombox.open({
             target:     'demo/xhr/ajax.html',
             effect:     effects[Math.floor(Math.random() * effects.length)],
             overlay:    Math.random() >= 0.5,
-            complete:   function () {
+            complete:   function() {
                 $('.modal-ajax').find('.infinite').show();
             }
         });
