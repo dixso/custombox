@@ -27,7 +27,7 @@
         width:          null,                   // Set a fixed total width or 'full'.
         effect:         'fadein',               // fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale.
         position:       ['center', 'center'],   // Set position of modal. First position 'x': left, center and right. Second position 'y': top, center, bottom.
-        animation:      null,                   // Only with effects: slide, flip and rotate (top, right, bottom, left and center) | (vertical or horizontal) and output position separated by commas. Example: 'top, bottom'.
+        animation:      null,                   // Only with effects: slide, flip and rotate (top, right, bottom, left and center) | (vertical or horizontal) and output position. Example: ['top', 'bottom'].
         speed:          500,                    // Sets the speed of the transitions, in milliseconds.
         loading:        false,                  // Show loading.
         open:           null,                   // Callback that fires right before begins to open.
@@ -78,7 +78,7 @@
             }
 
             this.cb.push({
-                settings: Object.assign( {}, _defaults, val )
+                settings: _config.oldIE && typeof cbExtendObjects !== 'undefined' ? cbExtendObjects( {}, _defaults, val ) : Object.assign( {}, _defaults, val )
             });
 
             if ( this.cb[this.item].settings.overlayEffect === 'auto' ) {
@@ -112,13 +112,10 @@
 
             // Create overlay.
             if ( this.cb[this.item].settings.overlay ) {
-                this.built('overlay').open();
+                this.built('overlay').built('modal').open();
             } else {
-                this.open();
+                this.built('modal').open();
             }
-
-            // Create modal.
-            this.built('modal');
 
             // Listeners.
             this.binds();
@@ -195,7 +192,7 @@
                     cb.container.classList.add('custombox-modal-container-' + cb.settings.effect);
                     cb.container.style.zIndex = cb.settings.zIndex + 4;
 
-                    if ( _config.modal.position.indexOf(cb.settings.effect) > -1 && !cb.settings.animation.length ) {
+                    if ( _config.modal.position.indexOf(cb.settings.effect) > -1 && cb.settings.animation === null ) {
                         // Defaults.
                         if ( cb.settings.effect === 'slide' ) {
                             cb.settings.animation = ['top'];
@@ -352,11 +349,12 @@
                         result = window.innerHeight / 2 - cb.content.offsetHeight / 2 + 'px';
                         break;
                 }
-                cb.container.style.marginTop = 0;
+                cb.container.style.marginTop = result;
             }
 
             if ( this.loading ) {
                 document.body.removeChild(this.loading);
+                delete this.loading;
             }
             cb.wrapper.classList.add('custombox-modal-open');
         },
@@ -494,9 +492,11 @@
                 // Remove property width and display.
                 if ( _config.oldIE ) {
                     cb.content.style.removeAttribute('width');
+                    cb.content.style.removeAttribute('height');
                     cb.content.style.removeAttribute('display');
                 } else {
                     cb.content.style.removeProperty('width');
+                    cb.content.style.removeProperty('height');
                     cb.content.style.removeProperty('display');
                 }
 
@@ -636,7 +636,8 @@
         },
         binds: function() {
             var _this = this,
-                cb = _this.cb[_this.item];
+                cb = _this.cb[_this.item],
+                stop = false;
 
             // Esc.
             if ( _this.cb.length === 1 ) {
@@ -645,30 +646,35 @@
                         document.removeEventListener('keydown', _this.esc);
                     }
                     event = event || window.event;
-                    if ( event.keyCode === 27 && _this.get() && _this.get().settings.escKey ) {
+                    if ( !stop && event.keyCode === 27 && _this.get() && _this.get().settings.escKey ) {
+                        stop = true;
                         _this.close();
                     }
                 };
                 document.addEventListener('keydown', _this.esc, false);
-
-                // Overlay close.
-                var stop = false;
-                cb.wrapper.addEventListener('click', function( event ) {
-                    if ( !stop && event.target === cb.wrapper && _this.get() && _this.get().settings.overlayClose ) {
-                        stop = true;
-                        _this.close();
-                    }
-                }, false);
-
-                document.addEventListener('custombox.close', function() {
-                    stop = false;
-                });
 
                 // Listener responsive.
                 window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', function() {
                     _this.responsive();
                 }, false);
             }
+
+            // Overlay close.
+
+            cb.wrapper.event = function ( event ) {
+                if ( _this.cb.length === 1 ) {
+                    document.removeEventListener('keydown', cb.wrapper.event);
+                }
+                if ( !stop && event.target === cb.wrapper && _this.get() && _this.get().settings.overlayClose ) {
+                    stop = true;
+                    _this.close();
+                }
+            };
+            cb.wrapper.addEventListener('click', cb.wrapper.event, false);
+
+            document.addEventListener('custombox.close', function() {
+                stop = false;
+            });
 
             var callback = function() {
                 // Execute the scripts.

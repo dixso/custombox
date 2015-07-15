@@ -215,7 +215,7 @@
                 Options <em>(click on the rows for see a demo)</em>
             </h4>
             <div class="table-responsive">
-                <table class="table table-bordered table-striped table-popover">
+                <table class="table table-bordered table-striped table-popover table-demo">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -286,10 +286,10 @@
                             <td>Combine any of the effects.</td>
                         </tr>
                         <tr>
-                            <td>width</td>
+                            <td>width <span class="label label-warning pull-right">updated</span></td>
                             <td>number | null</td>
                             <td>null</td>
-                            <td>Set a fixed total width.</td>
+                            <td>Set a fixed total width or 'full'.</td>
                         </tr>
                         <tr>
                             <td>effect</td>
@@ -298,16 +298,16 @@
                             <td>fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale.</td>
                         </tr>
                         <tr>
-                            <td>position</td>
+                            <td>position <span class="label label-warning pull-right">updated</span></td>
                             <td>array</td>
                             <td>['center', 'center']</td>
                             <td>Set position of modal. First position 'x': left, center and right. Second position 'y': top, center, bottom.</td>
                         </tr>
                         <tr>
-                            <td>animation</td>
+                            <td>animation <span class="label label-warning pull-right">updated</span></td>
                             <td>array | null</td>
                             <td>null</td>
-                            <td>Only with effects: slide or rotate (top, right, bottom, left and center) and flip (vertical or horizontal). Output position separated by commas.</td>
+                            <td>Only with effects: slide or rotate (top, right, bottom, left and center) and flip (vertical or horizontal).</td>
                         </tr>
                         <tr>
                             <td>speed</td>
@@ -316,7 +316,7 @@
                             <td>Sets the speed of the transitions, in milliseconds.</td>
                         </tr>
                         <tr>
-                            <td>loading <span class="label label-success pull-right" style="margin-top: 4px;">new</span></td>
+                            <td>loading <span class="label label-success pull-right">new</span></td>
                             <td>object</td>
                             <td>false</td>
                             <td>Show loading. (More info in the credits)</td>
@@ -506,10 +506,10 @@
             &nbsp;&nbsp;&nbsp;&nbsp;overlayEffect: 'makeway'
             <br>});
         </code>
-        <code id="demo-width" class="prettyprint">
+        <code id="demo-widthupdated" class="prettyprint">
             Custombox.open({<br>
             &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal',<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;width:  &nbsp;1200
+            &nbsp;&nbsp;&nbsp;&nbsp;width:  &nbsp;'full'
             <br>});
         </code>
         <code id="demo-effect" class="prettyprint">
@@ -518,14 +518,14 @@
             &nbsp;&nbsp;&nbsp;&nbsp;effect: 'newspaper'
             <br>});
         </code>
-        <code id="demo-position" class="prettyprint">
+        <code id="demo-positionupdated" class="prettyprint">
             Custombox.open({<br>
             &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;'#modal',<br>
             &nbsp;&nbsp;&nbsp;&nbsp;effect: &nbsp;&nbsp;'fadein',<br>
             &nbsp;&nbsp;&nbsp;&nbsp;position: ['center', 'top']
             <br>});
         </code>
-        <code id="demo-animation" class="prettyprint">
+        <code id="demo-animationupdated" class="prettyprint">
             Custombox.open({<br>
             &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;'#modal',<br>
             &nbsp;&nbsp;&nbsp;&nbsp;effect: &nbsp;&nbsp;'slide',<br>

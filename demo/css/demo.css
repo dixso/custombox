@@ -105,6 +105,16 @@ h4 > em {
     background-color: #D9EDF7;
     cursor: pointer;
 }
+.table-demo > thead > tr > th:nth-child(1){
+    width: 20%;
+}
+.table-demo > thead > tr > th:nth-child(2),
+.table-demo > thead > tr > th:nth-child(3) {
+    width: 15%;
+}
+.table-popover td span {
+    margin-top: 4px;
+}
 .footer {
     font-size: 11px;
     text-align: center;
@@ -200,7 +210,6 @@ h4 > em {
     100% {
         -webkit-transform: rotate(-360deg);
         transform: rotate(-360deg); } }
-
 
 div.sk-wandering-cubes .sk-cube {
     background-color: #FFF;
