@@ -60,6 +60,12 @@
     height: 50px;
     overflow: scroll;
 }
+.custombox-loading {
+    position: fixed;
+    transform: translateY(-50%) translateX(-50%);
+    top: 50%;
+    left: 50%;
+}
 
 /*
  ----------------------------

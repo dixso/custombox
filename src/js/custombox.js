@@ -29,6 +29,7 @@
         position:       ['center', 'center'],   // Set position of modal. First position 'x': left, center and right. Second position 'y': top, center, bottom.
         animation:      null,                   // Only with effects: slide, flip and rotate (top, right, bottom, left and center) | (vertical or horizontal) and output position separated by commas. Example: 'top, bottom'.
         speed:          500,                    // Sets the speed of the transitions, in milliseconds.
+        loading:        false,                  // Show loading.
         open:           null,                   // Callback that fires right before begins to open.
         complete:       null,                   // Callback that fires right after loaded content is displayed.
         close:          null                    // Callback that fires once is closed.
@@ -104,16 +105,20 @@
                 this.built('container');
             }
 
+            // Create loading.
+            if ( this.cb[this.item].settings.loading && this.cb[this.item].settings.loading.parent ) {
+                this.built('loading');
+            }
+
             // Create overlay.
             if ( this.cb[this.item].settings.overlay ) {
-                this.built('overlay');
+                this.built('overlay').open();
+            } else {
+                this.open();
             }
 
             // Create modal.
             this.built('modal');
-
-            // Load target.
-            this.load();
 
             // Listeners.
             this.binds();
@@ -190,23 +195,14 @@
                     cb.container.classList.add('custombox-modal-container-' + cb.settings.effect);
                     cb.container.style.zIndex = cb.settings.zIndex + 4;
 
-                    if ( _config.modal.position.indexOf(cb.settings.effect) > -1 ) {
-                        if ( cb.settings.animation !== null ) {
-                            if ( cb.settings.animation.indexOf(',') > -1 ) {
-                                // Convert the string to array.
-                                cb.settings.animation = cb.settings.animation.split(',');
-                            } else {
-                                cb.settings.animation = [cb.settings.animation];
-                            }
+                    if ( _config.modal.position.indexOf(cb.settings.effect) > -1 && !cb.settings.animation.length ) {
+                        // Defaults.
+                        if ( cb.settings.effect === 'slide' ) {
+                            cb.settings.animation = ['top'];
+                        } else if ( cb.settings.effect === 'flip' ) {
+                            cb.settings.animation = ['horizontal'];
                         } else {
-                            // Defaults.
-                            if ( cb.settings.effect === 'slide' ) {
-                                cb.settings.animation = ['top'];
-                            } else if ( cb.settings.effect === 'flip' ) {
-                                cb.settings.animation = ['horizontal'];
-                            } else {
-                                cb.settings.animation = ['bottom'];
-                            }
+                            cb.settings.animation = ['bottom'];
                         }
                     }
 
@@ -219,7 +215,33 @@
                     cb.modal.style.zIndex = cb.settings.zIndex + 4;
                     cb.wrapper.appendChild(cb.container).appendChild(cb.modal);
                     break;
+                case 'loading':
+                    this.loading = document.createElement('div');
+                    this.loading.classList.add('custombox-loading');
+
+                    var wrapper = document.createElement('div');
+                    for ( var i = 0, t = this.cb[this.item].settings.loading.parent.length; i < t; i++ ) {
+                        wrapper.classList.add(this.cb[this.item].settings.loading.parent[i]);
+                    }
+
+                    this.loading.appendChild(wrapper);
+                    this.loading.style.zIndex = cb.settings.zIndex + 3;
+
+                    if ( this.cb[this.item].settings.loading.childrens ) {
+                        for ( var e = 0, te = this.cb[this.item].settings.loading.childrens.length; e < te; e++ ) {
+                            var tmp = document.createElement('div');
+                            for ( var r = 0, tr = this.cb[this.item].settings.loading.childrens[e].length; r < tr; r++ ) {
+                                tmp.classList.add(this.cb[this.item].settings.loading.childrens[e][r]);
+                            }
+                            wrapper.appendChild(tmp);
+                        }
+                    }
+
+                    document.body.appendChild(this.loading);
+                    break;
             }
+
+            return this;
         },
         load: function() {
             var cb = this.cb[this.item];
@@ -245,7 +267,7 @@
                         cb.display = cb.content.style.display === 'none';
                         cb.content.style.display = 'block';
                         cb.content.parentNode.insertBefore(cb.inline, cb.content);
-                        this.size().open();
+                        this.size();
                     } else {
                         this.error();
                     }
@@ -258,13 +280,12 @@
             return this;
         },
         size: function() {
-            var cb = this.cb[this.item];
+            var cb = this.cb[this.item],
+                customw = cb.content.offsetWidth;
 
             if ( _config.oldIE ) {
                 window.innerHeight = document.documentElement.clientHeight;
             }
-
-            var customw = cb.content.offsetWidth;
 
             if ( !cb.inline ) {
                 if ( _config.oldIE ) {
@@ -334,7 +355,10 @@
                 cb.container.style.marginTop = 0;
             }
 
-            return this;
+            if ( this.loading ) {
+                document.body.removeChild(this.loading);
+            }
+            cb.wrapper.classList.add('custombox-modal-open');
         },
         ajax: function() {
             var _this = this,
@@ -354,7 +378,7 @@
                             cb.content.style.cssFloat = 'left';
                         }
                         cb.container.appendChild(cb.content);
-                        _this.size().open();
+                        _this.size();
                     } else {
                         _this.error();
                     }
@@ -373,12 +397,15 @@
             return scrollbarWidth;
         },
         open: function() {
-            var cb = this.cb[this.item],
-                scrollbar = this.scrollbar();
+            var _this = this,
+                cb = _this.cb[_this.item],
+                scrollbar = _this.scrollbar();
 
             if ( scrollbar ) {
                 document.body.style.paddingRight = scrollbar + 'px';
             }
+
+            _this.main.classList.add('custombox-container-open');
 
             if ( cb.settings.overlay ) {
                 if ( _config.overlay.perspective.indexOf(cb.settings.overlayEffect) > -1 || _config.overlay.together.indexOf( cb.settings.overlayEffect ) > -1 ) {
@@ -388,22 +415,35 @@
                     cb.overlay.style.opacity = cb.settings.overlayOpacity;
                 }
 
-                this.main.classList.add('custombox-container-open');
-
                 if ( _config.overlay.together.indexOf( cb.settings.overlayEffect ) > -1 || _config.oldIE ) {
-                    cb.wrapper.classList.add('custombox-modal-open');
+                    // Load target.
+                    _this.load();
+
+                    if ( cb.inline) {
+                        cb.wrapper.classList.add('custombox-modal-open');
+                    }
                 } else {
                     var open = function() {
                         cb.overlay.removeEventListener('transitionend', open);
-                        cb.wrapper.classList.add('custombox-modal-open');
+
+                        // Load target.
+                        _this.load();
+
+                        if ( cb.inline) {
+                            cb.wrapper.classList.add('custombox-modal-open');
+                        }
                     };
                     cb.overlay.addEventListener('transitionend', open, false);
                 }
             } else {
-                cb.wrapper.classList.add('custombox-modal-open');
-                this.main.classList.add('custombox-container-open');
+                // Load target.
+                _this.load();
+
+                if ( cb.inline) {
+                    cb.wrapper.classList.add('custombox-modal-open');
+                }
             }
-            return this;
+            return _this;
         },
         clean: function( item ) {
             var _this = this,
@@ -680,7 +720,7 @@
     return {
         /**
          * @desc Set options defaults.
-         * @param {object} options - Auto build.
+         * @param {object} options - Auto built.
          */
         set: function( options ) {
             if ( options.autobuild ) {

@@ -37,7 +37,7 @@
     <!-- Internal CSS -->
     <link rel="stylesheet" href="demo/css/demo.css">
     <!-- injector:css -->
-    <link rel="stylesheet" href="dist/custombox.min.css">
+    <link rel="stylesheet" href="src/css/custombox.css">
     <!-- endinjector -->
 </head>
 <body>
@@ -217,104 +217,110 @@
             <div class="table-responsive">
                 <table class="table table-bordered table-striped table-popover">
                     <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Property</th>
-                        <th>Description</th>
-                    </tr>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Property</th>
+                            <th>Description</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>target</td>
-                        <td>string</td>
-                        <td>null</td>
-                        <td>Set the URL, ID or Class.</td>
-                    </tr>
-                    <tr>
-                        <td>cache</td>
-                        <td>boolean</td>
-                        <td>false</td>
-                        <td>If set to false, it will force requested pages not to be cached by the browser only when send by AJAX.</td>
-                    </tr>
-                    <tr>
-                        <td>escKey</td>
-                        <td>boolean</td>
-                        <td>true</td>
-                        <td>Allows the user to close the modal when press escape key.</td>
-                    </tr>
-                    <tr>
-                        <td>zIndex</td>
-                        <td>string | number</td>
-                        <td>auto</td>
-                        <td>Overlay z-index: Auto or number.</td>
-                    </tr>
-                    <tr>
-                        <td>overlay</td>
-                        <td>boolean</td>
-                        <td>true</td>
-                        <td>Show the overlay.</td>
-                    </tr>
-                    <tr>
-                        <td>overlayColor</td>
-                        <td>string</td>
-                        <td>#000</td>
-                        <td>Overlay color.</td>
-                    </tr>
-                    <tr>
-                        <td>overlayOpacity</td>
-                        <td>number</td>
-                        <td>0.8</td>
-                        <td>The overlay opacity level. Range: 0 to 1.</td>
-                    </tr>
-                    <tr>
-                        <td>overlayClose</td>
-                        <td>boolean</td>
-                        <td>true</td>
-                        <td>Allows the user to close the modal by clicking the overlay.</td>
-                    </tr>
-                    <tr>
-                        <td>overlaySpeed</td>
-                        <td>number</td>
-                        <td>300</td>
-                        <td>Sets the speed of the overlay, in milliseconds.</td>
-                    </tr>
-                    <tr>
-                        <td>overlayEffect</td>
-                        <td>string</td>
-                        <td>auto</td>
-                        <td>Combine any of the effects.</td>
-                    </tr>
-                    <tr>
-                        <td>width</td>
-                        <td>number | null</td>
-                        <td>null</td>
-                        <td>Set a fixed total width.</td>
-                    </tr>
-                    <tr>
-                        <td>effect</td>
-                        <td>string</td>
-                        <td>fadein</td>
-                        <td>fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale.</td>
-                    </tr>
-                    <tr>
-                        <td>position</td>
-                        <td>string</td>
-                        <td>center, center</td>
-                        <td>Set position of modal. First position 'x': left, center and right. Second position 'y': top, center, bottom.</td>
-                    </tr>
-                    <tr>
-                        <td>animation</td>
-                        <td>string | null</td>
-                        <td>null</td>
-                        <td>Only with effects: slide or rotate (top, right, bottom, left and center) and flip (vertical or horizontal). Output position separated by commas.</td>
-                    </tr>
-                    <tr>
-                        <td>speed</td>
-                        <td>number</td>
-                        <td>600</td>
-                        <td>Sets the speed of the transitions, in milliseconds.</td>
-                    </tr>
+                        <tr>
+                            <td>target</td>
+                            <td>string</td>
+                            <td>null</td>
+                            <td>Set the URL, ID or Class.</td>
+                        </tr>
+                        <tr>
+                            <td>cache</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>If set to false, it will force requested pages not to be cached by the browser only when send by AJAX.</td>
+                        </tr>
+                        <tr>
+                            <td>escKey</td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Allows the user to close the modal when press escape key.</td>
+                        </tr>
+                        <tr>
+                            <td>zIndex</td>
+                            <td>string | number</td>
+                            <td>9999</td>
+                            <td>Overlay z-index: Number or auto.</td>
+                        </tr>
+                        <tr>
+                            <td>overlay</td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Show the overlay.</td>
+                        </tr>
+                        <tr>
+                            <td>overlayColor</td>
+                            <td>string</td>
+                            <td>#000</td>
+                            <td>Overlay color.</td>
+                        </tr>
+                        <tr>
+                            <td>overlayOpacity</td>
+                            <td>number</td>
+                            <td>0.8</td>
+                            <td>The overlay opacity level. Range: 0 to 1.</td>
+                        </tr>
+                        <tr>
+                            <td>overlayClose</td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Allows the user to close the modal by clicking the overlay.</td>
+                        </tr>
+                        <tr>
+                            <td>overlaySpeed</td>
+                            <td>number</td>
+                            <td>300</td>
+                            <td>Sets the speed of the overlay, in milliseconds.</td>
+                        </tr>
+                        <tr>
+                            <td>overlayEffect</td>
+                            <td>string</td>
+                            <td>auto</td>
+                            <td>Combine any of the effects.</td>
+                        </tr>
+                        <tr>
+                            <td>width</td>
+                            <td>number | null</td>
+                            <td>null</td>
+                            <td>Set a fixed total width.</td>
+                        </tr>
+                        <tr>
+                            <td>effect</td>
+                            <td>string</td>
+                            <td>fadein</td>
+                            <td>fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale.</td>
+                        </tr>
+                        <tr>
+                            <td>position</td>
+                            <td>array</td>
+                            <td>['center', 'center']</td>
+                            <td>Set position of modal. First position 'x': left, center and right. Second position 'y': top, center, bottom.</td>
+                        </tr>
+                        <tr>
+                            <td>animation</td>
+                            <td>array | null</td>
+                            <td>null</td>
+                            <td>Only with effects: slide or rotate (top, right, bottom, left and center) and flip (vertical or horizontal). Output position separated by commas.</td>
+                        </tr>
+                        <tr>
+                            <td>speed</td>
+                            <td>number</td>
+                            <td>600</td>
+                            <td>Sets the speed of the transitions, in milliseconds.</td>
+                        </tr>
+                        <tr>
+                            <td>loading <span class="label label-success pull-right" style="margin-top: 4px;">new</span></td>
+                            <td>object</td>
+                            <td>false</td>
+                            <td>Show loading. (More info in the credits)</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -395,7 +401,7 @@
                         <td>set <span class="label label-success pull-right">new</span></td>
                         <td>bolean</td>
                         <td>autobuild</td>
-                        <td>Auto build custombox.</td>
+                        <td>Auto built custombox for iframes.</td>
                     </tr>
                     </tbody>
                 </table>
@@ -423,6 +429,7 @@
                     Credits:
                 </h4>
                 <p>- The animations CSS3 based on <a target="_blank" rel="nofollow" href="http://tympanus.net/codrops/2013/06/25/nifty-modal-window-effects/">Codrops</a>.</p>
+                <p>- Simple CSS Spinners on <a target="_blank" rel="nofollow" href="http://tobiasahlin.com/spinkit/">SpinKit</a>.</p>
                 <p>- The example page is built with <a target="_blank" rel="nofollow" href="http://getbootstrap.com/">Bootstrap 3</a>.</p>
                 <p>- The page example code is built with <a target="_blank" rel="nofollow" href="//code.google.com/p/google-code-prettify/">Google Code Prettify</a>.</p>
             </div>
@@ -460,7 +467,7 @@
         <code id="demo-zIndex" class="prettyprint">
             Custombox.open({<br>
             &nbsp;&nbsp;&nbsp;&nbsp;target: '#modal',<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;zIndex: 9999
+            &nbsp;&nbsp;&nbsp;&nbsp;zIndex: 'auto'
             <br>});
         </code>
         <code id="demo-overlay" class="prettyprint">
@@ -515,14 +522,14 @@
             Custombox.open({<br>
             &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;'#modal',<br>
             &nbsp;&nbsp;&nbsp;&nbsp;effect: &nbsp;&nbsp;'fadein',<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;position: 'center, top'
+            &nbsp;&nbsp;&nbsp;&nbsp;position: ['center', 'top']
             <br>});
         </code>
         <code id="demo-animation" class="prettyprint">
             Custombox.open({<br>
             &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;&nbsp;'#modal',<br>
             &nbsp;&nbsp;&nbsp;&nbsp;effect: &nbsp;&nbsp;'slide',<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;animation: 'top, bottom'
+            &nbsp;&nbsp;&nbsp;&nbsp;animation: ['top', 'bottom']
             <br>});
         </code>
         <code id="demo-speed" class="prettyprint">
@@ -589,6 +596,18 @@
             &nbsp;&nbsp;&nbsp;&nbsp;autobuild: &nbsp;true
             <br>});
         </code>
+        <code id="demo-loadingnew" class="prettyprint">
+            Custombox.open({<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;target: &nbsp;'#modal',<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;loading: {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parent:&nbsp;['sk-wandering-cubes'],<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;childrens:&nbsp;&nbsp;&nbsp;&nbsp;[<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;['sk-cube', 'sk-cube1'],<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;['sk-cube', 'sk-cube2']<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+            &nbsp;&nbsp;}
+            <br>});
+        </code>
     </div>
 </div>
 
@@ -611,8 +630,8 @@
 
 <!-- Internal JavaScript -->
 <!-- injector:js -->
-<script src="dist/custombox.min.js"></script>
-<script src="dist/legacy.min.js"></script>
+<script src="src/js/legacy.js"></script>
+<script src="src/js/custombox.js"></script>
 <!-- endinjector -->
 <script src="demo/js/demo.js"></script>
 </body>
