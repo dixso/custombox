@@ -25,7 +25,7 @@
         overlaySpeed:   300,                    // Sets the speed of the overlay, in milliseconds.
         overlayEffect:  'auto',                 // Combine any of the effects.
         width:          null,                   // Set a fixed total width or 'full'.
-        effect:         'fadein',               // fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale.
+        effect:         'fadein',               // fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale | swell.
         position:       ['center', 'center'],   // Set position of modal. First position 'x': left, center and right. Second position 'y': top, center, bottom.
         animation:      null,                   // Only with effects: slide, flip and rotate (top, right, bottom, left and center) | (vertical or horizontal) and output position. Example: ['top', 'bottom'].
         speed:          500,                    // Sets the speed of the transitions, in milliseconds.
@@ -450,9 +450,6 @@
             document.documentElement.classList.remove('custombox-open-' + cb.settings.overlayEffect);
 
             if ( cb.settings.overlay ) {
-                // Add class from overlay.
-                cb.overlay.classList.add('custombox-overlay-close');
-
                 if ( cb.overlay.style.opacity ) {
                     cb.overlay.style.opacity = 0;
                 }
@@ -578,12 +575,15 @@
                     cb.wrapper.removeEventListener('transitionend', wrapper);
                     _this.clean(item);
                 };
-                cb.wrapper.addEventListener('transitionend', wrapper, false);
+
+                if ( cb.settings.effect !== 'swell' ) {
+                    cb.wrapper.addEventListener('transitionend', wrapper, false);
+                } else {
+                    cb.wrapper.addEventListener('animationend', wrapper, false);
+                }
             }
         },
         responsive: function() {
-            var cb = this.cb[this.item];
-
             if ( _config.oldIE ) {
                 window.innerHeight = document.documentElement.clientHeight;
             }
@@ -591,7 +591,7 @@
             for ( var i = 0, t = this.cb.length, result; i < t; i++ ) {
                 // Width.
                 if ( this.cb[i].size + 60 >= window.innerWidth ) {
-                    if ( cb.settings.width !== 'full' ) {
+                    if ( this.cb[i].settings.width !== 'full' ) {
                         this.cb[i].container.style.marginLeft = '5%';
                         this.cb[i].container.style.marginRight = '5%';
                     }
@@ -615,7 +615,7 @@
                 }
 
                 // Top.
-                if ( this.cb[i].content.offsetHeight >= window.innerHeight && cb.settings.width !== 'full' ) {
+                if ( this.cb[i].content.offsetHeight >= window.innerHeight && this.cb[i].settings.width !== 'full' ) {
                     this.cb[i].container.style.marginTop = '5%';
                     this.cb[i].container.style.marginBottom = '5%';
                 } else {
@@ -660,7 +660,6 @@
             }
 
             // Overlay close.
-
             cb.wrapper.event = function ( event ) {
                 if ( _this.cb.length === 1 ) {
                     document.removeEventListener('keydown', cb.wrapper.event);

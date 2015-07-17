@@ -705,3 +705,48 @@
 .custombox-modal-open .custombox-modal-contentscale {
     transform: translateY(0);
 }
+
+/*
+ ----------------------------
+ Modal: Val
+ ----------------------------
+ */
+.custombox-modal-swell {
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
+}
+.custombox-modal-open .custombox-modal-swell {
+    animation-name: swell-open;
+}
+.custombox-modal-swell {
+    animation-name: swell-close;
+}
+@keyframes swell-open {
+    0% {
+        opacity: 0;
+        transform: translate3d(calc(-100vw - 50%), 0, 0);
+    }
+    50% {
+        opacity: 1;
+        transform: translate3d(100px, 0, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+@keyframes swell-close {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+    50% {
+        opacity: 1;
+        transform: translate3d(-100px, 0, 0) scale3d(1.1, 1.1, 1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(calc(100vw + 50%), 0, 0)
+    }
+}
