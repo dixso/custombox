@@ -25,7 +25,7 @@
         overlaySpeed:   300,                    // Sets the speed of the overlay, in milliseconds.
         overlayEffect:  'auto',                 // Combine any of the effects.
         width:          null,                   // Set a fixed total width or 'full'.
-        effect:         'fadein',               // fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale | swell.
+        effect:         'fadein',               // fadein | slide | newspaper | fall | sidefall | blur | flip | sign | superscaled | slit | rotate | letmein | makeway | slip | corner | slidetogether | scale | door | push | contentscale | swell | rotatedown.
         position:       ['center', 'center'],   // Set position of modal. First position 'x': left, center and right. Second position 'y': top, center, bottom.
         animation:      null,                   // Only with effects: slide, flip and rotate (top, right, bottom, left and center) | (vertical or horizontal) and output position. Example: ['top', 'bottom'].
         speed:          500,                    // Sets the speed of the transitions, in milliseconds.
@@ -576,7 +576,7 @@
                     _this.clean(item);
                 };
 
-                if ( cb.settings.effect !== 'swell' ) {
+                if ( cb.settings.effect !== 'swell' && cb.settings.effect !== 'rotatedown' ) {
                     cb.wrapper.addEventListener('transitionend', wrapper, false);
                 } else {
                     cb.wrapper.addEventListener('animationend', wrapper, false);

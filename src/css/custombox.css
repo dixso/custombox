@@ -750,3 +750,56 @@
         transform: translate3d(calc(100vw + 50%), 0, 0)
     }
 }
+
+/*
+ ----------------------------
+ Modal: Rotate down
+ ----------------------------
+ */
+.custombox-modal-rotatedown {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.7,0,0.3,1);
+    animation-fill-mode: forwards;
+    transform-origin: -150% 50%;
+}
+.custombox-modal-open .custombox-modal-rotatedown {
+    animation-name: rotatedown-open;
+}
+.custombox-modal-rotatedown {
+    animation-name: rotatedown-close;
+    overflow: hidden;
+}
+.custombox-modal-open .custombox-modal-rotatedown div > * {
+    animation: rotatedown-elem 0.4s both;
+    transform-origin: -50% 50%;
+    animation-timing-function: cubic-bezier(0.7,0,0.3,1);
+    animation-delay: 0.15s;
+}
+@keyframes rotatedown-open {
+    0% {
+        opacity: 0;
+        transform: rotate3d(0, 0, 1, -45deg);
+    }
+    100% {
+        opacity: 1;
+        transform: rotate3d(0, 0, 1, 0deg);
+    }
+}
+@keyframes rotatedown-close {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate3d(0, 0, 1, 45deg);
+    }
+}
+@keyframes rotatedown-elem {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, -150px, 0) rotate3d(0, 0, 1, -20deg);
+    }
+    100% { opacity: 1;
+        transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, 0deg);
+    }
+}
