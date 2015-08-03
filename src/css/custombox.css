@@ -715,12 +715,10 @@
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
     animation-timing-function: ease-out;
+    animation-name: swell-close;
 }
 .custombox-modal-open .custombox-modal-swell {
     animation-name: swell-open;
-}
-.custombox-modal-swell {
-    animation-name: swell-close;
 }
 @keyframes swell-open {
     0% {

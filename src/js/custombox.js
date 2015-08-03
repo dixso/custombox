@@ -578,9 +578,9 @@
                 };
 
                 if ( _config.modal.animationend.indexOf(cb.settings.effect) > -1 ) {
-                    cb.wrapper.addEventListener('transitionend', wrapper, false);
-                } else {
                     cb.wrapper.addEventListener('animationend', wrapper, false);
+                } else {
+                    cb.wrapper.addEventListener('transitionend', wrapper, false);
                 }
             }
         },
