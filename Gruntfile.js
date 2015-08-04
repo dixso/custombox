@@ -42,6 +42,7 @@ module.exports = function ( grunt ) {
                 ' *  classList - http://purl.eligrey.com/github/classList.js/blob/master/classList.js\n' +
                 ' *  addEventListener - https://gist.github.com/2864711/946225eb3822c203e8d6218095d888aac5e1748e\n' +
                 ' *  :scope polyfill - http://stackoverflow.com/questions/6481612/queryselector-search-immediate-children\n' +
+                ' *  forEach - http://es5.github.com/#x15.4.4.18\n' +
                 ' *  Object.assign() - https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Object/assign\n' +
                 ' *  Array.isArray() - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray\n' +
                 ' *\n' +
