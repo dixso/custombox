@@ -53,6 +53,19 @@
     max-width: 100%;
     height: auto;
 }
+.custombox-scrollbar {
+    position: absolute;
+    top: -9999px;
+    width: 50px;
+    height: 50px;
+    overflow: scroll;
+}
+.custombox-loading {
+    position: fixed;
+    transform: translateY(-50%) translateX(-50%);
+    top: 50%;
+    left: 50%;
+}
 
 /*
  ----------------------------
@@ -691,4 +704,169 @@
 }
 .custombox-modal-open .custombox-modal-contentscale {
     transform: translateY(0);
+}
+
+/*
+ ----------------------------
+ Modal: Val
+ ----------------------------
+ */
+.custombox-modal-swell {
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
+    animation-name: swell-close;
+}
+.custombox-modal-open .custombox-modal-swell {
+    animation-name: swell-open;
+}
+@keyframes swell-open {
+    0% {
+        opacity: 0;
+        transform: translate3d(calc(-100vw - 50%), 0, 0);
+    }
+    50% {
+        opacity: 1;
+        transform: translate3d(100px, 0, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+@keyframes swell-close {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+    50% {
+        opacity: 1;
+        transform: translate3d(-100px, 0, 0) scale3d(1.1, 1.1, 1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(calc(100vw + 50%), 0, 0)
+    }
+}
+
+/*
+ ----------------------------
+ Modal: Rotate down
+ ----------------------------
+ */
+.custombox-modal-rotatedown {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.7,0,0.3,1);
+    animation-fill-mode: forwards;
+    transform-origin: -150% 50%;
+    animation-name: rotatedown-close;
+    overflow: hidden;
+}
+.custombox-modal-open .custombox-modal-rotatedown {
+    animation-name: rotatedown-open;
+}
+.custombox-modal-open .custombox-modal-rotatedown div > * {
+    animation: rotatedown-elem 0.4s both;
+    transform-origin: -50% 50%;
+    animation-timing-function: cubic-bezier(0.7,0,0.3,1);
+    animation-delay: 0.15s;
+}
+@keyframes rotatedown-open {
+    0% {
+        opacity: 0;
+        transform: rotate3d(0, 0, 1, -45deg);
+    }
+    100% {
+        opacity: 1;
+        transform: rotate3d(0, 0, 1, 0deg);
+    }
+}
+@keyframes rotatedown-close {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate3d(0, 0, 1, 45deg);
+    }
+}
+@keyframes rotatedown-elem {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, -150px, 0) rotate3d(0, 0, 1, -20deg);
+    }
+    100% { opacity: 1;
+        transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, 0deg);
+    }
+}
+
+/*
+ ----------------------------
+ Modal: Flash
+ ----------------------------
+ */
+.custombox-modal-flash {
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.7,0,0.3,1);
+    animation-name: flash-close;
+    overflow: hidden;
+}
+.custombox-modal-open .custombox-modal-flash {
+    animation-name: flash-open;
+}
+.custombox-modal-open .custombox-modal-flash div > * {
+    animation: flash-elem-open 0.4s cubic-bezier(0.7,0,0.3,1) both;
+}
+.custombox-modal-flash div > * {
+    animation: flash-elem-close 0.4s cubic-bezier(0.7,0,0.3,1) both;
+}
+@keyframes flash-open {
+    0% {
+        opacity: 0;
+        transform: translate3d(-400px, 0, 0)
+        scale3d(1.4, 0, 1);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+    }
+}
+@keyframes flash-close {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+    }
+    20% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(-400px, 0, 0) scale3d(1.4, 0, 1);
+    }
+}
+@keyframes flash-elem-open {
+    0% {
+        opacity: 0;
+        transform: translate3d(-100px, 0, 0);
+    }
+    20% {
+        opacity: 0;
+        transform: translate3d(-100px, 0, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+@keyframes flash-elem-close {
+    0% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(-100px, 0, 0);
+    }
 }

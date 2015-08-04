@@ -710,6 +710,64 @@ if (!Array.prototype.indexOf) {
     }
 })(window, document, 'x-ms-event-listeners');
 
+// Production steps of ECMA-262, Edition 5, 15.4.4.18
+// Reference: http://es5.github.com/#x15.4.4.18
+if (!Array.prototype.forEach) {
+
+    Array.prototype.forEach = function forEach(callback, thisArg) {
+        'use strict';
+        var T, k;
+
+        if (this == null) {
+            throw new TypeError("this is null or not defined");
+        }
+
+        var kValue,
+        // 1. Let O be the result of calling ToObject passing the |this| value as the argument.
+            O = Object(this),
+
+        // 2. Let lenValue be the result of calling the Get internal method of O with the argument "length".
+        // 3. Let len be ToUint32(lenValue).
+            len = O.length >>> 0; // Hack to convert O.length to a UInt32
+
+        // 4. If IsCallable(callback) is false, throw a TypeError exception.
+        // See: http://es5.github.com/#x9.11
+        if ({}.toString.call(callback) !== "[object Function]") {
+            throw new TypeError(callback + " is not a function");
+        }
+
+        // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
+        if (arguments.length >= 2) {
+            T = thisArg;
+        }
+
+        // 6. Let k be 0
+        k = 0;
+
+        // 7. Repeat, while k < len
+        while (k < len) {
+
+            // a. Let Pk be ToString(k).
+            //   This is implicit for LHS operands of the in operator
+            // b. Let kPresent be the result of calling the HasProperty internal method of O with argument Pk.
+            //   This step can be combined with c
+            // c. If kPresent is true, then
+            if (k in O) {
+
+                // i. Let kValue be the result of calling the Get internal method of O with argument Pk.
+                kValue = O[k];
+
+                // ii. Call the Call internal method of callback with T as the this value and
+                // argument list containing kValue, k, and O.
+                callback.call(T, kValue, k, O);
+            }
+            // d. Increase k by 1.
+            k++;
+        }
+        // 8. return undefined
+    };
+}
+
 /**
  * :scope polyfill
  * http://stackoverflow.com/questions/6481612/queryselector-search-immediate-children
@@ -735,3 +793,62 @@ if (!Array.prototype.indexOf) {
         });
     }
 })(window.document, Element.prototype);
+
+if (navigator.appVersion.indexOf('MSIE 8.') === -1 && navigator.appVersion.indexOf('MSIE 9.') === -1) {
+    /**
+     * The Object.assign() method is used to copy the values of all enumerable own properties from one or more source objects to a target object. It will return the target object.
+     * https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Object/assign
+     */
+    if (!Object.assign) {
+        Object.defineProperty(Object, 'assign', {
+            enumerable: false,
+            configurable: true,
+            writable: true,
+            value: function(target, firstSource) {
+                'use strict';
+                if (target === undefined || target === null) {
+                    throw new TypeError('Cannot convert first argument to object');
+                }
+
+                var to = Object(target);
+                for (var i = 1; i < arguments.length; i++) {
+                    var nextSource = arguments[i];
+                    if (nextSource === undefined || nextSource === null) {
+                        continue;
+                    }
+
+                    var keysArray = Object.keys(Object(nextSource));
+                    for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+                        var nextKey = keysArray[nextIndex];
+                        var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+                        if (desc !== undefined && desc.enumerable) {
+                            to[nextKey] = nextSource[nextKey];
+                        }
+                    }
+                }
+                return to;
+            }
+        });
+    }
+}
+
+/*
+ * The Array.isArray() method returns true if an object is an array, false if it is not.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
+ */
+if (!Array.isArray) {
+    Array.isArray = function(arg) {
+        return Object.prototype.toString.call(arg) === '[object Array]';
+    };
+}
+
+function cbExtendObjects () {
+    for ( var i = 1, arg = arguments.length; i < arg; i++ ) {
+        for ( var key in arguments[i] ) {
+            if( arguments[i].hasOwnProperty(key) ) {
+                arguments[0][key] = arguments[i][key];
+            }
+        }
+    }
+    return arguments[0];
+}
