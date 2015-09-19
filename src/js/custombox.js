@@ -121,18 +121,6 @@
             // Listeners.
             this.binds();
         },
-        zIndex: function() {
-            for ( var zIndex = 0, x = 0, elements = document.getElementsByTagName('*'), xLen = elements.length; x < xLen; x += 1 ) {
-                var val = window.getComputedStyle(elements[x]).getPropertyValue('z-index');
-                if ( val ) {
-                    val =+ val;
-                    if ( val > zIndex ) {
-                        zIndex = val;
-                    }
-                }
-            }
-            return zIndex;
-        },
         built: function( item ) {
             var cb;
             if ( typeof this.item !== 'undefined' ) {
@@ -595,6 +583,8 @@
                     if ( this.cb[i].settings.width !== 'full' ) {
                         this.cb[i].container.style.marginLeft = '5%';
                         this.cb[i].container.style.marginRight = '5%';
+                    } else if ( this.cb[i].content.offsetWidth <= window.innerWidth ) {
+                        this.cb[i].content.style.width = 'auto';
                     }
                     this.cb[i].container.style.width = 'auto';
                     this.cb[i].wrapper.style.width = window.innerWidth + 'px';
@@ -620,6 +610,12 @@
                     this.cb[i].container.style.marginTop = '5%';
                     this.cb[i].container.style.marginBottom = '5%';
                 } else {
+                    if ( this.cb[i].settings.width === 'full' ) {
+                        this.cb[i].settings.position[1] = 'top';
+                        if ( this.cb[i].content.offsetHeight <= window.innerHeight ) {
+                            this.cb[i].content.style.height = window.innerHeight + 'px';
+                        }
+                    }
                     switch ( this.cb[i].settings.position[1].trim() ) {
                         case 'top':
                             result = 0;
