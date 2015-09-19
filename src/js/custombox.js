@@ -385,6 +385,7 @@
         },
         open: function() {
             var _this = this,
+                delay = 0,
                 cb = _this.cb[_this.item],
                 scrollbar = _this.scrollbar();
 
@@ -394,6 +395,15 @@
 
             _this.main.classList.add('custombox-container-open');
 
+            // Loading delay.
+            if ( _this.cb[_this.item].settings.loading ) {
+                if ( _this.cb[_this.item].settings.loading.delay && !isNaN( _this.cb[_this.item].settings.loading.delay * 1 ) ) {
+                    delay = _this.cb[_this.item].settings.loading.delay * 1;
+                } else {
+                    delay = 1000;
+                }
+            }
+
             if ( cb.settings.overlay ) {
                 if ( _config.overlay.perspective.indexOf(cb.settings.overlayEffect) > -1 || _config.overlay.together.indexOf( cb.settings.overlayEffect ) > -1 ) {
                     // Add class perspective.
@@ -402,32 +412,47 @@
                     cb.overlay.style.opacity = cb.settings.overlayOpacity;
                 }
 
-                if ( _config.overlay.together.indexOf( cb.settings.overlayEffect ) > -1 || _config.oldIE ) {
+                var open = function() {
+                    cb.overlay.removeEventListener('transitionend', open);
+
                     // Load target.
                     _this.load();
 
                     if ( cb.inline) {
                         cb.wrapper.classList.add('custombox-modal-open');
                     }
-                } else {
-                    var open = function() {
-                        cb.overlay.removeEventListener('transitionend', open);
+                };
 
+                if ( _this.cb[_this.item].settings.loading ) {
+                    setTimeout(function() {
+                        open();
+                    }, delay);
+                } else {
+                    if ( _config.overlay.together.indexOf( cb.settings.overlayEffect ) > -1 || _config.oldIE ) {
+                        if ( _this.cb[_this.item].settings.loading ) {
+                            setTimeout(function() {
+                                // Load target.
+                                _this.load();
+
+                                if ( cb.inline) {
+                                    cb.wrapper.classList.add('custombox-modal-open');
+                                }
+                            }, delay);
+                        }
+                    } else {
+                        cb.overlay.addEventListener('transitionend', open, false);
+                    }
+                }
+            } else {
+                if ( _this.cb[_this.item].settings.loading ) {
+                    setTimeout(function() {
                         // Load target.
                         _this.load();
 
                         if ( cb.inline) {
                             cb.wrapper.classList.add('custombox-modal-open');
                         }
-                    };
-                    cb.overlay.addEventListener('transitionend', open, false);
-                }
-            } else {
-                // Load target.
-                _this.load();
-
-                if ( cb.inline) {
-                    cb.wrapper.classList.add('custombox-modal-open');
+                    }, delay);
                 }
             }
             return _this;
