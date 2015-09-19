@@ -121,18 +121,6 @@
             // Listeners.
             this.binds();
         },
-        zIndex: function() {
-            for ( var zIndex = 0, x = 0, elements = document.getElementsByTagName('*'), xLen = elements.length; x < xLen; x += 1 ) {
-                var val = window.getComputedStyle(elements[x]).getPropertyValue('z-index');
-                if ( val ) {
-                    val =+ val;
-                    if ( val > zIndex ) {
-                        zIndex = val;
-                    }
-                }
-            }
-            return zIndex;
-        },
         built: function( item ) {
             var cb;
             if ( typeof this.item !== 'undefined' ) {
@@ -397,6 +385,7 @@
         },
         open: function() {
             var _this = this,
+                delay = 0,
                 cb = _this.cb[_this.item],
                 scrollbar = _this.scrollbar();
 
@@ -406,6 +395,15 @@
 
             _this.main.classList.add('custombox-container-open');
 
+            // Loading delay.
+            if ( _this.cb[_this.item].settings.loading ) {
+                if ( _this.cb[_this.item].settings.loading.delay && !isNaN( _this.cb[_this.item].settings.loading.delay * 1 ) ) {
+                    delay = _this.cb[_this.item].settings.loading.delay * 1;
+                } else {
+                    delay = 1000;
+                }
+            }
+
             if ( cb.settings.overlay ) {
                 if ( _config.overlay.perspective.indexOf(cb.settings.overlayEffect) > -1 || _config.overlay.together.indexOf( cb.settings.overlayEffect ) > -1 ) {
                     // Add class perspective.
@@ -414,32 +412,47 @@
                     cb.overlay.style.opacity = cb.settings.overlayOpacity;
                 }
 
-                if ( _config.overlay.together.indexOf( cb.settings.overlayEffect ) > -1 || _config.oldIE ) {
+                var open = function() {
+                    cb.overlay.removeEventListener('transitionend', open);
+
                     // Load target.
                     _this.load();
 
                     if ( cb.inline) {
                         cb.wrapper.classList.add('custombox-modal-open');
                     }
-                } else {
-                    var open = function() {
-                        cb.overlay.removeEventListener('transitionend', open);
+                };
 
+                if ( _this.cb[_this.item].settings.loading ) {
+                    setTimeout(function() {
+                        open();
+                    }, delay);
+                } else {
+                    if ( _config.overlay.together.indexOf( cb.settings.overlayEffect ) > -1 || _config.oldIE ) {
+                        if ( _this.cb[_this.item].settings.loading ) {
+                            setTimeout(function() {
+                                // Load target.
+                                _this.load();
+
+                                if ( cb.inline) {
+                                    cb.wrapper.classList.add('custombox-modal-open');
+                                }
+                            }, delay);
+                        }
+                    } else {
+                        cb.overlay.addEventListener('transitionend', open, false);
+                    }
+                }
+            } else {
+                if ( _this.cb[_this.item].settings.loading ) {
+                    setTimeout(function() {
                         // Load target.
                         _this.load();
 
                         if ( cb.inline) {
                             cb.wrapper.classList.add('custombox-modal-open');
                         }
-                    };
-                    cb.overlay.addEventListener('transitionend', open, false);
-                }
-            } else {
-                // Load target.
-                _this.load();
-
-                if ( cb.inline) {
-                    cb.wrapper.classList.add('custombox-modal-open');
+                    }, delay);
                 }
             }
             return _this;
@@ -473,6 +486,10 @@
         remove: function( item ) {
             var _this = this,
                 cb = this.cb[item];
+
+            if ( !cb ) {
+                return;
+            }
 
             // Remove classes from html tag.
             if ( _this.cb.length === 1 ) {
@@ -516,11 +533,6 @@
                 cb.overlay.parentNode.removeChild(cb.overlay);
             }
 
-            // Callback close.
-            if ( typeof cb.settings.close === 'function' ) {
-                cb.settings.close.call();
-            }
-
             // Trigger close.
             if ( document.createEvent ) {
                 var tclose = document.createEvent('Event');
@@ -541,8 +553,13 @@
 
             // Remove items.
             _this.cb.splice(item, 1);
+
+            // Callback close.
+            if ( typeof cb.settings.close === 'function' ) {
+                cb.settings.close.call();
+            }
         },
-        close: function( target ) {
+        close: function( target, callback ) {
             var _this = this,
                 item;
 
@@ -558,6 +575,10 @@
             }
 
             var cb = _this.cb[item];
+
+            if ( typeof callback === 'function' ) {
+                cb.settings.close = callback;
+            }
 
             // Modal
             if ( _config.modal.position.indexOf( cb.settings.effect ) > -1 && cb.settings.animation.length > 1 ) {
@@ -595,6 +616,8 @@
                     if ( this.cb[i].settings.width !== 'full' ) {
                         this.cb[i].container.style.marginLeft = '5%';
                         this.cb[i].container.style.marginRight = '5%';
+                    } else if ( this.cb[i].content.offsetWidth <= window.innerWidth ) {
+                        this.cb[i].content.style.width = 'auto';
                     }
                     this.cb[i].container.style.width = 'auto';
                     this.cb[i].wrapper.style.width = window.innerWidth + 'px';
@@ -620,6 +643,12 @@
                     this.cb[i].container.style.marginTop = '5%';
                     this.cb[i].container.style.marginBottom = '5%';
                 } else {
+                    if ( this.cb[i].settings.width === 'full' ) {
+                        this.cb[i].settings.position[1] = 'top';
+                        if ( this.cb[i].content.offsetHeight <= window.innerHeight ) {
+                            this.cb[i].content.style.height = window.innerHeight + 'px';
+                        }
+                    }
                     switch ( this.cb[i].settings.position[1].trim() ) {
                         case 'top':
                             result = 0;
@@ -738,15 +767,20 @@
          * @param {object} options - Options for the custombox.
          */
         open: function( options ) {
-            _private.set(options);
+            _private.set( options );
             _private.init();
         },
         /**
          * @desc Close Custombox.
          * @param {string} options - Target.
+         * @param {function} callback.
          */
-        close: function( target ) {
-            _private.close(target);
+        close: function( target, callback ) {
+            if ( typeof target === 'function' ) {
+                callback = target;
+                target = false;
+            }
+            _private.close( target, callback );
         }
     };
 }));
