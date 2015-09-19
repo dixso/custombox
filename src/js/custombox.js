@@ -487,6 +487,10 @@
             var _this = this,
                 cb = this.cb[item];
 
+            if ( !cb ) {
+                return;
+            }
+
             // Remove classes from html tag.
             if ( _this.cb.length === 1 ) {
                 document.documentElement.classList.remove('custombox-open', 'custombox-perspective');
@@ -529,11 +533,6 @@
                 cb.overlay.parentNode.removeChild(cb.overlay);
             }
 
-            // Callback close.
-            if ( typeof cb.settings.close === 'function' ) {
-                cb.settings.close.call();
-            }
-
             // Trigger close.
             if ( document.createEvent ) {
                 var tclose = document.createEvent('Event');
@@ -554,8 +553,13 @@
 
             // Remove items.
             _this.cb.splice(item, 1);
+
+            // Callback close.
+            if ( typeof cb.settings.close === 'function' ) {
+                cb.settings.close.call();
+            }
         },
-        close: function( target ) {
+        close: function( target, callback ) {
             var _this = this,
                 item;
 
@@ -571,6 +575,10 @@
             }
 
             var cb = _this.cb[item];
+
+            if ( typeof callback === 'function' ) {
+                cb.settings.close = callback;
+            }
 
             // Modal
             if ( _config.modal.position.indexOf( cb.settings.effect ) > -1 && cb.settings.animation.length > 1 ) {
@@ -759,15 +767,20 @@
          * @param {object} options - Options for the custombox.
          */
         open: function( options ) {
-            _private.set(options);
+            _private.set( options );
             _private.init();
         },
         /**
          * @desc Close Custombox.
          * @param {string} options - Target.
+         * @param {function} callback.
          */
-        close: function( target ) {
-            _private.close(target);
+        close: function( target, callback ) {
+            if ( typeof target === 'function' ) {
+                callback = target;
+                target = false;
+            }
+            _private.close( target, callback );
         }
     };
 }));
