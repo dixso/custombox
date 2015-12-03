@@ -424,20 +424,14 @@
                 };
 
                 if ( _this.cb[_this.item].settings.loading ) {
-                    setTimeout(function() {
-                        open();
-                    }, delay);
+                    setTimeout(open, delay);
                 } else {
                     if ( _config.overlay.together.indexOf( cb.settings.overlayEffect ) > -1 || _config.oldIE ) {
-                        if ( _this.cb[_this.item].settings.loading ) {
-                            setTimeout(function() {
-                                // Load target.
-                                _this.load();
+                        // Load target.
+                        _this.load();
 
-                                if ( cb.inline) {
-                                    cb.wrapper.classList.add('custombox-modal-open');
-                                }
-                            }, delay);
+                        if ( cb.inline) {
+                            cb.wrapper.classList.add('custombox-modal-open');
                         }
                     } else {
                         cb.overlay.addEventListener('transitionend', open, false);
