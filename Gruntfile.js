@@ -7,24 +7,6 @@ module.exports = function ( grunt ) {
     grunt.initConfig( {
         pkg: grunt.file.readJSON('package.json'),
 
-        files: {
-            js: [
-                './src/js/*.js',
-                './demo/js/*.js'
-            ],
-            css: [
-                './src/css/*.css',
-                './demo/css/*.css'
-            ],
-            html: [
-                './index.html',
-                './demo/xhr/*.html'
-            ],
-            json: [
-                'package.json'
-            ]
-        },
-
         banner: '/*\n *  <%= pkg.name %> v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
                 ' *  Modal Window Effects with transitions CSS3.\n' +
                 ' *  http://dixso.github.io/custombox/\n' +
@@ -49,33 +31,23 @@ module.exports = function ( grunt ) {
                 ' *  Under MIT License - http://opensource.org/licenses/MIT\n' +
                 ' */\n',
 
-        connect: {
-            default: {
-                options: {
-                    hostname:   'localhost',
-                    port:       9001,
-                    keepalive:  true,
-                    open:       true
+        browserSync: {
+            options: {
+                server: {
+                    baseDir: './'
                 }
-            }
-        },
-
-        watch: {
-            default: {
-                files: [
-                    '<%= files.js %>',
-                    '<%= files.css %>',
-                    '<%= files.html %>',
-                    '<%= files.json %>'
-                ],
-                options: {
-                    livereload: true
-                },
-                tasks: ['dev']
             },
-            karma: {
-                files: ['test/spec/*.js'],
-                tasks: ['karma:default']
+            dev: {
+                bsFiles: {
+                    src: [
+                        'src/*/**',
+                        'demo/*/**'
+                    ]
+                },
+                options: {
+                    codeSync:   true,
+                    port:       3001
+                }
             }
         },
 
@@ -242,7 +214,7 @@ module.exports = function ( grunt ) {
      Task init
      ----------------------------
      */
-    grunt.registerTask('init', ['dev', 'connect']);
+    grunt.registerTask('init', ['dev', 'browserSync']);
 
     /*
      ----------------------------
