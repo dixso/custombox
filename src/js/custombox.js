@@ -404,6 +404,19 @@
                 }
             }
 
+            var open = function(listener) {
+                if ( listener ) {
+                    cb.overlay.removeEventListener('transitionend', open);
+                }
+
+                // Load target.
+                _this.load();
+
+                if ( cb.inline) {
+                    cb.wrapper.classList.add('custombox-modal-open');
+                }
+            };
+
             if ( cb.settings.overlay ) {
                 if ( _config.overlay.perspective.indexOf(cb.settings.overlayEffect) > -1 || _config.overlay.together.indexOf( cb.settings.overlayEffect ) > -1 ) {
                     // Add class perspective.
@@ -412,41 +425,20 @@
                     cb.overlay.style.opacity = cb.settings.overlayOpacity;
                 }
 
-                var open = function() {
-                    cb.overlay.removeEventListener('transitionend', open);
-
-                    // Load target.
-                    _this.load();
-
-                    if ( cb.inline) {
-                        cb.wrapper.classList.add('custombox-modal-open');
-                    }
-                };
-
                 if ( _this.cb[_this.item].settings.loading ) {
                     setTimeout(open, delay);
                 } else {
                     if ( _config.overlay.together.indexOf( cb.settings.overlayEffect ) > -1 || _config.oldIE ) {
-                        // Load target.
-                        _this.load();
-
-                        if ( cb.inline) {
-                            cb.wrapper.classList.add('custombox-modal-open');
-                        }
+                        open(false);
                     } else {
                         cb.overlay.addEventListener('transitionend', open, false);
                     }
                 }
             } else {
                 if ( _this.cb[_this.item].settings.loading ) {
-                    setTimeout(function() {
-                        // Load target.
-                        _this.load();
-
-                        if ( cb.inline) {
-                            cb.wrapper.classList.add('custombox-modal-open');
-                        }
-                    }, delay);
+                    setTimeout(open, delay);
+                } else {
+                    open(false);
                 }
             }
             return _this;
