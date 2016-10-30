@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./custombox.css">
+    <script src="./custombox.js"></script>
+    <script>
+      const modal = new Custombox.modal({
+          target: '#test',
+          effect: 'fadein',
+      });
+      const modal2 = new Custombox.modal({
+          target: '#test2',
+          effect: 'fadein',
+          width: 'full',
+      });
+    </script>
+</head>
+<body>
+Un <div>div</div>
+
+<div id="test" style="background: #fc5e5e; border: #fc5e5e solid 1px">
+  YEAHHH
+    <a href="javascript:void(0);" onclick="modal2.close()">Open</a>
+</div>
+<div id="test2" style="background: #FFF;">
+  Funciona
+    <a href="javascript:void(0);" onclick="modal2.close()">Close</a>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", () =>  modal.open());
+  document.addEventListener("custombox:close", () =>  console.log('close'));
+
+  setTimeout(()=> modal2.open(), 5000);
+</script>
+</body>
+</html>

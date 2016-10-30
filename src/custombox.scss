@@ -1,0 +1,86 @@
+// Constans
+$cb: custombox;
+$overlay: #{$cb}-overlay;
+$content: #{$cb}-content;
+
+// Actions
+$open: 'open';
+$close: 'close';
+
+// Effects
+$effect1: fadein;
+
+/*
+ ----------------------------
+ Core
+ ----------------------------
+ */
+.#{$cb} {
+  position: fixed;
+  overflow: auto;
+  z-index: 1111;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  visibility: visible;
+  opacity: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.#{$overlay} {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  position: fixed;
+  transition-delay: 0s;
+  transition-timing-function: linear;
+  transition-property: opacity;
+}
+.#{$cb}:not(.#{$cb}-is-full) {
+  .#{$content} {
+    max-height: 90%;
+    max-width: 90%;
+  }
+}
+.#{$content} {
+  > * {
+    max-width: 100%;
+  }
+}
+.#{$cb}-is-full {
+  flex-direction: column;
+  height: 100%;
+
+  .#{$content} {
+    flex: 1;
+    display: flex;
+    width: 100%;
+    > * {
+      width: 100%;
+    }
+  }
+}
+
+/*
+ ----------------------------
+ Fadein
+ ----------------------------
+ */
+.#{$cb}.#{$effect1} {
+  .#{$content} {
+    transform: scale(0.7);
+    transition-property: all;
+    opacity: 0;
+  }
+}
+.#{$cb}.#{$effect1} {
+  .#{$open}.#{$content} {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+  }
+}
