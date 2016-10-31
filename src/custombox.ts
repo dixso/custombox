@@ -135,16 +135,43 @@ module Custombox {
     }
 
     // Public methods
-    fetch(target: string): any {
-      let selector: Element = document.querySelector(target);
-      if (selector) {
-        let element: HTMLElement = <HTMLElement>selector.cloneNode(true);
-        element.removeAttribute('id');
+    fetch(target: string, width: string): Promise<any> {
+      return new Promise((resolve: Function, reject: Function) => {
+        let selector: Element = document.querySelector(target);
 
-        this.element.appendChild(element);
-      } else {
-        throw `The element doesn't exist`;
-      }
+        if (selector) {
+          let element: HTMLElement = <HTMLElement>selector.cloneNode(true);
+          element.removeAttribute('id');
+          if (width !== 'full') {
+            element.style.width = width;
+          }
+
+          resolve(element);
+        } else if (target.charAt(0) !== '#' && target.charAt(0) !== '.') {
+          let url: string = target;
+          let req: XMLHttpRequest = new XMLHttpRequest();
+
+          req.open('GET', url);
+          req.onload = () => {
+            if (req.status === 200) {
+              let modal: HTMLElement = document.createElement('div');
+
+              modal.innerHTML = req.response;
+              if (width !== 'full') {
+                modal.style.width = width;
+              }
+
+              resolve(modal);
+            } else {
+              reject(new Error(req.statusText));
+            }
+          };
+          req.onerror = () => reject(new Error('Network error'));
+          req.send();
+        } else {
+          reject(new Error(`The element doesn't exist`));
+        }
+      });
     }
 
     bind(method: string): Promise<Event> {
@@ -201,26 +228,28 @@ module Custombox {
 
     // Public methods
     open(): void {
-      // Fetch target
-      this.content.fetch(this.options.target);
+      this.content.fetch(this.options.target, this.options.width).then((element: HTMLElement) => {
+        // Append
+        this.content.element.appendChild(element);
+        document.body.appendChild(this.wrapper.element);
 
-      // Append into body
-      document.body.appendChild(this.wrapper.element);
-
-      if (this.options.overlay) {
-        this.overlay.bind('open').then(() => this.content.bind('open').then(() => this.dispatchEvent('complete')));
-      } else {
-        let ready = window.getComputedStyle(this.content.element).transitionDuration;
-        if (ready) {
-          this.content.bind('open').then(() => this.dispatchEvent('complete'));
+        if (this.options.overlay) {
+          this.overlay.bind('open').then(() => this.content.bind('open').then(() => this.dispatchEvent('complete')));
+        } else {
+          let ready = window.getComputedStyle(this.content.element).transitionDuration;
+          if (ready) {
+            this.content.bind('open').then(() => this.dispatchEvent('complete'));
+          }
         }
-      }
 
-      // Dispatch event
-      this.dispatchEvent('open');
+        // Dispatch event
+        this.dispatchEvent('open');
 
-      // Listeners
-      this.listeners();
+        // Listeners
+        this.listeners();
+      }).catch((error: string) => {
+        throw error;
+      });
     }
 
     close(): void {
