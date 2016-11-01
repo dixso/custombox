@@ -6,10 +6,15 @@
     <link rel="stylesheet" href="./custombox.css">
     <script src="./custombox.js"></script>
     <script>
-      const modal = new Custombox.modal({
+      var effects = ['fadein', 'slide'];
+      var animation = ['top', 'bottom'];
+
+      const modal =
+        new Custombox.modal({
           target: 'ajax.html',
-          effect: 'fadein',
-      });
+          effect: effects[Math.floor(Math.random() * effects.length)],
+          animation: [animation[Math.floor(Math.random() * animation.length)], animation[Math.floor(Math.random() * animation.length)]]
+        });
       var modals = [];
     </script>
 </head>
@@ -19,23 +24,24 @@ Un <div>div</div>
 <div id="test" style="background: #fc5e5e; border: #fc5e5e solid 1px">
   <a href="javascript:void(0);" onclick="dynamicModal()">Open new modal</a>
 </div>
-<div id="test2" style="background: #FFF;">
-  Funciona
-    <a href="javascript:void(0);" onclick="modals[modals.length - 1].close()">Close</a>
-</div>
 <script>
   document.addEventListener("DOMContentLoaded", () =>  modal.open());
   document.addEventListener("custombox:close", () =>  console.log('close'));
 
-  function dynamicModal() {
-    let custom = new Custombox.modal({
-      target: '#test2',
-      effect: 'fadein',
-      width: 'full',
-    });
+  function dynamicModal(action) {
+    if (!action) {
+      var custom = new Custombox.modal({
+        target: 'ajax.html',
+        effect: effects[Math.floor(Math.random() * effects.length)],
+        animation: [animation[Math.floor(Math.random() * animation.length)], animation[Math.floor(Math.random() * animation.length)]]
+      });
 
-    custom.open();
-    modals.push(custom);
+      custom.open();
+      modals.push(custom);
+    } else {
+      modals[modals.length - 1].close();
+      modals.splice(modals.length - 1, 1);
+    }
   }
 </script>
 </body>

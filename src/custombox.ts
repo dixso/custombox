@@ -9,6 +9,7 @@ module Custombox {
     speed: number;
     effect: string;
     width: string;
+    animation: Array<string>;
     open: Function;
     complete: Function;
     close: Function;
@@ -19,8 +20,9 @@ module Custombox {
     effect: string;
   }
 
-  const cb: string = 'custombox';
-  const o: string = 'open';
+  const CB: string = 'custombox';
+  const O: string = 'open';
+  const C: string = 'close';
 
   class Defaults {
     private defaults: Options;
@@ -39,6 +41,7 @@ module Custombox {
       // Content
       this.defaults.speed = 500;
       this.defaults.width = null;
+      this.defaults.animation = ['top', 'top'];
     }
 
     // Public methods
@@ -52,10 +55,10 @@ module Custombox {
 
     constructor(effect: string, full: boolean) {
       this.element = document.createElement('div');
-      this.element.classList.add(cb, effect);
+      this.element.classList.add(CB, effect);
 
       if (full) {
-        this.element.classList.add(`${cb}-is-full`);
+        this.element.classList.add(`${CB}-is-full`);
       }
     }
 
@@ -76,11 +79,11 @@ module Custombox {
     constructor(private options: Options) {
       this.element = document.createElement('div');
       this.element.style.backgroundColor = this.options.overlayColor;
-      this.element.classList.add(`${cb}-overlay`);
+      this.element.classList.add(`${CB}-overlay`);
 
       let sheet = this.createSheet();
-      sheet.insertRule(`.${cb}-overlay { animation: CloseFade ${this.options.overlaySpeed}ms; }`, 0);
-      sheet.insertRule(`.${o}.${cb}-overlay { animation: OpenFade ${this.options.overlaySpeed}ms; opacity: ${this.options.overlayOpacity} }`, 0);
+      sheet.insertRule(`.${CB}-overlay { animation: CloseFade ${this.options.overlaySpeed}ms; }`, 0);
+      sheet.insertRule(`.${O}.${CB}-overlay { animation: OpenFade ${this.options.overlaySpeed}ms; opacity: ${this.options.overlayOpacity} }`, 0);
       sheet.insertRule(`@keyframes OpenFade { from {opacity: 0} to {opacity: ${this.options.overlayOpacity}} }`, 0);
       sheet.insertRule(`@keyframes CloseFade { from {opacity: ${this.options.overlayOpacity}} to {opacity: 0} }`, 0);
     }
@@ -99,7 +102,7 @@ module Custombox {
       }
 
       return new Promise((resolve: Function) => {
-        this.element.classList[action](o);
+        this.element.classList[action](O);
         this.listener().then(()=> resolve());
       });
     }
@@ -114,7 +117,7 @@ module Custombox {
     // Private methods
     private createSheet(): any  {
       this.style = document.createElement('style');
-      this.style.setAttribute('id', `${cb}-overlay-${Date.now()}`);
+      this.style.setAttribute('id', `${CB}-overlay-${Date.now()}`);
       document.head.appendChild(this.style);
 
       return this.style.sheet;
@@ -128,10 +131,13 @@ module Custombox {
   class Content {
     element: HTMLElement;
 
-    constructor(speed: number) {
+    private animationDefaults: Array<string>;
+
+    constructor(speed: number, private effect: string, private animation: Array<string>) {
       this.element = document.createElement('div');
       this.element.style.transitionDuration = `${speed}ms`;
-      this.element.classList.add(`${cb}-content`);
+      this.element.classList.add(`${CB}-content`);
+      this.checkAnimation();
     }
 
     // Public methods
@@ -175,21 +181,20 @@ module Custombox {
     }
 
     bind(method: string): Promise<Event> {
-      let action: string;
-
       switch (method) {
         case 'close':
-          action = 'remove';
-          break;
+          return new Promise((resolve: Function) => {
+            this.element.classList.remove(O);
+            this.element.classList.add(C);
+            this.checkAnimation(1);
+            this.listener().then(()=> resolve());
+          });
         default:
-          action = 'add';
-          break
+          return new Promise((resolve: Function) => {
+            this.element.classList.add(O);
+            this.listener().then(()=> resolve());
+          });
       }
-
-      return new Promise((resolve: Function) => {
-        this.element.classList[action](o);
-        this.listener().then(()=> resolve());
-      });
     }
 
     remove(): void {
@@ -201,6 +206,22 @@ module Custombox {
     // Private methods
     private listener(): Promise<Event> {
       return new Promise((resolve: Function) => this.element.addEventListener('transitionend', () => resolve(), true));
+    }
+
+    private checkAnimation(action: number = 0): void {
+      this.animationDefaults = ['slide'];
+
+      if (this.animationDefaults.indexOf(this.effect) > -1) {
+        if (this.element.classList.contains('top')) {
+          this.element.classList.remove('top');
+        }
+
+        if (this.element.classList.contains('bottom')) {
+          this.element.classList.remove('bottom');
+        }
+
+        this.element.classList.add(this.animation[action]);
+      }
     }
   }
 
@@ -215,7 +236,7 @@ module Custombox {
       this.options = defaults.assign();
 
       this.wrapper = new Wrapper(this.options.effect, this.options.width === 'full');
-      this.content = new Content(this.options.speed);
+      this.content = new Content(this.options.speed, this.options.effect, this.options.animation);
 
       if (this.options.overlay) {
         this.overlay = new Overlay(this.options);
@@ -228,44 +249,47 @@ module Custombox {
 
     // Public methods
     open(): void {
-      this.content.fetch(this.options.target, this.options.width).then((element: HTMLElement) => {
-        // Append
-        this.content.element.appendChild(element);
-        document.body.appendChild(this.wrapper.element);
+      this.content
+        .fetch(this.options.target, this.options.width)
+        .then((element: HTMLElement) => {
+          // Append
+          this.content.element.appendChild(element);
+          document.body.appendChild(this.wrapper.element);
 
-        if (this.options.overlay) {
-          this.overlay.bind('open').then(() => this.content.bind('open').then(() => this.dispatchEvent('complete')));
-        } else {
-          let ready = window.getComputedStyle(this.content.element).transitionDuration;
-          if (ready) {
-            this.content.bind('open').then(() => this.dispatchEvent('complete'));
+          if (this.options.overlay) {
+            this.overlay.bind(O).then(() => this.content.bind(O).then(() => this.dispatchEvent('complete')));
+          } else {
+            let ready = window.getComputedStyle(this.content.element).transitionDuration;
+            if (ready) {
+              this.content.bind(O).then(() => this.dispatchEvent('complete'));
+            }
           }
-        }
 
-        // Dispatch event
-        this.dispatchEvent('open');
+          // Dispatch event
+          this.dispatchEvent(O);
 
-        // Listeners
-        this.listeners();
-      }).catch((error: string) => {
-        throw error;
-      });
+          // Listeners
+          this.listeners();
+        })
+        .catch((error: Error) => {
+          throw error;
+        });
     }
 
     close(): void {
       if (this.options.overlay) {
         Promise.all([
-          this.content.bind('close').then(() => this.content.remove()),
-          this.overlay.bind('close').then(() => this.overlay.remove())
+          this.content.bind(C).then(() => this.content.remove()),
+          this.overlay.bind(C).then(() => this.overlay.remove())
         ]).then(() => {
           this.wrapper.remove();
-          this.dispatchEvent('close');
+          this.dispatchEvent(C);
         });
       } else {
-        this.content.bind('close').then(() => {
+        this.content.bind(C).then(() => {
           this.content.remove();
           this.wrapper.remove();
-          this.dispatchEvent('close');
+          this.dispatchEvent(C);
         });
       }
     }
@@ -276,7 +300,7 @@ module Custombox {
     }
 
     private dispatchEvent(type: string): void {
-      let event = new Event(`${cb}:${type}`);
+      let event = new Event(`${CB}:${type}`);
       document.dispatchEvent(event);
 
       try {

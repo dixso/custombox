@@ -6,9 +6,12 @@ $content: #{$cb}-content;
 // Actions
 $open: 'open';
 $close: 'close';
+$t: 'top';
+$b: 'bottom';
 
 // Effects
 $effect1: fadein;
+$effect2: slide;
 
 /*
  ----------------------------
@@ -67,7 +70,7 @@ $effect1: fadein;
 
 /*
  ----------------------------
- Fadein
+ #{$effect1}
  ----------------------------
  */
 .#{$cb}.#{$effect1} {
@@ -76,11 +79,31 @@ $effect1: fadein;
     transition-property: all;
     opacity: 0;
   }
-}
-.#{$cb}.#{$effect1} {
   .#{$open}.#{$content} {
     transform: scale(1);
     opacity: 1;
     visibility: visible;
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect2}
+ ----------------------------
+ */
+.#{$cb}.#{$effect2} {
+  align-items: stretch;
+
+  .#{$content}.#{$t},
+  .#{$close}.#{$content}.#{$t} {
+    transform: translateY(-50%);
+  }
+  .#{$open}.#{$content}.#{$t},
+  .#{$open}.#{$content}.#{$b} {
+    transform: translateY(50%);
+  }
+  .#{$content}.#{$b},
+  .#{$close}.#{$content}.#{$b} {
+    transform: translateY(150%);
   }
 }
