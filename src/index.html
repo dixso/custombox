@@ -6,14 +6,18 @@
     <link rel="stylesheet" href="./custombox.css">
     <script src="./custombox.js"></script>
     <script>
-      var effects = ['fadein', 'slide'];
+      var effects = ['fadein', 'fadein'];
       var animation = ['top', 'bottom'];
 
       const modal =
         new Custombox.modal({
           target: 'ajax.html',
           effect: effects[Math.floor(Math.random() * effects.length)],
-          animation: [animation[Math.floor(Math.random() * animation.length)], animation[Math.floor(Math.random() * animation.length)]]
+          animation: {
+              from: animation[Math.floor(Math.random() * animation.length)],
+              to: animation[Math.floor(Math.random() * animation.length)]
+          },
+            width: '400px',
         });
       var modals = [];
     </script>
@@ -21,8 +25,8 @@
 <body>
 Un <div>div</div>
 
-<div id="test" style="background: #fc5e5e; border: #fc5e5e solid 1px">
-  <a href="javascript:void(0);" onclick="dynamicModal()">Open new modal</a>
+<div id="test" style="background: #fc5e5e; border: #fc5e5e solid 1px;">
+    <a href="javascript:void(0);" onclick="dynamicModal()">Open new modal</a>
 </div>
 <script>
   document.addEventListener("DOMContentLoaded", () =>  modal.open());

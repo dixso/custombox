@@ -43,7 +43,7 @@ $effect2: slide;
   transition-timing-function: linear;
   transition-property: opacity;
 }
-.#{$cb}:not(.#{$cb}-is-full) {
+.#{$cb}:not(.#{$cb}-fullscreen) {
   .#{$content} {
     max-height: 90%;
     max-width: 90%;
@@ -54,7 +54,7 @@ $effect2: slide;
     max-width: 100%;
   }
 }
-.#{$cb}-is-full {
+.#{$cb}-fullscreen {
   flex-direction: column;
   height: 100%;
 

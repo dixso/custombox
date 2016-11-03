@@ -1,28 +1,34 @@
 module Custombox {
 
-  interface Overlay {
+  const CB: string = 'custombox';
+  const O: string = 'open';
+  const C: string = 'close';
+
+  interface OverlayConfig {
     overlay: boolean;
     overlaySpeed: number;
     overlayColor: string;
     overlayOpacity: number;
     overlayClose: boolean;
+  }
+
+  interface ContentConfig {
     speed: number;
     effect: string;
     width: string;
-    animation: Array<string>;
+    fullscreen: boolean;
+    animation: {
+      from: string;
+      to: string;
+    };
     open: Function;
     complete: Function;
     close: Function;
   }
 
-  interface Options extends Overlay {
+  interface Options extends OverlayConfig, ContentConfig {
     target: string;
-    effect: string;
   }
-
-  const CB: string = 'custombox';
-  const O: string = 'open';
-  const C: string = 'close';
 
   class Defaults {
     private defaults: Options;
@@ -41,7 +47,10 @@ module Custombox {
       // Content
       this.defaults.speed = 500;
       this.defaults.width = null;
-      this.defaults.animation = ['top', 'top'];
+      this.defaults.animation = {
+        from: 'top',
+        to: 'top'
+      };
     }
 
     // Public methods
@@ -53,12 +62,12 @@ module Custombox {
   class Wrapper {
     element: HTMLElement;
 
-    constructor(effect: string, full: boolean) {
+    constructor(effect: string, fullscreen: boolean) {
       this.element = document.createElement('div');
       this.element.classList.add(CB, effect);
 
-      if (full) {
-        this.element.classList.add(`${CB}-is-full`);
+      if (fullscreen) {
+        this.element.classList.add(`${CB}-fullscreen`);
       }
     }
 
@@ -74,9 +83,9 @@ module Custombox {
   class Overlay {
     element: HTMLElement;
 
-    private style: any;
+    private style: HTMLStyleElement;
 
-    constructor(private options: Options) {
+    constructor(private options: OverlayConfig) {
       this.element = document.createElement('div');
       this.element.style.backgroundColor = this.options.overlayColor;
       this.element.classList.add(`${CB}-overlay`);
@@ -133,7 +142,7 @@ module Custombox {
 
     private animationDefaults: Array<string>;
 
-    constructor(speed: number, private effect: string, private animation: Array<string>) {
+    constructor(speed: number, private effect: string, private animation: Object) {
       this.element = document.createElement('div');
       this.element.style.transitionDuration = `${speed}ms`;
       this.element.classList.add(`${CB}-content`);
@@ -148,11 +157,13 @@ module Custombox {
         if (selector) {
           let element: HTMLElement = <HTMLElement>selector.cloneNode(true);
           element.removeAttribute('id');
-          if (width !== 'full') {
+
+          if (width) {
             element.style.width = width;
           }
 
-          resolve(element);
+          this.element.appendChild(element);
+          resolve();
         } else if (target.charAt(0) !== '#' && target.charAt(0) !== '.') {
           let url: string = target;
           let req: XMLHttpRequest = new XMLHttpRequest();
@@ -160,14 +171,13 @@ module Custombox {
           req.open('GET', url);
           req.onload = () => {
             if (req.status === 200) {
-              let modal: HTMLElement = document.createElement('div');
+              this.element.insertAdjacentHTML('beforeend', req.response);
 
-              modal.innerHTML = req.response;
-              if (width !== 'full') {
-                modal.style.width = width;
+              if (width) {
+                let child: any = this.element.firstChild;
+                child.style.width = width;
               }
-
-              resolve(modal);
+              resolve();
             } else {
               reject(new Error(req.statusText));
             }
@@ -186,7 +196,7 @@ module Custombox {
           return new Promise((resolve: Function) => {
             this.element.classList.remove(O);
             this.element.classList.add(C);
-            this.checkAnimation(1);
+            this.checkAnimation('to');
             this.listener().then(()=> resolve());
           });
         default:
@@ -208,7 +218,7 @@ module Custombox {
       return new Promise((resolve: Function) => this.element.addEventListener('transitionend', () => resolve(), true));
     }
 
-    private checkAnimation(action: number = 0): void {
+    private checkAnimation(action: string = 'from'): void {
       this.animationDefaults = ['slide'];
 
       if (this.animationDefaults.indexOf(this.effect) > -1) {
@@ -235,7 +245,7 @@ module Custombox {
       let defaults: Defaults = new Defaults(options);
       this.options = defaults.assign();
 
-      this.wrapper = new Wrapper(this.options.effect, this.options.width === 'full');
+      this.wrapper = new Wrapper(this.options.effect, this.options.fullscreen);
       this.content = new Content(this.options.speed, this.options.effect, this.options.animation);
 
       if (this.options.overlay) {
@@ -251,9 +261,8 @@ module Custombox {
     open(): void {
       this.content
         .fetch(this.options.target, this.options.width)
-        .then((element: HTMLElement) => {
+        .then(() => {
           // Append
-          this.content.element.appendChild(element);
           document.body.appendChild(this.wrapper.element);
 
           if (this.options.overlay) {
@@ -278,13 +287,15 @@ module Custombox {
 
     close(): void {
       if (this.options.overlay) {
-        Promise.all([
-          this.content.bind(C).then(() => this.content.remove()),
-          this.overlay.bind(C).then(() => this.overlay.remove())
-        ]).then(() => {
-          this.wrapper.remove();
-          this.dispatchEvent(C);
-        });
+        Promise
+          .all([
+            this.content.bind(C).then(() => this.content.remove()),
+            this.overlay.bind(C).then(() => this.overlay.remove())
+          ])
+          .then(() => {
+            this.wrapper.remove();
+            this.dispatchEvent(C);
+          });
       } else {
         this.content.bind(C).then(() => {
           this.content.remove();
