@@ -1,8 +1,10 @@
 module Custombox {
 
   const CB: string = 'custombox';
-  const O: string = 'open';
-  const C: string = 'close';
+  const O: string = `${CB}-open`;
+  const C: string = `${CB}-close`;
+  const animationValues: Array<string> = ['slide'];
+  const positionValues: Array<string> = ['top', 'right', 'bottom', 'left'];
 
   interface OverlayConfig {
     overlay: boolean;
@@ -20,6 +22,10 @@ module Custombox {
     animation: {
       from: string;
       to: string;
+    };
+    position: {
+      x: string;
+      y: string;
     };
     open: Function;
     complete: Function;
@@ -51,6 +57,10 @@ module Custombox {
         from: 'top',
         to: 'top'
       };
+      this.defaults.position = {
+        x: 'center',
+        y: 'center',
+      };
     }
 
     // Public methods
@@ -62,13 +72,9 @@ module Custombox {
   class Wrapper {
     element: HTMLElement;
 
-    constructor(effect: string, fullscreen: boolean) {
+    constructor(effect: string) {
       this.element = document.createElement('div');
-      this.element.classList.add(CB, effect);
-
-      if (fullscreen) {
-        this.element.classList.add(`${CB}-fullscreen`);
-      }
+      this.element.classList.add(CB, `${CB}-${effect}`);
     }
 
     // Public methods
@@ -102,7 +108,7 @@ module Custombox {
       let action: string;
 
       switch (method) {
-        case 'close':
+        case C:
           action = 'remove';
           break;
         default:
@@ -140,13 +146,21 @@ module Custombox {
   class Content {
     element: HTMLElement;
 
-    private animationDefaults: Array<string>;
-
-    constructor(speed: number, private effect: string, private animation: Object) {
+    constructor(private options: Options, delay: number) {
       this.element = document.createElement('div');
-      this.element.style.transitionDuration = `${speed}ms`;
+      this.element.style.animationDuration = `${this.options.speed}ms`;
+      this.element.style.animationDelay = `${delay}ms`;
       this.element.classList.add(`${CB}-content`);
-      this.checkAnimation();
+
+      if (this.options.fullscreen) {
+        this.element.classList.add(`${CB}-fullscreen`);
+      } else {
+        this.setPosition();
+      }
+
+      if (animationValues.indexOf(this.options.effect) > -1) {
+        this.setAnimation();
+      }
     }
 
     // Public methods
@@ -159,7 +173,7 @@ module Custombox {
           element.removeAttribute('id');
 
           if (width) {
-            element.style.width = width;
+            element.style.flexBasis = width;
           }
 
           this.element.appendChild(element);
@@ -192,11 +206,12 @@ module Custombox {
 
     bind(method: string): Promise<Event> {
       switch (method) {
-        case 'close':
+        case C:
           return new Promise((resolve: Function) => {
+            this.element.style.animationDelay = '0ms';
             this.element.classList.remove(O);
             this.element.classList.add(C);
-            this.checkAnimation('to');
+            this.setAnimation('to');
             this.listener().then(()=> resolve());
           });
         default:
@@ -215,23 +230,23 @@ module Custombox {
 
     // Private methods
     private listener(): Promise<Event> {
-      return new Promise((resolve: Function) => this.element.addEventListener('transitionend', () => resolve(), true));
+      return new Promise((resolve: Function) => this.element.addEventListener('animationend', () => resolve(), true));
     }
 
-    private checkAnimation(action: string = 'from'): void {
-      this.animationDefaults = ['slide'];
-
-      if (this.animationDefaults.indexOf(this.effect) > -1) {
-        if (this.element.classList.contains('top')) {
-          this.element.classList.remove('top');
-        }
-
-        if (this.element.classList.contains('bottom')) {
-          this.element.classList.remove('bottom');
-        }
-
-        this.element.classList.add(this.animation[action]);
+    private setPosition(): void {
+      for (let key of Object.keys(this.options.position)) {
+        this.element.classList.add(`${CB}-${key}-${this.options.position[key]}`);
       }
+    }
+
+    private setAnimation(action: string = 'from'): void {
+      for (let i = 0, t = positionValues.length; i < t; i++) {
+        if (this.element.classList.contains(`${CB}-${positionValues[i]}`)) {
+          this.element.classList.remove(`${CB}-${positionValues[i]}`);
+        }
+      }
+
+      this.element.classList.add(`${CB}-${this.options.animation[action]}`);
     }
   }
 
@@ -245,13 +260,19 @@ module Custombox {
       let defaults: Defaults = new Defaults(options);
       this.options = defaults.assign();
 
-      this.wrapper = new Wrapper(this.options.effect, this.options.fullscreen);
-      this.content = new Content(this.options.speed, this.options.effect, this.options.animation);
+      // Create wrapper
+      this.wrapper = new Wrapper(this.options.effect);
 
+      // Create overlay
+      let delay: number = 0;
       if (this.options.overlay) {
         this.overlay = new Overlay(this.options);
         this.wrapper.element.appendChild(this.overlay.element);
+        delay = this.options.overlaySpeed / 2;
       }
+
+      // Create content
+      this.content = new Content(this.options, delay);
 
       // Create the structure
       this.build();
@@ -266,13 +287,10 @@ module Custombox {
           document.body.appendChild(this.wrapper.element);
 
           if (this.options.overlay) {
-            this.overlay.bind(O).then(() => this.content.bind(O).then(() => this.dispatchEvent('complete')));
-          } else {
-            let ready = window.getComputedStyle(this.content.element).transitionDuration;
-            if (ready) {
-              this.content.bind(O).then(() => this.dispatchEvent('complete'));
-            }
+            this.overlay.bind(O);
           }
+
+          this.content.bind(O).then(() => this.dispatchEvent('complete'));
 
           // Dispatch event
           this.dispatchEvent(O);
@@ -326,7 +344,7 @@ module Custombox {
         }
       }, true);
 
-      if (this.options.overlayClose) {
+      if (this.options.overlay) {
         this.overlay.element.addEventListener('click', () => this.close(), true);
       }
     }

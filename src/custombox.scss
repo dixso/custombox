@@ -4,68 +4,97 @@ $overlay: #{$cb}-overlay;
 $content: #{$cb}-content;
 
 // Actions
-$open: 'open';
-$close: 'close';
-$t: 'top';
-$b: 'bottom';
+$open: #{$cb}-open;
+$close: #{$cb}-close;
+$t: #{$cb}-top;
+$b: #{$cb}-bottom;
+$l: #{$cb}-left;
+$r: #{$cb}-right;
+
+// Cartesian
+$x-left: #{$cb}-x-left;
+$x-center: #{$cb}-x-center;
+$x-right: #{$cb}-x-right;
+$y-top: #{$cb}-y-top;
+$y-center: #{$cb}-y-center;
+$y-bottom: #{$cb}-y-bottom;
 
 // Effects
-$effect1: fadein;
-$effect2: slide;
+$effect1: #{$cb}-fadein;
+$effect2: #{$cb}-slide;
+
+@mixin animation($name, $timing: ease-out, $fill-mode: forwards) {
+  animation-name: $name;
+  animation-timing-function: $timing;
+  animation-fill-mode: $fill-mode;
+  backface-visibility: hidden;
+}
 
 /*
  ----------------------------
  Core
  ----------------------------
  */
-.#{$cb} {
+
+@mixin fixed() {
   position: fixed;
-  overflow: auto;
-  z-index: 1111;
+  overflow: hidden;
   top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  visibility: visible;
-  opacity: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.#{$cb},
+.#{$content},
+.#{$overlay} {
+  @include fixed();
+}
+.#{$cb} {
+  z-index: 9999;
 }
 .#{$overlay} {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
   opacity: 0;
-  position: fixed;
   transition-delay: 0s;
   transition-timing-function: linear;
   transition-property: opacity;
 }
-.#{$cb}:not(.#{$cb}-fullscreen) {
-  .#{$content} {
-    max-height: 90%;
-    max-width: 90%;
-  }
+.#{$content} {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  align-content: stretch;
+  pointer-events: none;
 }
 .#{$content} {
   > * {
     max-width: 100%;
   }
 }
-.#{$cb}-fullscreen {
-  flex-direction: column;
-  height: 100%;
-
-  .#{$content} {
-    flex: 1;
-    display: flex;
+.#{$cb}-fullscreen.#{$content} {
+  justify-content: flex-start;
+  align-items: stretch;
+  > * {
     width: 100%;
-    > * {
-      width: 100%;
-    }
   }
+}
+.#{$y-top} {
+  align-items: baseline;
+}
+.#{$x-left} {
+  align-items: flex-start;
+}
+.#{$y-center} {
+  align-items: center;
+}
+.#{$y-bottom} {
+  align-items: flex-end;
+}
+.#{$x-center} {
+  justify-content: center;
+}
+.#{$x-right} {
+  justify-content: flex-end;
 }
 
 /*
@@ -73,16 +102,42 @@ $effect2: slide;
  #{$effect1}
  ----------------------------
  */
-.#{$cb}.#{$effect1} {
-  .#{$content} {
-    transform: scale(0.7);
-    transition-property: all;
-    opacity: 0;
+@mixin fadeOpen() {
+  transform: scale(0.7);
+  transition-property: all;
+}
+
+@mixin fadeClose() {
+  transform: scale(1);
+  opacity: 1;
+}
+
+@keyframes fadeIn {
+  from {
+    @include fadeOpen();
   }
-  .#{$open}.#{$content} {
-    transform: scale(1);
-    opacity: 1;
-    visibility: visible;
+  to {
+    @include fadeClose();
+  }
+}
+@keyframes fadeOut {
+  from {
+    @include fadeClose();
+  }
+  to {
+    @include fadeOpen();
+  }
+}
+.#{$effect1} {
+  .#{$content} {
+    opacity: 0;
+
+    &.#{$open} {
+      @include animation(fadeIn, ease-in);
+    }
+    &.#{$close} {
+      @include animation(fadeOut, ease-out);
+    }
   }
 }
 
@@ -91,19 +146,97 @@ $effect2: slide;
  #{$effect2}
  ----------------------------
  */
-.#{$cb}.#{$effect2} {
-  align-items: stretch;
+@keyframes slideInTop {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes slideOutTop {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+@keyframes slideInBottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes slideOutBottom {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+.#{$effect2} {
+  .#{$content} {
+    transform: translateX(-100%);
 
-  .#{$content}.#{$t},
-  .#{$close}.#{$content}.#{$t} {
-    transform: translateY(-50%);
-  }
-  .#{$open}.#{$content}.#{$t},
-  .#{$open}.#{$content}.#{$b} {
-    transform: translateY(50%);
-  }
-  .#{$content}.#{$b},
-  .#{$close}.#{$content}.#{$b} {
-    transform: translateY(150%);
+    &.#{$open}.#{$t} {
+      @include animation(slideInTop, ease-out);
+    }
+    &.#{$open}.#{$b} {
+      @include animation(slideInBottom, ease-out);
+    }
+    &.#{$open}.#{$l} {
+      @include animation(slideInLeft, ease-out);
+    }
+    &.#{$open}.#{$r} {
+      @include animation(slideInRight, ease-out);
+    }
+    &.#{$close}.#{$t} {
+      @include animation(slideOutTop, ease-in);
+    }
+    &.#{$close}.#{$b} {
+      @include animation(slideOutBottom, ease-in);
+    }
+    &.#{$close}.#{$l} {
+      @include animation(slideOutLeft, ease-in);
+    }
+    &.#{$close}.#{$r} {
+      @include animation(slideOutRight, ease-in);
+    }
   }
 }

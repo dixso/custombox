@@ -5,18 +5,28 @@
     <title>Title</title>
     <link rel="stylesheet" href="./custombox.css">
     <script src="./custombox.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
     <script>
-      var effects = ['fadein', 'fadein'];
-      var animation = ['top', 'bottom'];
+      var effects = ['fadein', 'slide'];
+      var animation = ['top', 'right', 'bottom', 'left'];
 
       const modal =
         new Custombox.modal({
-          target: 'ajax.html',
+          target: '#test',
           effect: effects[Math.floor(Math.random() * effects.length)],
           animation: {
               from: animation[Math.floor(Math.random() * animation.length)],
               to: animation[Math.floor(Math.random() * animation.length)]
           },
+            position: {
+                x: 'center',
+                y: 'center'
+            },
             width: '400px',
         });
       var modals = [];
@@ -25,8 +35,9 @@
 <body>
 Un <div>div</div>
 
-<div id="test" style="background: #fc5e5e; border: #fc5e5e solid 1px;">
+<div id="test" style="background: #fc5e5e; border: #fc5e5e solid 1px; border: #F0F solid 2px">
     <a href="javascript:void(0);" onclick="dynamicModal()">Open new modal</a>
+    julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>
 </div>
 <script>
   document.addEventListener("DOMContentLoaded", () =>  modal.open());
