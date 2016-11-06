@@ -3,8 +3,9 @@ module Custombox {
   const CB: string = 'custombox';
   const O: string = `${CB}-open`;
   const C: string = `${CB}-close`;
-  const animationValues: Array<string> = ['slide'];
+  const animationValues: Array<string> = ['slide', 'blur'];
   const positionValues: Array<string> = ['top', 'right', 'bottom', 'left'];
+  const containerValues: Array<string> = ['blur'];
 
   interface OverlayConfig {
     overlay: boolean;
@@ -32,7 +33,11 @@ module Custombox {
     close: Function;
   }
 
-  interface Options extends OverlayConfig, ContentConfig {
+  interface ContainerConfig {
+    container: string;
+  }
+
+  interface Options extends OverlayConfig, ContentConfig, ContainerConfig {
     target: string;
   }
 
@@ -50,6 +55,9 @@ module Custombox {
       this.defaults.overlayOpacity = .5;
       this.defaults.overlayClose = true;
 
+      // Container
+      this.defaults.container = null;
+
       // Content
       this.defaults.speed = 500;
       this.defaults.width = null;
@@ -66,6 +74,71 @@ module Custombox {
     // Public methods
     assign(): Options {
       return Object.assign(this.defaults, this.options);
+    }
+  }
+
+  class Container {
+    element: Element;
+
+    constructor(target: string, private effect: string) {
+      if (document.readyState === 'loading') {
+        throw new Error(`You need to instantiate Custombox after the document is loaded.`);
+      } else {
+        let selector: Element = document.querySelector(target);
+
+        if (selector) {
+          this.element = selector;
+          this.element.classList.add(`${CB}-container`, `${CB}-${this.effect}`);
+        } else {
+          let scopes: NodeListOf<Element> = document.body.querySelectorAll(':scope > *');
+          let create: boolean = true;
+
+          for (let i = 0, t = scopes.length; i < t; i++) {
+            if (scopes[i].classList.contains(`${CB}-container`)) {
+              create = false;
+              break;
+            }
+          }
+
+          if (create) {
+            this.element = document.createElement('div');
+            this.element.classList.add(`${CB}-container`, `${CB}-${this.effect}`);
+
+            while (document.body.firstChild) {
+              this.element.appendChild(document.body.firstChild);
+            }
+            document.body.appendChild(this.element);
+          }
+        }
+      }
+    }
+
+    // Public methods
+    bind(method: string): Promise<Event> {
+      let action: string;
+
+      switch (method) {
+        case C:
+          action = 'remove';
+          break;
+        default:
+          action = 'add';
+          break
+      }
+
+      return new Promise((resolve: Function) => {
+        this.element.classList[action](O);
+        this.listener().then(()=> resolve());
+      });
+    }
+
+    remove(): void {
+      this.element.classList.remove(C, `${CB}-${this.effect}`);
+    }
+
+    // Private methods
+    private listener(): Promise<Event> {
+      return new Promise((resolve: Function) => this.element.addEventListener('animationend', () => resolve(), true));
     }
   }
 
@@ -96,7 +169,7 @@ module Custombox {
       this.element.style.backgroundColor = this.options.overlayColor;
       this.element.classList.add(`${CB}-overlay`);
 
-      let sheet = this.createSheet();
+      let sheet: any = this.createSheet();
       sheet.insertRule(`.${CB}-overlay { animation: CloseFade ${this.options.overlaySpeed}ms; }`, 0);
       sheet.insertRule(`.${O}.${CB}-overlay { animation: OpenFade ${this.options.overlaySpeed}ms; opacity: ${this.options.overlayOpacity} }`, 0);
       sheet.insertRule(`@keyframes OpenFade { from {opacity: 0} to {opacity: ${this.options.overlayOpacity}} }`, 0);
@@ -130,7 +203,7 @@ module Custombox {
     }
 
     // Private methods
-    private createSheet(): any  {
+    private createSheet(): StyleSheet  {
       this.style = document.createElement('style');
       this.style.setAttribute('id', `${CB}-overlay-${Date.now()}`);
       document.head.appendChild(this.style);
@@ -189,7 +262,7 @@ module Custombox {
 
               if (width) {
                 let child: any = this.element.firstChild;
-                child.style.width = width;
+                child.style.flexBasis = width;
               }
               resolve();
             } else {
@@ -245,7 +318,7 @@ module Custombox {
           this.element.classList.remove(`${CB}-${positionValues[i]}`);
         }
       }
-
+      
       this.element.classList.add(`${CB}-${this.options.animation[action]}`);
     }
   }
@@ -253,6 +326,7 @@ module Custombox {
   export class modal {
     private options: Options;
     private wrapper: Wrapper;
+    private container: Container;
     private content: Content;
     private overlay: Overlay;
 
@@ -262,6 +336,11 @@ module Custombox {
 
       // Create wrapper
       this.wrapper = new Wrapper(this.options.effect);
+
+      // Create container
+      if (containerValues.indexOf(this.options.effect) > -1) {
+        this.container = new Container(this.options.container, this.options.effect);
+      }
 
       // Create overlay
       let delay: number = 0;
@@ -290,6 +369,10 @@ module Custombox {
             this.overlay.bind(O);
           }
 
+          if (this.container) {
+            this.container.bind(O);
+          }
+
           this.content.bind(O).then(() => this.dispatchEvent('complete'));
 
           // Dispatch event
@@ -304,23 +387,24 @@ module Custombox {
     }
 
     close(): void {
+      let close: Promise<void>[] = [
+        this.content.bind(C).then(() => this.content.remove()),
+      ];
+
       if (this.options.overlay) {
-        Promise
-          .all([
-            this.content.bind(C).then(() => this.content.remove()),
-            this.overlay.bind(C).then(() => this.overlay.remove())
-          ])
-          .then(() => {
-            this.wrapper.remove();
-            this.dispatchEvent(C);
-          });
-      } else {
-        this.content.bind(C).then(() => {
-          this.content.remove();
+        close.push(this.overlay.bind(C).then(() => this.overlay.remove()));
+      }
+
+      if (this.container) {
+        close.push(this.container.bind(C).then(() => this.container.remove()));
+      }
+
+      Promise
+        .all(close)
+        .then(() => {
           this.wrapper.remove();
           this.dispatchEvent(C);
         });
-      }
     }
 
     // Private methods

@@ -2,6 +2,7 @@
 $cb: custombox;
 $overlay: #{$cb}-overlay;
 $content: #{$cb}-content;
+$container: #{$cb}-container;
 
 // Actions
 $open: #{$cb}-open;
@@ -22,6 +23,10 @@ $y-bottom: #{$cb}-y-bottom;
 // Effects
 $effect1: #{$cb}-fadein;
 $effect2: #{$cb}-slide;
+$effect3: #{$cb}-newspaper;
+$effect4: #{$cb}-fall;
+$effect5: #{$cb}-sidefall;
+$effect6: #{$cb}-blur;
 
 @mixin animation($name, $timing: ease-out, $fill-mode: forwards) {
   animation-name: $name;
@@ -239,4 +244,295 @@ $effect2: #{$cb}-slide;
       @include animation(slideOutRight, ease-in);
     }
   }
+}
+
+/*
+ ----------------------------
+ #{$effect3}
+ ----------------------------
+ */
+@mixin newspaperOpen() {
+  transform: scale(0) rotate(720deg);
+  opacity: 0;
+}
+
+@mixin newspaperClose() {
+  transform: scale(1) rotate(0deg);
+  opacity: 1;
+}
+
+@keyframes newspaperIn {
+  from {
+    @include newspaperOpen();
+  }
+  to {
+    @include newspaperClose();
+  }
+}
+@keyframes newspaperOut {
+  from {
+    @include newspaperClose();
+  }
+  to {
+    @include newspaperOpen();
+  }
+}
+.#{$effect3} {
+  .#{$content} {
+    opacity: 0;
+
+    &.#{$open} {
+      @include animation(newspaperIn, ease-in);
+    }
+    &.#{$close} {
+      @include animation(newspaperOut, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect4}
+ ----------------------------
+ */
+@mixin fallOpen() {
+  transform-style: preserve-3d;
+  transform: translateZ(600px) rotateX(20deg);
+  opacity: 0;
+}
+
+@mixin fallClose() {
+  transition-timing-function: ease-in;
+  transition-property: all;
+  transform: translateZ(0) rotateX(0deg);
+  opacity: 1;
+}
+
+@keyframes fallIn {
+  from {
+    @include fallOpen();
+  }
+  to {
+    @include fallClose();
+  }
+}
+@keyframes fallOut {
+  from {
+    @include fallClose();
+  }
+  to {
+    @include fallOpen();
+  }
+}
+.#{$effect4} {
+  perspective: 1300px;
+
+  .#{$content} {
+    opacity: 0;
+
+    &.#{$open} {
+      @include animation(fallIn, ease-in);
+    }
+    &.#{$close} {
+      @include animation(fallOut, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect5}
+ ----------------------------
+ */
+@mixin sidefallOpen() {
+  transform-style: preserve-3d;
+  transform: translate(30%) translateZ(600px) rotate(10deg);
+  opacity: 0;
+}
+
+@mixin sidefallClose() {
+  transition-timing-function: ease-in;
+  transition-property: all;
+  transform: translate(0) translateZ(0) rotate(0deg);
+  opacity: 1;
+}
+
+@keyframes sidefallIn {
+  from {
+    @include sidefallOpen();
+  }
+  to {
+    @include sidefallClose();
+  }
+}
+@keyframes sidefallOut {
+  from {
+    @include sidefallClose();
+  }
+  to {
+    @include sidefallOpen();
+  }
+}
+.#{$effect5} {
+  perspective: 1300px;
+
+  .#{$content} {
+    opacity: 0;
+
+    &.#{$open} {
+      @include animation(sidefallIn, ease-in);
+    }
+    &.#{$close} {
+      @include animation(sidefallOut, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect6}
+ ----------------------------
+ */
+@mixin blurOpen() {
+  transform: translateY(-5%);
+  opacity: 0;
+}
+@mixin blurOpenBottom() {
+  transform: translateY(5%);
+  opacity: 0;
+}
+@mixin blurOpenRight() {
+  transform: translateX(5%);
+  opacity: 0;
+}
+@mixin blurOpenLeft() {
+  transform: translateX(-5%);
+  opacity: 0;
+}
+@mixin blurClose() {
+  transform: translateY(0);
+  opacity: 1;
+}
+@mixin blurContainerOpen() {
+  filter: blur(0px);
+}
+@mixin blurContainerClose() {
+  filter: blur(3px);
+}
+
+@keyframes blurInTop {
+  from {
+    @include blurOpen();
+  }
+  to {
+    @include blurClose();
+  }
+}
+@keyframes blurOutTop {
+  from {
+    @include blurClose();
+  }
+  to {
+    @include blurOpen();
+  }
+}
+@keyframes blurInBottom {
+  from {
+    @include blurOpenBottom();
+  }
+  to {
+    @include blurClose();
+  }
+}
+@keyframes blurOutBottom {
+  from {
+    @include blurClose();
+  }
+  to {
+    @include blurOpenBottom();
+  }
+}
+@keyframes blurInRight {
+  from {
+    @include blurOpenRight();
+  }
+  to {
+    @include blurClose();
+  }
+}
+@keyframes blurOutRight {
+  from {
+    @include blurClose();
+  }
+  to {
+    @include blurOpenRight();
+  }
+}
+@keyframes blurInLeft {
+  from {
+    @include blurOpenLeft();
+  }
+  to {
+    @include blurClose();
+  }
+}
+@keyframes blurOutLeft {
+  from {
+    @include blurClose();
+  }
+  to {
+    @include blurOpenLeft();
+  }
+}
+@keyframes blurInContainer {
+  from {
+    @include blurContainerOpen();
+  }
+  to {
+    @include blurContainerClose();
+  }
+}
+@keyframes blurOutContainer {
+  from {
+    @include blurContainerClose();
+  }
+  to {
+    @include blurContainerOpen();
+  }
+}
+.#{$effect6} {
+  .#{$content} {
+    opacity: 0;
+
+    &.#{$open}.#{$t} {
+      @include animation(blurInTop, ease-in);
+    }
+    &.#{$close}.#{$t} {
+      @include animation(blurOutTop, ease-out);
+    }
+    &.#{$open}.#{$b} {
+      @include animation(blurInBottom, ease-in);
+    }
+    &.#{$close}.#{$b} {
+      @include animation(blurOutBottom, ease-out);
+    }
+    &.#{$open}.#{$r} {
+      @include animation(blurInRight, ease-in);
+    }
+    &.#{$close}.#{$r} {
+      @include animation(blurOutRight, ease-out);
+    }
+    &.#{$open}.#{$l} {
+      @include animation(blurInLeft, ease-in);
+    }
+    &.#{$close}.#{$l} {
+      @include animation(blurOutLeft, ease-out);
+    }
+  }
+}
+.#{$effect6}.#{$container} {
+  @include animation(blurOutContainer, ease-out);
+}
+.#{$effect6}.#{$container}.#{$open} {
+  @include animation(blurInContainer, ease-in);
 }
