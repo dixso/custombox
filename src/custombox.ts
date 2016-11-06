@@ -3,7 +3,7 @@ module Custombox {
   const CB: string = 'custombox';
   const O: string = `${CB}-open`;
   const C: string = `${CB}-close`;
-  const animationValues: Array<string> = ['slide', 'blur'];
+  const animationValues: Array<string> = ['slide', 'blur', 'flip'];
   const positionValues: Array<string> = ['top', 'right', 'bottom', 'left'];
   const containerValues: Array<string> = ['blur'];
 
@@ -318,7 +318,7 @@ module Custombox {
           this.element.classList.remove(`${CB}-${positionValues[i]}`);
         }
       }
-      
+
       this.element.classList.add(`${CB}-${this.options.animation[action]}`);
     }
   }

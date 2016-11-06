@@ -27,6 +27,10 @@ $effect3: #{$cb}-newspaper;
 $effect4: #{$cb}-fall;
 $effect5: #{$cb}-sidefall;
 $effect6: #{$cb}-blur;
+$effect7: #{$cb}-flip;
+$effect8: #{$cb}-sign;
+$effect9: #{$cb}-superscaled;
+$effect10: #{$cb}-slit;
 
 @mixin animation($name, $timing: ease-out, $fill-mode: forwards) {
   animation-name: $name;
@@ -219,29 +223,34 @@ $effect6: #{$cb}-blur;
   .#{$content} {
     transform: translateX(-100%);
 
-    &.#{$open}.#{$t} {
-      @include animation(slideInTop, ease-out);
+    &.#{$open} {
+      &.#{$t} {
+        @include animation(slideInTop, ease-out);
+      }
+      &.#{$b} {
+        @include animation(slideInBottom, ease-out);
+      }
+      &.#{$l} {
+        @include animation(slideInLeft, ease-out);
+      }
+      &.#{$r} {
+        @include animation(slideInRight, ease-out);
+      }
     }
-    &.#{$open}.#{$b} {
-      @include animation(slideInBottom, ease-out);
-    }
-    &.#{$open}.#{$l} {
-      @include animation(slideInLeft, ease-out);
-    }
-    &.#{$open}.#{$r} {
-      @include animation(slideInRight, ease-out);
-    }
-    &.#{$close}.#{$t} {
-      @include animation(slideOutTop, ease-in);
-    }
-    &.#{$close}.#{$b} {
-      @include animation(slideOutBottom, ease-in);
-    }
-    &.#{$close}.#{$l} {
-      @include animation(slideOutLeft, ease-in);
-    }
-    &.#{$close}.#{$r} {
-      @include animation(slideOutRight, ease-in);
+
+    &.#{$close} {
+      &.#{$t} {
+        @include animation(slideOutTop, ease-in);
+      }
+      &.#{$b} {
+        @include animation(slideOutBottom, ease-in);
+      }
+      &.#{$l} {
+        @include animation(slideOutLeft, ease-in);
+      }
+      &.#{$r} {
+        @include animation(slideOutRight, ease-in);
+      }
     }
   }
 }
@@ -504,29 +513,33 @@ $effect6: #{$cb}-blur;
   .#{$content} {
     opacity: 0;
 
-    &.#{$open}.#{$t} {
-      @include animation(blurInTop, ease-in);
+    &.#{$open} {
+      &.#{$t} {
+        @include animation(blurInTop, ease-in);
+      }
+      &.#{$b} {
+        @include animation(blurInBottom, ease-in);
+      }
+      &.#{$l} {
+        @include animation(blurInLeft, ease-in);
+      }
+      &.#{$r} {
+        @include animation(blurInRight, ease-in);
+      }
     }
-    &.#{$close}.#{$t} {
-      @include animation(blurOutTop, ease-out);
-    }
-    &.#{$open}.#{$b} {
-      @include animation(blurInBottom, ease-in);
-    }
-    &.#{$close}.#{$b} {
-      @include animation(blurOutBottom, ease-out);
-    }
-    &.#{$open}.#{$r} {
-      @include animation(blurInRight, ease-in);
-    }
-    &.#{$close}.#{$r} {
-      @include animation(blurOutRight, ease-out);
-    }
-    &.#{$open}.#{$l} {
-      @include animation(blurInLeft, ease-in);
-    }
-    &.#{$close}.#{$l} {
-      @include animation(blurOutLeft, ease-out);
+    &.#{$close} {
+      &.#{$t} {
+        @include animation(blurOutTop, ease-out);
+      }
+      &.#{$b} {
+        @include animation(blurOutBottom, ease-out);
+      }
+      &.#{$r} {
+        @include animation(blurOutRight, ease-out);
+      }
+      &.#{$l} {
+        @include animation(blurOutLeft, ease-out);
+      }
     }
   }
 }
@@ -535,4 +548,267 @@ $effect6: #{$cb}-blur;
 }
 .#{$effect6}.#{$container}.#{$open} {
   @include animation(blurInContainer, ease-in);
+}
+
+/*
+ ----------------------------
+ #{$effect7}
+ ----------------------------
+ */
+@mixin flipOpen() {
+  transform-style: preserve-3d;
+  transform: rotateX(-70deg);
+}
+@mixin flipOpenBottom() {
+  transform-style: preserve-3d;
+  transform: rotateX(70deg);
+}
+@mixin flipOpenRight() {
+  transform-style: preserve-3d;
+  transform: rotateY(70deg);
+}
+@mixin flipOpenLeft() {
+  transform-style: preserve-3d;
+  transform: rotateY(-70deg);
+}
+@mixin flipClose() {
+  transform: rotateY(0deg);
+  opacity: 1;
+}
+
+@keyframes flipInTop {
+  from {
+    @include flipOpen();
+  }
+  to {
+    @include flipClose();
+  }
+}
+@keyframes flipOutTop {
+  from {
+    @include flipClose();
+  }
+  to {
+    @include flipOpen();
+  }
+}
+@keyframes flipInBottom {
+  from {
+    @include flipOpenBottom();
+  }
+  to {
+    @include flipClose();
+  }
+}
+@keyframes flipOutBottom {
+  from {
+    @include flipClose();
+  }
+  to {
+    @include flipOpenBottom();
+  }
+}
+@keyframes flipInRight {
+  from {
+    @include flipOpenRight();
+  }
+  to {
+    @include flipClose();
+  }
+}
+@keyframes flipOutRight {
+  from {
+    @include flipClose();
+  }
+  to {
+    @include flipOpenRight();
+  }
+}
+@keyframes flipInLeft {
+  from {
+    @include flipOpenLeft();
+  }
+  to {
+    @include flipClose();
+  }
+}
+@keyframes flipOutLeft {
+  from {
+    @include flipClose();
+  }
+  to {
+    @include flipOpenLeft();
+  }
+}
+.#{$effect7} {
+  perspective: 1300px;
+  .#{$content} {
+    opacity: 0;
+    &.#{$open} {
+      &.#{$t} {
+        @include animation(flipInTop, ease-in);
+      }
+      &.#{$b} {
+        @include animation(flipInBottom, ease-in);
+      }
+      &.#{$r} {
+        @include animation(flipInRight, ease-in);
+      }
+      &.#{$l} {
+        @include animation(flipInLeft, ease-in);
+      }
+    }
+
+    &.#{$close} {
+      &.#{$t} {
+        @include animation(flipOutTop, ease-out);
+      }
+      &.#{$b} {
+        @include animation(flipOutBottom, ease-out);
+      }
+      &.#{$r} {
+        @include animation(flipOutRight, ease-out);
+      }
+      &.#{$l} {
+        @include animation(flipOutLeft, ease-out);
+      }
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect8}
+ ----------------------------
+ */
+@mixin signOpen() {
+  transform-style: preserve-3d;
+  transform: rotateX(-60deg);
+  transform-origin: 50% 0;
+  transition-property: all;
+}
+
+@mixin signClose() {
+  transform: rotateX(0deg);
+  opacity: 1;
+}
+
+@keyframes signIn {
+  from {
+    @include signOpen();
+  }
+  to {
+    @include signClose();
+  }
+}
+@keyframes signOut {
+  from {
+    @include signClose();
+  }
+  to {
+    @include signOpen();
+  }
+}
+.#{$effect8} {
+  perspective: 1300px;
+  .#{$content} {
+    opacity: 0;
+
+    &.#{$open} {
+      @include animation(signIn, ease-in);
+    }
+    &.#{$close} {
+      @include animation(signOut, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect9}
+ ----------------------------
+ */
+@mixin superscaledOpen() {
+  transform: scale(2);
+}
+
+@mixin superscaledClose() {
+  transform: scale(1);
+  opacity: 1;
+}
+
+@keyframes superscaledIn {
+  from {
+    @include superscaledOpen();
+  }
+  to {
+    @include superscaledClose();
+  }
+}
+@keyframes superscaledOut {
+  from {
+    @include superscaledClose();
+  }
+  to {
+    @include superscaledOpen();
+  }
+}
+.#{$effect9} {
+  .#{$content} {
+    opacity: 0;
+
+    &.#{$open} {
+      @include animation(superscaledIn, ease-in);
+    }
+    &.#{$close} {
+      @include animation(superscaledOut, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect10}
+ ----------------------------
+ */
+@keyframes slitIn {
+  0% {
+    transform: translateZ(-3000px) rotateY(90deg);
+  }
+  50% {
+    transform: translateZ(-250px) rotateY(89deg);
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  100% {
+    transform: translateZ(0) rotateY(0deg);
+    opacity: 1;
+  }
+}
+@keyframes slitOut {
+  0% {
+    transform: translateZ(0) rotateY(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateZ(-250px) rotateY(89deg);
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  100% {
+    transform: translateZ(-3000px) rotateY(90deg);
+  }
+}
+.#{$effect10} {
+  .#{$content} {
+    opacity: 0;
+    transform-style: preserve-3d;
+
+    &.#{$open} {
+      @include animation(slitIn, ease-in);
+    }
+    &.#{$close} {
+      @include animation(slitOut, ease-out);
+    }
+  }
 }
