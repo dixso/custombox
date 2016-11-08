@@ -6,6 +6,7 @@ module Custombox {
   const animationValues: Array<string> = ['slide', 'blur', 'flip'];
   const positionValues: Array<string> = ['top', 'right', 'bottom', 'left'];
   const containerValues: Array<string> = ['blur'];
+  const overlayValues: Array<string> = ['letmein'];
 
   interface OverlayConfig {
     overlay: boolean;
@@ -50,7 +51,7 @@ module Custombox {
 
       // Overlay
       this.defaults.overlay = true;
-      this.defaults.overlaySpeed = 300;
+      this.defaults.overlaySpeed = 400;
       this.defaults.overlayColor = '#000';
       this.defaults.overlayOpacity = .5;
       this.defaults.overlayClose = true;
@@ -148,6 +149,9 @@ module Custombox {
     constructor(effect: string) {
       this.element = document.createElement('div');
       this.element.classList.add(CB, `${CB}-${effect}`);
+      if (overlayValues.indexOf(effect) > -1) {
+        this.element.classList.add(`${CB}-wrapper-perspective`);
+      }
     }
 
     // Public methods
@@ -158,22 +162,16 @@ module Custombox {
     }
   }
 
-
   class Overlay {
     element: HTMLElement;
 
     private style: HTMLStyleElement;
 
-    constructor(private options: OverlayConfig) {
+    constructor(private options: Options) {
       this.element = document.createElement('div');
       this.element.style.backgroundColor = this.options.overlayColor;
       this.element.classList.add(`${CB}-overlay`);
-
-      let sheet: any = this.createSheet();
-      sheet.insertRule(`.${CB}-overlay { animation: CloseFade ${this.options.overlaySpeed}ms; }`, 0);
-      sheet.insertRule(`.${O}.${CB}-overlay { animation: OpenFade ${this.options.overlaySpeed}ms; opacity: ${this.options.overlayOpacity} }`, 0);
-      sheet.insertRule(`@keyframes OpenFade { from {opacity: 0} to {opacity: ${this.options.overlayOpacity}} }`, 0);
-      sheet.insertRule(`@keyframes CloseFade { from {opacity: ${this.options.overlayOpacity}} to {opacity: 0} }`, 0);
+      this.setAnimation();
     }
 
     // Public methods
@@ -183,6 +181,7 @@ module Custombox {
       switch (method) {
         case C:
           action = 'remove';
+          this.element.classList.add(C);
           break;
         default:
           action = 'add';
@@ -213,6 +212,19 @@ module Custombox {
 
     private listener(): Promise<Event> {
       return new Promise((resolve: Function) => this.element.addEventListener('animationend', () => resolve(), true));
+    }
+
+    private setAnimation(): void {
+      let sheet: any = this.createSheet();
+      if (overlayValues.indexOf(this.options.effect) > -1) {
+        this.element.style.opacity = this.options.overlayOpacity.toString();
+        this.element.style.animationDuration = `${this.options.overlaySpeed}ms`;
+      } else {
+        sheet.insertRule(`.${CB}-overlay { animation: CloseFade ${this.options.overlaySpeed}ms; }`, 0);
+        sheet.insertRule(`.${O}.${CB}-overlay { animation: OpenFade ${this.options.overlaySpeed}ms; opacity: ${this.options.overlayOpacity} }`, 0);
+        sheet.insertRule(`@keyframes OpenFade { from {opacity: 0} to {opacity: ${this.options.overlayOpacity}} }`, 0);
+        sheet.insertRule(`@keyframes CloseFade { from {opacity: ${this.options.overlayOpacity}} to {opacity: 0} }`, 0);
+      }
     }
   }
 
@@ -365,6 +377,10 @@ module Custombox {
           // Append
           document.body.appendChild(this.wrapper.element);
 
+          if (overlayValues.indexOf(this.options.effect) > -1) {
+            document.documentElement.classList.add(`${CB}-perspective`);
+          }
+
           if (this.options.overlay) {
             this.overlay.bind(O);
           }
@@ -403,6 +419,9 @@ module Custombox {
         .all(close)
         .then(() => {
           this.wrapper.remove();
+          if (overlayValues.indexOf(this.options.effect) > -1) {
+            document.documentElement.classList.remove(`${CB}-perspective`);
+          }
           this.dispatchEvent(C);
         });
     }

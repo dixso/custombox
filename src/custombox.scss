@@ -3,6 +3,7 @@ $cb: custombox;
 $overlay: #{$cb}-overlay;
 $content: #{$cb}-content;
 $container: #{$cb}-container;
+$perspective: #{$cb}-perspective;
 
 // Actions
 $open: #{$cb}-open;
@@ -31,6 +32,8 @@ $effect7: #{$cb}-flip;
 $effect8: #{$cb}-sign;
 $effect9: #{$cb}-superscaled;
 $effect10: #{$cb}-slit;
+$effect11: #{$cb}-rotate;
+$effect12: #{$cb}-letmein;
 
 @mixin animation($name, $timing: ease-out, $fill-mode: forwards) {
   animation-name: $name;
@@ -53,9 +56,9 @@ $effect10: #{$cb}-slit;
   height: 100%;
 }
 
-.#{$cb},
 .#{$content},
-.#{$overlay} {
+.#{$overlay},
+.#{$cb}:not(.#{$cb}-wrapper-perspective) {
   @include fixed();
 }
 .#{$cb} {
@@ -105,6 +108,11 @@ $effect10: #{$cb}-slit;
 .#{$x-right} {
   justify-content: flex-end;
 }
+.#{$perspective},
+.#{$perspective} body {
+  perspective: 600px;
+  height: 100%;
+}
 
 /*
  ----------------------------
@@ -115,7 +123,6 @@ $effect10: #{$cb}-slit;
   transform: scale(0.7);
   transition-property: all;
 }
-
 @mixin fadeClose() {
   transform: scale(1);
   opacity: 1;
@@ -264,7 +271,6 @@ $effect10: #{$cb}-slit;
   transform: scale(0) rotate(720deg);
   opacity: 0;
 }
-
 @mixin newspaperClose() {
   transform: scale(1) rotate(0deg);
   opacity: 1;
@@ -309,7 +315,6 @@ $effect10: #{$cb}-slit;
   transform: translateZ(600px) rotateX(20deg);
   opacity: 0;
 }
-
 @mixin fallClose() {
   transition-timing-function: ease-in;
   transition-property: all;
@@ -358,7 +363,6 @@ $effect10: #{$cb}-slit;
   transform: translate(30%) translateZ(600px) rotate(10deg);
   opacity: 0;
 }
-
 @mixin sidefallClose() {
   transition-timing-function: ease-in;
   transition-property: all;
@@ -543,11 +547,13 @@ $effect10: #{$cb}-slit;
     }
   }
 }
-.#{$effect6}.#{$container} {
-  @include animation(blurOutContainer, ease-out);
-}
-.#{$effect6}.#{$container}.#{$open} {
-  @include animation(blurInContainer, ease-in);
+.#{$effect6} {
+  &.#{$container} {
+    @include animation(blurOutContainer, ease-out);
+    &.#{$open} {
+      @include animation(blurInContainer, ease-in);
+    }
+  }
 }
 
 /*
@@ -687,7 +693,6 @@ $effect10: #{$cb}-slit;
   transform-origin: 50% 0;
   transition-property: all;
 }
-
 @mixin signClose() {
   transform: rotateX(0deg);
   opacity: 1;
@@ -731,7 +736,6 @@ $effect10: #{$cb}-slit;
 @mixin superscaledOpen() {
   transform: scale(2);
 }
-
 @mixin superscaledClose() {
   transform: scale(1);
   opacity: 1;
@@ -809,6 +813,78 @@ $effect10: #{$cb}-slit;
     }
     &.#{$close} {
       @include animation(slitOut, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect11}
+ ----------------------------
+ */
+
+/*
+ ----------------------------
+ #{$effect12}
+ ----------------------------
+ */
+@mixin letmeinOpen() {
+  transform: scale(0.7);
+  transition-property: all;
+}
+@mixin letmeinClose() {
+  transform: scale(1);
+  opacity: 1;
+}
+@mixin letmeinOverlayAction() {
+  transform: rotateX(-2deg);
+  transform-origin: 50% 0;
+  transform-style: preserve-3d;
+}
+
+@keyframes letmeinIn {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes letmeinOut {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+@keyframes letmeinOverlay {
+  to {
+    @include letmeinOverlayAction();
+  }
+}
+@keyframes letmeinOutOverlay {
+  from {
+    @include letmeinOverlayAction();
+  }
+}
+.#{$effect12} {
+  .#{$overlay} {
+    &.#{$open} {
+      @include animation(letmeinOverlay, ease-in);
+    }
+    &.#{$close} {
+      @include animation(letmeinOutOverlay, ease-out);
+    }
+  }
+  .#{$content} {
+    transform: translateY(-100%);
+
+    &.#{$open} {
+      @include animation(letmeinIn, ease-out);
+    }
+    &.#{$close} {
+      @include animation(letmeinOut, ease-out);
     }
   }
 }
