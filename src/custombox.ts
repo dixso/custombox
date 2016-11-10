@@ -3,10 +3,10 @@ module Custombox {
   const CB: string = 'custombox';
   const O: string = `${CB}-open`;
   const C: string = `${CB}-close`;
-  const animationValues: Array<string> = ['slide', 'blur', 'flip'];
+  const animationValues: Array<string> = ['slide', 'blur', 'flip', 'rotate', 'makeway'];
   const positionValues: Array<string> = ['top', 'right', 'bottom', 'left'];
-  const containerValues: Array<string> = ['blur'];
-  const overlayValues: Array<string> = ['letmein'];
+  const containerValues: Array<string> = ['blur', 'makeway'];
+  const overlayValues: Array<string> = ['letmein', 'makeway'];
 
   interface OverlayConfig {
     overlay: boolean;
@@ -79,13 +79,13 @@ module Custombox {
   }
 
   class Container {
-    element: Element;
+    element: HTMLElement;
 
-    constructor(target: string, private effect: string) {
+    constructor(target: string, private effect: string, private speed: number) {
       if (document.readyState === 'loading') {
         throw new Error(`You need to instantiate Custombox after the document is loaded.`);
       } else {
-        let selector: Element = document.querySelector(target);
+        let selector: any = document.querySelector(target);
 
         if (selector) {
           this.element = selector;
@@ -111,6 +111,8 @@ module Custombox {
             document.body.appendChild(this.element);
           }
         }
+
+        this.element.style.animationDuration = `${speed}ms`;
       }
     }
 
@@ -121,6 +123,7 @@ module Custombox {
       switch (method) {
         case C:
           action = 'remove';
+          this.element.classList.add(C);
           break;
         default:
           action = 'add';
@@ -135,6 +138,7 @@ module Custombox {
 
     remove(): void {
       this.element.classList.remove(C, `${CB}-${this.effect}`);
+      this.element.style.removeProperty('animation-duration');
     }
 
     // Private methods
@@ -351,7 +355,7 @@ module Custombox {
 
       // Create container
       if (containerValues.indexOf(this.options.effect) > -1) {
-        this.container = new Container(this.options.container, this.options.effect);
+        this.container = new Container(this.options.container, this.options.effect, this.options.overlaySpeed);
       }
 
       // Create overlay

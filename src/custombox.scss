@@ -34,6 +34,7 @@ $effect9: #{$cb}-superscaled;
 $effect10: #{$cb}-slit;
 $effect11: #{$cb}-rotate;
 $effect12: #{$cb}-letmein;
+$effect13: #{$cb}-makeway;
 
 @mixin animation($name, $timing: ease-out, $fill-mode: forwards) {
   animation-name: $name;
@@ -226,7 +227,8 @@ $effect12: #{$cb}-letmein;
     transform: translateX(100%);
   }
 }
-.#{$effect2} {
+.#{$effect2},
+.#{$effect13} {
   .#{$content} {
     transform: translateX(-100%);
 
@@ -775,32 +777,38 @@ $effect12: #{$cb}-letmein;
  #{$effect10}
  ----------------------------
  */
+@mixin slitIn-a() {
+  transform: translateZ(-3000px) rotateY(90deg);
+}
+@mixin slitIn-b() {
+  transform: translateZ(-250px) rotateY(89deg);
+  opacity: 1;
+  animation-timing-function: ease-out;
+}
+@mixin slitIn-c() {
+  transform: translateZ(0) rotateY(0deg);
+  opacity: 1;
+}
 @keyframes slitIn {
   0% {
-    transform: translateZ(-3000px) rotateY(90deg);
+    @include slitIn-a();
   }
   50% {
-    transform: translateZ(-250px) rotateY(89deg);
-    opacity: 1;
-    animation-timing-function: ease-out;
+    @include slitIn-b();
   }
   100% {
-    transform: translateZ(0) rotateY(0deg);
-    opacity: 1;
+    @include slitIn-c();
   }
 }
 @keyframes slitOut {
   0% {
-    transform: translateZ(0) rotateY(0deg);
-    opacity: 1;
+    @include slitIn-c();
   }
   50% {
-    transform: translateZ(-250px) rotateY(89deg);
-    opacity: 1;
-    animation-timing-function: ease-out;
+    @include slitIn-b();
   }
   100% {
-    transform: translateZ(-3000px) rotateY(90deg);
+    @include slitIn-a();
   }
 }
 .#{$effect10} {
@@ -822,6 +830,46 @@ $effect12: #{$cb}-letmein;
  #{$effect11}
  ----------------------------
  */
+@mixin rotateOpen() {
+  transform-style: preserve-3d;
+  transform: translateY(0%) rotateX(90deg);
+  transform-origin: 0 100%;
+  opacity: 0;
+  transition-timing-function: ease-out;
+  transition-property: all;
+}
+@mixin rotateClose() {
+  transform: translateY(0) rotateX(0deg);
+  opacity: 1;
+}
+@keyframes rotateIn {
+  from {
+    @include rotateOpen();
+  }
+  to {
+    @include rotateClose();
+  }
+}
+@keyframes rotateOut {
+  from {
+    @include rotateClose();
+  }
+  to {
+    @include rotateOpen();
+  }
+}
+.#{$effect11} {
+  perspective: 2300px;
+  .#{$content} {
+    transform: translateY(-100%);
+    &.#{$open} {
+      @include animation(rotateIn, ease-out);
+    }
+    &.#{$close} {
+      @include animation(rotateOut, ease-out);
+    }
+  }
+}
 
 /*
  ----------------------------
@@ -867,6 +915,9 @@ $effect12: #{$cb}-letmein;
   from {
     @include letmeinOverlayAction();
   }
+  to {
+    opacity: 0;
+  }
 }
 .#{$effect12} {
   .#{$overlay} {
@@ -885,6 +936,129 @@ $effect12: #{$cb}-letmein;
     }
     &.#{$close} {
       @include animation(letmeinOut, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect13}
+ ----------------------------
+ */
+@mixin makewayContainerOpen() {
+  transform: translateZ(-50px) rotateY(5deg);
+  animation-timing-function: ease-out;
+}
+@mixin makewayOutContainerOpen() {
+  transform: translateZ(-200px);
+}
+@mixin makewayAction() {
+  transform-style: preserve-3d;
+  transform-origin: 0 50%;
+}
+
+@keyframes makewayInContainer {
+  50% {
+    @include makewayContainerOpen();
+  }
+  100% {
+    @include makewayOutContainerOpen();
+  }
+}
+@keyframes makewayOutContainer {
+  0% {
+    @include makewayOutContainerOpen();
+  }
+  50% {
+    @include makewayContainerOpen();
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes makewayInTop {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes makewayOutTop {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+@keyframes makewayInBottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes makewayOutBottom {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+@keyframes makewayInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes makewayOutLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+@keyframes makewayInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes makewayOutRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+.#{$effect13} {
+  .#{$overlay} {
+    @include makewayAction();
+
+    &.#{$open} {
+      @include animation(makewayInContainer, ease-in);
+    }
+    &.#{$close} {
+      @include animation(makewayOutContainer, ease-out);
+    }
+  }
+  &.#{$container} {
+    @include makewayAction();
+
+    &.#{$open} {
+      @include animation(makewayInContainer, ease-in);
+    }
+    &.#{$close} {
+      @include animation(makewayOutContainer, ease-out);
     }
   }
 }
