@@ -3,10 +3,10 @@ module Custombox {
   const CB: string = 'custombox';
   const O: string = `${CB}-open`;
   const C: string = `${CB}-close`;
-  const animationValues: Array<string> = ['slide', 'blur', 'flip', 'rotate', 'makeway'];
+  const animationValues: Array<string> = ['slide', 'blur', 'flip', 'rotate', 'letmein', 'makeway'];
   const positionValues: Array<string> = ['top', 'right', 'bottom', 'left'];
   const containerValues: Array<string> = ['blur', 'makeway'];
-  const overlayValues: Array<string> = ['letmein', 'makeway'];
+  const overlayValues: Array<string> = ['letmein', 'makeway', 'slip'];
 
   interface OverlayConfig {
     overlay: boolean;
@@ -200,6 +200,9 @@ module Custombox {
       switch (method) {
         case C:
           action = 'remove';
+          if (overlayValues.indexOf(this.options.effect) > -1) {
+            this.toggleAnimation('to');
+          }
           this.element.classList.add(C);
           break;
         default:
@@ -238,12 +241,22 @@ module Custombox {
       if (overlayValues.indexOf(this.options.effect) > -1) {
         this.element.style.opacity = this.options.overlayOpacity.toString();
         this.element.style.animationDuration = `${this.options.overlaySpeed}ms`;
+        this.toggleAnimation();
       } else {
         sheet.insertRule(`.${CB}-overlay { animation: CloseFade ${this.options.overlaySpeed}ms; }`, 0);
         sheet.insertRule(`.${O}.${CB}-overlay { animation: OpenFade ${this.options.overlaySpeed}ms; opacity: ${this.options.overlayOpacity} }`, 0);
         sheet.insertRule(`@keyframes OpenFade { from {opacity: 0} to {opacity: ${this.options.overlayOpacity}} }`, 0);
         sheet.insertRule(`@keyframes CloseFade { from {opacity: ${this.options.overlayOpacity}} to {opacity: 0} }`, 0);
       }
+    }
+
+    private toggleAnimation(action: string = 'from'): void {
+      for (let i = 0, t = positionValues.length; i < t; i++) {
+        if (this.element.classList.contains(`${CB}-${positionValues[i]}`)) {
+          this.element.classList.remove(`${CB}-${positionValues[i]}`);
+        }
+      }
+      this.element.classList.add(`${CB}-${this.options.animation[action]}`);
     }
   }
 

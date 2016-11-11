@@ -229,6 +229,7 @@ $effect13: #{$cb}-makeway;
   }
 }
 .#{$effect2},
+.#{$effect12},
 .#{$effect13} {
   .#{$content} {
     transform: translateX(-100%);
@@ -885,36 +886,59 @@ $effect13: #{$cb}-makeway;
   transform: scale(1);
   opacity: 1;
 }
-@mixin letmeinOverlayAction() {
-  transform: rotateX(-2deg);
+@mixin letmeinOverlayAction($transform) {
+  transform: $transform;
   transform-origin: 50% 0;
   transform-style: preserve-3d;
 }
 
-@keyframes letmeinIn {
-  from {
-    transform: translateY(100%);
-  }
+@keyframes letmeinBottomOverlay {
   to {
-    transform: translateY(0);
+    @include letmeinOverlayAction(rotateX(-2deg));
   }
 }
-@keyframes letmeinOut {
+@keyframes letmeinOutBottomOverlay {
   from {
-    transform: translateY(0);
+    @include letmeinOverlayAction(rotateX(-2deg));
   }
   to {
-    transform: translateY(100%);
+    opacity: 0;
   }
 }
-@keyframes letmeinOverlay {
+@keyframes letmeinLeftOverlay {
   to {
-    @include letmeinOverlayAction();
+    @include letmeinOverlayAction(rotateY(-2deg));
   }
 }
-@keyframes letmeinOutOverlay {
+@keyframes letmeinOutLeftOverlay {
   from {
-    @include letmeinOverlayAction();
+    @include letmeinOverlayAction(rotateY(-2deg));
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes letmeinRightOverlay {
+  to {
+    @include letmeinOverlayAction(rotateY(2deg));
+  }
+}
+@keyframes letmeinOutRightOverlay {
+  from {
+    @include letmeinOverlayAction(rotateY(2deg));
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes letmeinTopOverlay {
+  to {
+    @include letmeinOverlayAction(rotateX(2deg));
+  }
+}
+@keyframes letmeinOutTopOverlay {
+  from {
+    @include letmeinOverlayAction(rotateX(2deg));
   }
   to {
     opacity: 0;
@@ -923,20 +947,33 @@ $effect13: #{$cb}-makeway;
 .#{$effect12} {
   .#{$overlay} {
     &.#{$open} {
-      @include animation(letmeinOverlay, ease-in);
+      &.#{$t} {
+        @include animation(letmeinTopOverlay, ease-in);
+      }
+      &.#{$b} {
+        @include animation(letmeinBottomOverlay, ease-in);
+      }
+      &.#{$l} {
+        @include animation(letmeinLeftOverlay, ease-in);
+      }
+      &.#{$r} {
+        @include animation(letmeinRightOverlay, ease-in);
+      }
     }
-    &.#{$close} {
-      @include animation(letmeinOutOverlay, ease-out);
-    }
-  }
-  .#{$content} {
-    transform: translateY(-100%);
 
-    &.#{$open} {
-      @include animation(letmeinIn, ease-out);
-    }
     &.#{$close} {
-      @include animation(letmeinOut, ease-out);
+      &.#{$t} {
+        @include animation(letmeinOutTopOverlay, ease-out);
+      }
+      &.#{$b} {
+        @include animation(letmeinOutBottomOverlay, ease-out);
+      }
+      &.#{$l} {
+        @include animation(letmeinOutLeftOverlay, ease-out);
+      }
+      &.#{$r} {
+        @include animation(letmeinOutRightOverlay, ease-out);
+      }
     }
   }
 }
