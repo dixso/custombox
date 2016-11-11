@@ -113,6 +113,7 @@ $effect13: #{$cb}-makeway;
 .#{$perspective} body {
   perspective: 600px;
   height: 100%;
+  overflow: hidden;
 }
 
 /*

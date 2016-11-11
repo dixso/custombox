@@ -147,6 +147,21 @@ module Custombox {
     }
   }
 
+  class Scroll {
+    position: number;
+
+    constructor() {
+      this.position = document.documentElement && document.documentElement.scrollTop || document.body && document.body.scrollTop || 0;
+      document.documentElement.classList.add(`${CB}-perspective`);
+    }
+
+    // Public methods
+    remove(): void {
+      document.documentElement.classList.remove(`${CB}-perspective`);
+      window.scrollTo(0, this.position);
+    }
+  }
+
   class Wrapper {
     element: HTMLElement;
 
@@ -345,6 +360,7 @@ module Custombox {
     private container: Container;
     private content: Content;
     private overlay: Overlay;
+    private scroll: Scroll;
 
     constructor(options: Options) {
       let defaults: Defaults = new Defaults(options);
@@ -375,24 +391,31 @@ module Custombox {
 
     // Public methods
     open(): void {
+      let win = window.innerHeight;
+      let body = document.body.offsetHeight;
+      let total = body - win;
       this.content
         .fetch(this.options.target, this.options.width)
         .then(() => {
+          // Scroll
+          if (overlayValues.indexOf(this.options.effect) > -1) {
+            this.scroll = new Scroll();
+          }
+
           // Append
           document.body.appendChild(this.wrapper.element);
 
-          if (overlayValues.indexOf(this.options.effect) > -1) {
-            document.documentElement.classList.add(`${CB}-perspective`);
-          }
-
+          // Overlay
           if (this.options.overlay) {
             this.overlay.bind(O);
           }
 
+          // Container
           if (this.container) {
             this.container.bind(O);
           }
 
+          // Content
           this.content.bind(O).then(() => this.dispatchEvent('complete'));
 
           // Dispatch event
@@ -412,7 +435,12 @@ module Custombox {
       ];
 
       if (this.options.overlay) {
-        close.push(this.overlay.bind(C).then(() => this.overlay.remove()));
+        close.push(this.overlay.bind(C).then(() => {
+          if (this.scroll) {
+            this.scroll.remove();
+          }
+          this.overlay.remove()
+        }));
       }
 
       if (this.container) {
@@ -423,9 +451,6 @@ module Custombox {
         .all(close)
         .then(() => {
           this.wrapper.remove();
-          if (overlayValues.indexOf(this.options.effect) > -1) {
-            document.documentElement.classList.remove(`${CB}-perspective`);
-          }
           this.dispatchEvent(C);
         });
     }
