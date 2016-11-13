@@ -3,10 +3,11 @@ module Custombox {
   const CB: string = 'custombox';
   const O: string = `${CB}-open`;
   const C: string = `${CB}-close`;
-  const animationValues: Array<string> = ['slide', 'blur', 'flip', 'rotate', 'letmein', 'makeway'];
+  const animationValues: Array<string> = ['slide', 'blur', 'flip', 'rotate', 'letmein', 'makeway', 'slip', 'corner'];
   const positionValues: Array<string> = ['top', 'right', 'bottom', 'left'];
-  const containerValues: Array<string> = ['blur', 'makeway'];
-  const overlayValues: Array<string> = ['letmein', 'makeway', 'slip'];
+  const containerValues: Array<string> = ['blur', 'makeway', 'slip'];
+  const overlayValues: Array<string> = ['letmein', 'makeway', 'slip', 'corner'];
+  const together: Array<string> = ['corner'];
 
   interface OverlayConfig {
     overlay: boolean;
@@ -51,7 +52,7 @@ module Custombox {
 
       // Overlay
       this.defaults.overlay = true;
-      this.defaults.overlaySpeed = 400;
+      this.defaults.overlaySpeed = 300;
       this.defaults.overlayColor = '#000';
       this.defaults.overlayOpacity = .5;
       this.defaults.overlayClose = true;
@@ -60,7 +61,7 @@ module Custombox {
       this.defaults.container = null;
 
       // Content
-      this.defaults.speed = 500;
+      this.defaults.speed = 400;
       this.defaults.width = null;
       this.defaults.animation = {
         from: 'top',
@@ -81,15 +82,14 @@ module Custombox {
   class Container {
     element: HTMLElement;
 
-    constructor(target: string, private effect: string, private speed: number) {
+    constructor(private options: Options) {
       if (document.readyState === 'loading') {
-        throw new Error(`You need to instantiate Custombox after the document is loaded.`);
+        throw new Error(`You need to instantiate Custombox when the document is fully loaded.`);
       } else {
-        let selector: any = document.querySelector(target);
-
+        let selector: any = document.querySelector(this.options.container);
         if (selector) {
           this.element = selector;
-          this.element.classList.add(`${CB}-container`, `${CB}-${this.effect}`);
+          this.addSimpleClass();
         } else {
           let scopes: NodeListOf<Element> = document.body.querySelectorAll(':scope > *');
           let create: boolean = true;
@@ -103,7 +103,7 @@ module Custombox {
 
           if (create) {
             this.element = document.createElement('div');
-            this.element.classList.add(`${CB}-container`, `${CB}-${this.effect}`);
+            this.addSimpleClass();
 
             while (document.body.firstChild) {
               this.element.appendChild(document.body.firstChild);
@@ -112,7 +112,11 @@ module Custombox {
           }
         }
 
-        this.element.style.animationDuration = `${speed}ms`;
+        this.element.style.animationDuration = `${this.options.speed}ms`;
+
+        if (animationValues.indexOf(this.options.effect) > -1) {
+          this.setAnimation();
+        }
       }
     }
 
@@ -123,6 +127,9 @@ module Custombox {
       switch (method) {
         case C:
           action = 'remove';
+          if (animationValues.indexOf(this.options.effect) > -1) {
+            this.setAnimation('to');
+          }
           this.element.classList.add(C);
           break;
         default:
@@ -137,13 +144,27 @@ module Custombox {
     }
 
     remove(): void {
-      this.element.classList.remove(C, `${CB}-${this.effect}`);
+      this.element.classList.remove(C, `${CB}-${this.options.effect}`);
       this.element.style.removeProperty('animation-duration');
     }
 
     // Private methods
     private listener(): Promise<Event> {
       return new Promise((resolve: Function) => this.element.addEventListener('animationend', () => resolve(), true));
+    }
+
+    private addSimpleClass(): void {
+      this.element.classList.add(`${CB}-container`, `${CB}-${this.options.effect}`);
+    }
+
+    private setAnimation(action: string = 'from'): void {
+      for (let i = 0, t = positionValues.length; i < t; i++) {
+        if (this.element.classList.contains(`${CB}-${positionValues[i]}`)) {
+          this.element.classList.remove(`${CB}-${positionValues[i]}`);
+        }
+      }
+
+      this.element.classList.add(`${CB}-${this.options.animation[action]}`);
     }
   }
 
@@ -240,7 +261,15 @@ module Custombox {
       let sheet: any = this.createSheet();
       if (overlayValues.indexOf(this.options.effect) > -1) {
         this.element.style.opacity = this.options.overlayOpacity.toString();
-        this.element.style.animationDuration = `${this.options.overlaySpeed}ms`;
+
+        let duration: number;
+        if (together.indexOf(this.options.effect) === -1) {
+          duration = this.options.overlaySpeed;
+        } else {
+          duration = this.options.speed;
+        }
+
+        this.element.style.animationDuration = `${duration}ms`;
         this.toggleAnimation();
       } else {
         sheet.insertRule(`.${CB}-overlay { animation: CloseFade ${this.options.overlaySpeed}ms; }`, 0);
@@ -384,7 +413,7 @@ module Custombox {
 
       // Create container
       if (containerValues.indexOf(this.options.effect) > -1) {
-        this.container = new Container(this.options.container, this.options.effect, this.options.overlaySpeed);
+        this.container = new Container(this.options);
       }
 
       // Create overlay
@@ -392,7 +421,9 @@ module Custombox {
       if (this.options.overlay) {
         this.overlay = new Overlay(this.options);
         this.wrapper.element.appendChild(this.overlay.element);
-        delay = this.options.overlaySpeed / 2;
+        if (together.indexOf(this.options.effect) === -1) {
+          delay = this.options.overlaySpeed / 2;
+        }
       }
 
       // Create content

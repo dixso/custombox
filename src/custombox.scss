@@ -35,6 +35,8 @@ $effect10: #{$cb}-slit;
 $effect11: #{$cb}-rotate;
 $effect12: #{$cb}-letmein;
 $effect13: #{$cb}-makeway;
+$effect14: #{$cb}-slip;
+$effect15: #{$cb}-corner;
 
 @mixin animation($name, $timing: ease-out, $fill-mode: forwards) {
   animation-name: $name;
@@ -230,7 +232,8 @@ $effect13: #{$cb}-makeway;
 }
 .#{$effect2},
 .#{$effect12},
-.#{$effect13} {
+.#{$effect13},
+.#{$effect14} {
   .#{$content} {
     transform: translateX(-100%);
 
@@ -1097,6 +1100,189 @@ $effect13: #{$cb}-makeway;
     }
     &.#{$close} {
       @include animation(makewayOutContainer, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect14}
+ ----------------------------
+ */
+@mixin slipOverlayAction($transform) {
+  transform: $transform;
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+}
+@keyframes slipTopOverlay {
+  50% {
+    @include slipOverlayAction(rotateX(10deg));
+  }
+}
+@keyframes slipOutTopOverlay {
+  50% {
+    @include slipOverlayAction(rotateX(10deg));
+  }
+}
+@keyframes slipRightOverlay {
+  50% {
+    @include slipOverlayAction(rotateY(10deg));
+  }
+}
+@keyframes slipOutRightOverlay {
+  50% {
+    @include slipOverlayAction(rotateY(10deg));
+  }
+}
+@keyframes slipBottomOverlay {
+  50% {
+    @include slipOverlayAction(rotateX(-10deg));
+  }
+}
+@keyframes slipOutBottomOverlay {
+  50% {
+    @include slipOverlayAction(rotateX(-10deg));
+  }
+}
+@keyframes slipLeftOverlay {
+  50% {
+    @include slipOverlayAction(rotateY(-10deg));
+  }
+}
+@keyframes slipOutLeftOverlay {
+  50% {
+    @include slipOverlayAction(rotateY(-10deg));
+  }
+}
+.#{$effect14} {
+  .#{$overlay} {
+    &.#{$open} {
+      &.#{$t} {
+        @include animation(slipTopOverlay, ease-in-out);
+      }
+      &.#{$b} {
+        @include animation(slipBottomOverlay, ease-in-out);
+      }
+      &.#{$l} {
+        @include animation(slipLeftOverlay, ease-in-out);
+      }
+      &.#{$r} {
+        @include animation(slipRightOverlay, ease-in-out);
+      }
+    }
+
+    &.#{$close} {
+      &.#{$t} {
+        @include animation(slipOutTopOverlay, ease-in-out);
+      }
+      &.#{$b} {
+        @include animation(slipOutBottomOverlay, ease-in-out);
+      }
+      &.#{$l} {
+        @include animation(slipOutLeftOverlay, ease-in-out);
+      }
+      &.#{$r} {
+        @include animation(slipOutRightOverlay, ease-in-out);
+      }
+    }
+  }
+}
+.#{$container} {
+  &.#{$open} {
+    &.#{$t} {
+      @include animation(slipTopOverlay, ease-in-out);
+    }
+    &.#{$b} {
+      @include animation(slipBottomOverlay, ease-in-out);
+    }
+    &.#{$l} {
+      @include animation(slipLeftOverlay, ease-in-out);
+    }
+    &.#{$r} {
+      @include animation(slipRightOverlay, ease-in-out);
+    }
+  }
+  &.#{$close} {
+    &.#{$t} {
+      @include animation(slipOutTopOverlay, ease-in-out);
+    }
+    &.#{$b} {
+      @include animation(slipOutBottomOverlay, ease-in-out);
+    }
+    &.#{$l} {
+      @include animation(slipOutLeftOverlay, ease-in-out);
+    }
+    &.#{$r} {
+      @include animation(slipOutRightOverlay, ease-in-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect15}
+ ----------------------------
+ */
+@mixin cornerActionOpen() {
+  transform: translateY(150px) translateX(150px);
+  transition-property: opacity, transform, visibility;
+}
+@mixin cornerActionClose() {
+  transform: translateY(0);
+  transition-property: opacity, transform;
+}
+
+@keyframes cornerInOverlay {
+  from {
+    @include cornerActionOpen();
+  }
+  to {
+    @include cornerActionClose();
+  }
+}
+@keyframes cornerOutOverlay {
+  from {
+    @include cornerActionClose();
+  }
+  to {
+    @include cornerActionOpen();
+    opacity: 0;
+  }
+}
+@keyframes cornerInContent {
+  from {
+    @include cornerActionOpen();
+  }
+  to {
+    @include cornerActionClose();
+    opacity: 1;
+  }
+}
+@keyframes cornerOutContent {
+  from {
+    @include cornerActionClose();
+    opacity: 1;
+  }
+  to {
+    @include cornerActionOpen();
+    opacity: 0;
+  }
+}
+.#{$effect15} {
+  .#{$overlay} {
+    &.#{$open} {
+      @include animation(cornerInOverlay, ease-in);
+    }
+    &.#{$close} {
+      @include animation(cornerOutOverlay, ease-out);
+    }
+  }
+  .#{$content} {
+    &.#{$open} {
+      @include animation(cornerInContent, ease-in);
+    }
+    &.#{$close} {
+      @include animation(cornerOutContent, ease-out);
     }
   }
 }
