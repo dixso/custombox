@@ -37,6 +37,8 @@ $effect12: #{$cb}-letmein;
 $effect13: #{$cb}-makeway;
 $effect14: #{$cb}-slip;
 $effect15: #{$cb}-corner;
+$effect16: #{$cb}-slidetogether;
+$effect17: #{$cb}-scale;
 
 @mixin animation($name, $timing: ease-out, $fill-mode: forwards) {
   animation-name: $name;
@@ -50,22 +52,18 @@ $effect15: #{$cb}-corner;
  Core
  ----------------------------
  */
-
 @mixin fixed() {
   position: fixed;
   overflow: hidden;
   top: 0;
   width: 100%;
   height: 100%;
+  z-index: 9999;
 }
 
 .#{$content},
-.#{$overlay},
-.#{$cb}:not(.#{$cb}-wrapper-perspective) {
+.#{$overlay} {
   @include fixed();
-}
-.#{$cb} {
-  z-index: 9999;
 }
 .#{$overlay} {
   opacity: 0;
@@ -124,7 +122,7 @@ $effect15: #{$cb}-corner;
  ----------------------------
  */
 @mixin fadeOpen() {
-  transform: scale(0.7);
+  transform: scale(.7);
   transition-property: all;
 }
 @mixin fadeClose() {
@@ -149,7 +147,7 @@ $effect15: #{$cb}-corner;
   }
 }
 .#{$effect1} {
-  .#{$content} {
+  &.#{$content} {
     opacity: 0;
 
     &.#{$open} {
@@ -234,7 +232,7 @@ $effect15: #{$cb}-corner;
 .#{$effect12},
 .#{$effect13},
 .#{$effect14} {
-  .#{$content} {
+  &.#{$content} {
     transform: translateX(-100%);
 
     &.#{$open} {
@@ -300,7 +298,7 @@ $effect15: #{$cb}-corner;
   }
 }
 .#{$effect3} {
-  .#{$content} {
+  &.#{$content} {
     opacity: 0;
 
     &.#{$open} {
@@ -348,7 +346,7 @@ $effect15: #{$cb}-corner;
 .#{$effect4} {
   perspective: 1300px;
 
-  .#{$content} {
+  &.#{$content} {
     opacity: 0;
 
     &.#{$open} {
@@ -396,7 +394,7 @@ $effect15: #{$cb}-corner;
 .#{$effect5} {
   perspective: 1300px;
 
-  .#{$content} {
+  &.#{$content} {
     opacity: 0;
 
     &.#{$open} {
@@ -521,7 +519,7 @@ $effect15: #{$cb}-corner;
   }
 }
 .#{$effect6} {
-  .#{$content} {
+  &.#{$content} {
     opacity: 0;
 
     &.#{$open} {
@@ -655,7 +653,7 @@ $effect15: #{$cb}-corner;
 }
 .#{$effect7} {
   perspective: 1300px;
-  .#{$content} {
+  &.#{$content} {
     opacity: 0;
     &.#{$open} {
       &.#{$t} {
@@ -723,7 +721,7 @@ $effect15: #{$cb}-corner;
 }
 .#{$effect8} {
   perspective: 1300px;
-  .#{$content} {
+  &.#{$content} {
     opacity: 0;
 
     &.#{$open} {
@@ -765,7 +763,7 @@ $effect15: #{$cb}-corner;
   }
 }
 .#{$effect9} {
-  .#{$content} {
+  &.#{$content} {
     opacity: 0;
 
     &.#{$open} {
@@ -817,7 +815,7 @@ $effect15: #{$cb}-corner;
   }
 }
 .#{$effect10} {
-  .#{$content} {
+  &.#{$content} {
     opacity: 0;
     transform-style: preserve-3d;
 
@@ -865,7 +863,7 @@ $effect15: #{$cb}-corner;
 }
 .#{$effect11} {
   perspective: 2300px;
-  .#{$content} {
+  &.#{$content} {
     transform: translateY(-100%);
     &.#{$open} {
       @include animation(rotateIn, ease-out);
@@ -882,7 +880,7 @@ $effect15: #{$cb}-corner;
  ----------------------------
  */
 @mixin letmeinOpen() {
-  transform: scale(0.7);
+  transform: scale(.7);
   transition-property: all;
 }
 @mixin letmeinClose() {
@@ -948,7 +946,7 @@ $effect15: #{$cb}-corner;
   }
 }
 .#{$effect12} {
-  .#{$overlay} {
+  &.#{$overlay} {
     &.#{$open} {
       &.#{$t} {
         @include animation(letmeinTopOverlay, ease-in);
@@ -1082,7 +1080,7 @@ $effect15: #{$cb}-corner;
   }
 }
 .#{$effect13} {
-  .#{$overlay} {
+  &.#{$overlay} {
     @include makewayAction();
 
     &.#{$open} {
@@ -1155,7 +1153,7 @@ $effect15: #{$cb}-corner;
   }
 }
 .#{$effect14} {
-  .#{$overlay} {
+  &.#{$overlay} {
     &.#{$open} {
       &.#{$t} {
         @include animation(slipTopOverlay, ease-in-out);
@@ -1269,7 +1267,7 @@ $effect15: #{$cb}-corner;
   }
 }
 .#{$effect15} {
-  .#{$overlay} {
+  &.#{$overlay} {
     &.#{$open} {
       @include animation(cornerInOverlay, ease-in);
     }
@@ -1277,12 +1275,104 @@ $effect15: #{$cb}-corner;
       @include animation(cornerOutOverlay, ease-out);
     }
   }
-  .#{$content} {
+  &.#{$content} {
     &.#{$open} {
       @include animation(cornerInContent, ease-in);
     }
     &.#{$close} {
       @include animation(cornerOutContent, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect16}
+ ----------------------------
+ */
+.#{$effect16} {
+  &.#{$content}, &.#{$overlay} {
+    transform: translateX(-100%);
+
+    &.#{$open} {
+      &.#{$t} {
+        @include animation(slideInTop, ease-out);
+      }
+      &.#{$b} {
+        @include animation(slideInBottom, ease-out);
+      }
+      &.#{$l} {
+        @include animation(slideInLeft, ease-out);
+      }
+      &.#{$r} {
+        @include animation(slideInRight, ease-out);
+      }
+    }
+
+    &.#{$close} {
+      &.#{$t} {
+        @include animation(slideOutTop, ease-in);
+      }
+      &.#{$b} {
+        @include animation(slideOutBottom, ease-in);
+      }
+      &.#{$l} {
+        @include animation(slideOutLeft, ease-in);
+      }
+      &.#{$r} {
+        @include animation(slideOutRight, ease-in);
+      }
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect17}
+ ----------------------------
+ */
+@mixin scaleActionOpen() {
+  transform: scale(.9);
+  transition: transform;
+  opacity: 0;
+}
+@mixin scaleActionClose() {
+  transform: scale(1);
+  transition: transform;
+}
+
+@keyframes scaleInOverlay {
+  from {
+    @include scaleActionOpen();
+  }
+  to {
+    @include scaleActionClose();
+  }
+}
+@keyframes scaleOutOverlay {
+  from {
+    @include scaleActionClose();
+  }
+  to {
+    @include scaleActionOpen();
+    opacity: 0;
+  }
+}
+.#{$effect17} {
+  &.#{$overlay} {
+    &.#{$open} {
+      @include animation(scaleInOverlay, ease-in);
+    }
+    &.#{$close} {
+      @include animation(scaleOutOverlay, ease-out);
+    }
+  }
+  &.#{$content} {
+    &.#{$open} {
+      @include animation(scaleInOverlay, ease-in);
+    }
+    &.#{$close} {
+      @include animation(scaleOutOverlay, ease-out);
     }
   }
 }

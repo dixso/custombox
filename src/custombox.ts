@@ -1,13 +1,17 @@
 module Custombox {
 
+  // Values
   const CB: string = 'custombox';
   const O: string = `${CB}-open`;
   const C: string = `${CB}-close`;
-  const animationValues: Array<string> = ['slide', 'blur', 'flip', 'rotate', 'letmein', 'makeway', 'slip', 'corner'];
   const positionValues: Array<string> = ['top', 'right', 'bottom', 'left'];
+
+  // Effects
+  const animationValues: Array<string> = ['slide', 'blur', 'flip', 'rotate', 'letmein', 'makeway', 'slip', 'corner', 'slidetogether'];
   const containerValues: Array<string> = ['blur', 'makeway', 'slip'];
-  const overlayValues: Array<string> = ['letmein', 'makeway', 'slip', 'corner'];
-  const together: Array<string> = ['corner'];
+  const overlayValues: Array<string> = ['letmein', 'makeway', 'slip', 'corner', 'slidetogether'];
+  const together: Array<string> = ['corner', 'slidetogether', 'scale'];
+  const perspective: Array<string> = ['letmein', 'makeway', 'slip'];
 
   interface OverlayConfig {
     overlay: boolean;
@@ -183,25 +187,6 @@ module Custombox {
     }
   }
 
-  class Wrapper {
-    element: HTMLElement;
-
-    constructor(effect: string) {
-      this.element = document.createElement('div');
-      this.element.classList.add(CB, `${CB}-${effect}`);
-      if (overlayValues.indexOf(effect) > -1) {
-        this.element.classList.add(`${CB}-wrapper-perspective`);
-      }
-    }
-
-    // Public methods
-    remove(): void {
-      try {
-        this.element.parentNode.removeChild(this.element);
-      } catch (e) {}
-    }
-  }
-
   class Overlay {
     element: HTMLElement;
 
@@ -227,6 +212,11 @@ module Custombox {
           this.element.classList.add(C);
           break;
         default:
+          // Append
+          document.body.appendChild(this.element);
+
+          // Initialization
+          this.element.classList.add(`${CB}-${this.options.effect}`);
           action = 'add';
           break
       }
@@ -261,7 +251,16 @@ module Custombox {
       let sheet: any = this.createSheet();
       if (overlayValues.indexOf(this.options.effect) > -1) {
         this.element.style.opacity = this.options.overlayOpacity.toString();
+        this.element.style.animationDuration = `${this.options.overlaySpeed}ms`;
+        this.toggleAnimation();
+      } else {
+        sheet.insertRule(`.${CB}-overlay { animation: CloseFade ${this.options.overlaySpeed}ms; }`, 0);
+        sheet.insertRule(`.${O}.${CB}-overlay { animation: OpenFade ${this.options.overlaySpeed}ms; opacity: ${this.options.overlayOpacity} }`, 0);
+        sheet.insertRule(`@keyframes OpenFade { from {opacity: 0} to {opacity: ${this.options.overlayOpacity}} }`, 0);
+        sheet.insertRule(`@keyframes CloseFade { from {opacity: ${this.options.overlayOpacity}} to {opacity: 0} }`, 0);
+      }
 
+      if (together.indexOf(this.options.effect) > -1) {
         let duration: number;
         if (together.indexOf(this.options.effect) === -1) {
           duration = this.options.overlaySpeed;
@@ -270,12 +269,6 @@ module Custombox {
         }
 
         this.element.style.animationDuration = `${duration}ms`;
-        this.toggleAnimation();
-      } else {
-        sheet.insertRule(`.${CB}-overlay { animation: CloseFade ${this.options.overlaySpeed}ms; }`, 0);
-        sheet.insertRule(`.${O}.${CB}-overlay { animation: OpenFade ${this.options.overlaySpeed}ms; opacity: ${this.options.overlayOpacity} }`, 0);
-        sheet.insertRule(`@keyframes OpenFade { from {opacity: 0} to {opacity: ${this.options.overlayOpacity}} }`, 0);
-        sheet.insertRule(`@keyframes CloseFade { from {opacity: ${this.options.overlayOpacity}} to {opacity: 0} }`, 0);
       }
     }
 
@@ -361,6 +354,12 @@ module Custombox {
             this.listener().then(()=> resolve());
           });
         default:
+          // Append
+          document.body.appendChild(this.element);
+
+          // Initialization
+          this.element.classList.add(`${CB}-${this.options.effect}`);
+
           return new Promise((resolve: Function) => {
             this.element.classList.add(O);
             this.listener().then(()=> resolve());
@@ -398,7 +397,6 @@ module Custombox {
 
   export class modal {
     private options: Options;
-    private wrapper: Wrapper;
     private container: Container;
     private content: Content;
     private overlay: Overlay;
@@ -407,9 +405,6 @@ module Custombox {
     constructor(options: Options) {
       let defaults: Defaults = new Defaults(options);
       this.options = defaults.assign();
-
-      // Create wrapper
-      this.wrapper = new Wrapper(this.options.effect);
 
       // Create container
       if (containerValues.indexOf(this.options.effect) > -1) {
@@ -420,7 +415,6 @@ module Custombox {
       let delay: number = 0;
       if (this.options.overlay) {
         this.overlay = new Overlay(this.options);
-        this.wrapper.element.appendChild(this.overlay.element);
         if (together.indexOf(this.options.effect) === -1) {
           delay = this.options.overlaySpeed / 2;
         }
@@ -428,9 +422,6 @@ module Custombox {
 
       // Create content
       this.content = new Content(this.options, delay);
-
-      // Create the structure
-      this.build();
     }
 
     // Public methods
@@ -442,12 +433,9 @@ module Custombox {
         .fetch(this.options.target, this.options.width)
         .then(() => {
           // Scroll
-          if (overlayValues.indexOf(this.options.effect) > -1) {
+          if (perspective.indexOf(this.options.effect) > -1) {
             this.scroll = new Scroll();
           }
-
-          // Append
-          document.body.appendChild(this.wrapper.element);
 
           // Overlay
           if (this.options.overlay) {
@@ -493,17 +481,10 @@ module Custombox {
 
       Promise
         .all(close)
-        .then(() => {
-          this.wrapper.remove();
-          this.dispatchEvent(C);
-        });
+        .then(() => this.dispatchEvent(C));
     }
 
     // Private methods
-    private build(): void {
-      this.wrapper.element.appendChild(this.content.element);
-    }
-
     private dispatchEvent(type: string): void {
       let event = new Event(`${CB}:${type}`);
       document.dispatchEvent(event);
