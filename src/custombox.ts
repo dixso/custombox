@@ -1,7 +1,6 @@
 import { Options } from './model';
 
 module Custombox {
-
   // Values
   const CB: string = 'custombox';
   const O: string = `${CB}-open`;
@@ -94,23 +93,20 @@ module Custombox {
 
     // Public methods
     bind(method: string): Promise<Event> {
-      let action: string;
-
       switch (method) {
         case C:
-          action = 'remove';
           if (animationValues.indexOf(this.options.effect) > -1) {
             this.setAnimation('to');
           }
           this.element.classList.add(C);
+          this.element.classList.remove(O);
           break;
         default:
-          action = 'add';
+          this.element.classList.add(O);
           break
       }
 
       return new Promise((resolve: Function) => {
-        this.element.classList[action](O);
         this.listener().then(()=> resolve());
       });
     }
@@ -169,28 +165,25 @@ module Custombox {
 
     // Public methods
     bind(method: string): Promise<Event> {
-      let action: string;
-
       switch (method) {
         case C:
-          action = 'remove';
           if (overlayValues.indexOf(this.options.effect) > -1) {
             this.toggleAnimation('to');
           }
           this.element.classList.add(C);
+          this.element.classList.remove(O);
           break;
         default:
           // Append
           document.body.appendChild(this.element);
 
           // Initialization
-          this.element.classList.add(`${CB}-${this.options.effect}`);
-          action = 'add';
+          this.element.classList.add(`${CB}-${this.options.effect}`, O);
           break
       }
 
       return new Promise((resolve: Function) => {
-        this.element.classList[action](O);
+
         this.listener().then(()=> resolve());
       });
     }
