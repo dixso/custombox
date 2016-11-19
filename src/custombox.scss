@@ -39,6 +39,8 @@ $effect14: #{$cb}-slip;
 $effect15: #{$cb}-corner;
 $effect16: #{$cb}-slidetogether;
 $effect17: #{$cb}-scale;
+$effect18: #{$cb}-door;
+$effect19: #{$cb}-push;
 
 @mixin animation($name, $timing: ease-out, $fill-mode: forwards) {
   animation-name: $name;
@@ -231,7 +233,8 @@ $effect17: #{$cb}-scale;
 .#{$effect2},
 .#{$effect12},
 .#{$effect13},
-.#{$effect14} {
+.#{$effect14},
+.#{$effect19} {
   &.#{$content} {
     transform: translateX(-100%);
 
@@ -1373,6 +1376,283 @@ $effect17: #{$cb}-scale;
     }
     &.#{$close} {
       @include animation(scaleOutOverlay, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect18}
+ ----------------------------
+ */
+@mixin doorActionOpen() {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  right: 50%;
+  width: 0;
+}
+@mixin doorActionClose() {
+  width: 100%;
+  left: 0;
+  right: 0;
+  transition-property: width;
+}
+@keyframes doorInOverlay {
+  from {
+    @include doorActionOpen()
+  }
+  to {
+    @include doorActionClose()
+  }
+}
+@keyframes doorOutOverlay {
+  from {
+    @include doorActionClose()
+  }
+  to {
+    @include doorActionOpen()
+  }
+}
+.#{$effect18} {
+  &.#{$overlay} {
+    &.#{$open} {
+      @include animation(doorInOverlay, ease-in);
+    }
+    &.#{$close} {
+      @include animation(doorOutOverlay, ease-out);
+    }
+  }
+  &.#{$content} {
+    &.#{$open} {
+      @include animation(doorInOverlay, ease-in);
+    }
+    &.#{$close} {
+      @include animation(doorOutOverlay, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect19}
+ ----------------------------
+ */
+@mixin pushContainerAction() {
+  overflow-x: hidden;
+  transition-property: transform;
+}
+@mixin pushOverlayAction() {
+  transform: translateX(0) translateY(0);
+}
+@mixin pushRight() {
+  transform: translateX(100%);
+}
+@mixin pushLeft() {
+  transform: translateX(-100%);
+}
+@mixin pushTop() {
+  transform: translateY(-100%);
+}
+@mixin pushBottom() {
+  transform: translateY(100%);
+}
+@keyframes pushInLeftOverlay {
+  from {
+    @include pushLeft();
+  }
+  to {
+    @include pushOverlayAction();
+  }
+}
+@keyframes pushOutLeftOverlay {
+  from {
+    @include pushOverlayAction();
+  }
+  to {
+    @include pushLeft();
+  }
+}
+@keyframes pushInRightOverlay {
+  from {
+    @include pushRight();
+  }
+  to {
+    @include pushOverlayAction();
+  }
+}
+@keyframes pushOutRightOverlay {
+  from {
+    @include pushOverlayAction();
+  }
+  to {
+    @include pushRight();
+  }
+}
+@keyframes pushInTopOverlay {
+  from {
+    @include pushTop();
+  }
+  to {
+    @include pushOverlayAction();
+  }
+}
+@keyframes pushOutTopOverlay {
+  from {
+    @include pushOverlayAction();
+  }
+  to {
+    @include pushTop();
+  }
+}
+@keyframes pushInBottomOverlay {
+  from {
+    @include pushBottom();
+  }
+  to {
+    @include pushOverlayAction();
+  }
+}
+@keyframes pushOutBottomOverlay {
+  from {
+    @include pushOverlayAction();
+  }
+  to {
+    @include pushBottom();
+  }
+}
+@keyframes pushOutTopOverlay {
+  from {
+    @include pushOverlayAction();
+  }
+  to {
+    @include pushTop();
+  }
+}
+@keyframes pushInLeftContainer {
+  from {
+    @include pushContainerAction();
+  }
+  to {
+    @include pushRight();
+  }
+}
+@keyframes pushOutLeftContainer {
+  from {
+    @include pushRight();
+  }
+  to {
+    @include pushContainerAction();
+  }
+}
+@keyframes pushInRightContainer {
+  from {
+    @include pushContainerAction();
+  }
+  to {
+    @include pushLeft();
+  }
+}
+@keyframes pushOutRightContainer {
+  from {
+    @include pushLeft();
+  }
+  to {
+    @include pushContainerAction();
+  }
+}
+@keyframes pushInTopContainer {
+  from {
+    @include pushContainerAction();
+  }
+  to {
+    @include pushBottom();
+  }
+}
+@keyframes pushOutTopContainer {
+  from {
+    @include pushBottom();
+  }
+  to {
+    @include pushContainerAction();
+  }
+}
+@keyframes pushInBottomContainer {
+  from {
+    @include pushContainerAction();
+  }
+  to {
+    @include pushTop();
+  }
+}
+@keyframes pushOutBottomContainer {
+  from {
+    @include pushTop();
+  }
+  to {
+    @include pushContainerAction();
+  }
+}
+.#{$effect19} {
+  &.#{$overlay} {
+    transition-property: transform;
+    &.#{$open} {
+      &.#{$t} {
+        @include animation(pushInTopOverlay, ease-in);
+      }
+      &.#{$b} {
+        @include animation(pushInBottomOverlay, ease-in);
+      }
+      &.#{$l} {
+        @include animation(pushInLeftOverlay, ease-in);
+      }
+      &.#{$r} {
+        @include animation(pushInRightOverlay, ease-in);
+      }
+    }
+    &.#{$close} {
+      &.#{$t} {
+        @include animation(pushOutTopOverlay, ease-out);
+      }
+      &.#{$b} {
+        @include animation(pushOutBottomOverlay, ease-out);
+      }
+      &.#{$l} {
+        @include animation(pushOutLeftOverlay, ease-out);
+      }
+      &.#{$r} {
+        @include animation(pushOutRightOverlay, ease-out);
+      }
+    }
+  }
+  &.#{$container} {
+    &.#{$open} {
+      &.#{$t} {
+        @include animation(pushInTopContainer, ease-in);
+      }
+      &.#{$b} {
+        @include animation(pushInBottomContainer, ease-in);
+      }
+      &.#{$l} {
+        @include animation(pushInLeftContainer, ease-in);
+      }
+      &.#{$r} {
+        @include animation(pushInRightContainer, ease-in);
+      }
+    }
+    &.#{$close} {
+      &.#{$t} {
+        @include animation(pushOutTopContainer, ease-out);
+      }
+      &.#{$b} {
+        @include animation(pushOutBottomContainer, ease-out);
+      }
+      &.#{$l} {
+        @include animation(pushOutLeftContainer, ease-out);
+      }
+      &.#{$r} {
+        @include animation(pushOutRightContainer, ease-out);
+      }
     }
   }
 }

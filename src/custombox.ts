@@ -1,3 +1,5 @@
+import { Options } from './model';
+
 module Custombox {
 
   // Values
@@ -7,45 +9,11 @@ module Custombox {
   const positionValues: Array<string> = ['top', 'right', 'bottom', 'left'];
 
   // Effects
-  const animationValues: Array<string> = ['slide', 'blur', 'flip', 'rotate', 'letmein', 'makeway', 'slip', 'corner', 'slidetogether'];
-  const containerValues: Array<string> = ['blur', 'makeway', 'slip'];
-  const overlayValues: Array<string> = ['letmein', 'makeway', 'slip', 'corner', 'slidetogether'];
-  const together: Array<string> = ['corner', 'slidetogether', 'scale'];
+  const animationValues: Array<string> = ['slide', 'blur', 'flip', 'rotate', 'letmein', 'makeway', 'slip', 'corner', 'slidetogether', 'push'];
+  const containerValues: Array<string> = ['blur', 'makeway', 'slip', 'push'];
+  const overlayValues: Array<string> = ['letmein', 'makeway', 'slip', 'corner', 'slidetogether', 'door', 'push'];
+  const together: Array<string> = ['corner', 'slidetogether', 'scale', 'door', 'push'];
   const perspective: Array<string> = ['letmein', 'makeway', 'slip'];
-
-  interface OverlayConfig {
-    overlay: boolean;
-    overlaySpeed: number;
-    overlayColor: string;
-    overlayOpacity: number;
-    overlayClose: boolean;
-  }
-
-  interface ContentConfig {
-    speed: number;
-    effect: string;
-    width: string;
-    fullscreen: boolean;
-    animation: {
-      from: string;
-      to: string;
-    };
-    position: {
-      x: string;
-      y: string;
-    };
-    open: Function;
-    complete: Function;
-    close: Function;
-  }
-
-  interface ContainerConfig {
-    container: string;
-  }
-
-  interface Options extends OverlayConfig, ContentConfig, ContainerConfig {
-    target: string;
-  }
 
   class Defaults {
     private defaults: Options;
@@ -89,38 +57,38 @@ module Custombox {
     constructor(private options: Options) {
       if (document.readyState === 'loading') {
         throw new Error(`You need to instantiate Custombox when the document is fully loaded.`);
+      }
+
+      let selector: any = document.querySelector(this.options.container);
+      if (selector) {
+        this.element = selector;
+        this.addSimpleClass();
       } else {
-        let selector: any = document.querySelector(this.options.container);
-        if (selector) {
-          this.element = selector;
+        let scopes: NodeListOf<Element> = document.body.querySelectorAll(':scope > *');
+        let create: boolean = true;
+
+        for (let i = 0, t = scopes.length; i < t; i++) {
+          if (scopes[i].classList.contains(`${CB}-container`)) {
+            create = false;
+            break;
+          }
+        }
+
+        if (create) {
+          this.element = document.createElement('div');
           this.addSimpleClass();
-        } else {
-          let scopes: NodeListOf<Element> = document.body.querySelectorAll(':scope > *');
-          let create: boolean = true;
 
-          for (let i = 0, t = scopes.length; i < t; i++) {
-            if (scopes[i].classList.contains(`${CB}-container`)) {
-              create = false;
-              break;
-            }
+          while (document.body.firstChild) {
+            this.element.appendChild(document.body.firstChild);
           }
-
-          if (create) {
-            this.element = document.createElement('div');
-            this.addSimpleClass();
-
-            while (document.body.firstChild) {
-              this.element.appendChild(document.body.firstChild);
-            }
-            document.body.appendChild(this.element);
-          }
+          document.body.appendChild(this.element);
         }
+      }
 
-        this.element.style.animationDuration = `${this.options.speed}ms`;
+      this.element.style.animationDuration = `${this.options.speed}ms`;
 
-        if (animationValues.indexOf(this.options.effect) > -1) {
-          this.setAnimation();
-        }
+      if (animationValues.indexOf(this.options.effect) > -1) {
+        this.setAnimation();
       }
     }
 
