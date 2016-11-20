@@ -41,6 +41,10 @@ $effect16: #{$cb}-slidetogether;
 $effect17: #{$cb}-scale;
 $effect18: #{$cb}-door;
 $effect19: #{$cb}-push;
+$effect20: #{$cb}-contentscale;
+$effect21: #{$cb}-swell;
+$effect22: #{$cb}-rotatedown;
+$effect23: #{$cb}-flash;
 
 @mixin animation($name, $timing: ease-out, $fill-mode: forwards) {
   animation-name: $name;
@@ -166,6 +170,39 @@ $effect19: #{$cb}-push;
  #{$effect2}
  ----------------------------
  */
+@mixin slide() {
+  transform: translateX(-100%);
+
+  &.#{$open} {
+    &.#{$t} {
+      @include animation(slideInTop, ease-out);
+    }
+    &.#{$b} {
+      @include animation(slideInBottom, ease-out);
+    }
+    &.#{$l} {
+      @include animation(slideInLeft, ease-out);
+    }
+    &.#{$r} {
+      @include animation(slideInRight, ease-out);
+    }
+  }
+
+  &.#{$close} {
+    &.#{$t} {
+      @include animation(slideOutTop, ease-in);
+    }
+    &.#{$b} {
+      @include animation(slideOutBottom, ease-in);
+    }
+    &.#{$l} {
+      @include animation(slideOutLeft, ease-in);
+    }
+    &.#{$r} {
+      @include animation(slideOutRight, ease-in);
+    }
+  }
+}
 @keyframes slideInTop {
   from {
     transform: translateY(-100%);
@@ -234,39 +271,10 @@ $effect19: #{$cb}-push;
 .#{$effect12},
 .#{$effect13},
 .#{$effect14},
-.#{$effect19} {
+.#{$effect19},
+.#{$effect20} {
   &.#{$content} {
-    transform: translateX(-100%);
-
-    &.#{$open} {
-      &.#{$t} {
-        @include animation(slideInTop, ease-out);
-      }
-      &.#{$b} {
-        @include animation(slideInBottom, ease-out);
-      }
-      &.#{$l} {
-        @include animation(slideInLeft, ease-out);
-      }
-      &.#{$r} {
-        @include animation(slideInRight, ease-out);
-      }
-    }
-
-    &.#{$close} {
-      &.#{$t} {
-        @include animation(slideOutTop, ease-in);
-      }
-      &.#{$b} {
-        @include animation(slideOutBottom, ease-in);
-      }
-      &.#{$l} {
-        @include animation(slideOutLeft, ease-in);
-      }
-      &.#{$r} {
-        @include animation(slideOutRight, ease-in);
-      }
-    }
+    @include slide();
   }
 }
 
@@ -1295,37 +1303,7 @@ $effect19: #{$cb}-push;
  */
 .#{$effect16} {
   &.#{$content}, &.#{$overlay} {
-    transform: translateX(-100%);
-
-    &.#{$open} {
-      &.#{$t} {
-        @include animation(slideInTop, ease-out);
-      }
-      &.#{$b} {
-        @include animation(slideInBottom, ease-out);
-      }
-      &.#{$l} {
-        @include animation(slideInLeft, ease-out);
-      }
-      &.#{$r} {
-        @include animation(slideInRight, ease-out);
-      }
-    }
-
-    &.#{$close} {
-      &.#{$t} {
-        @include animation(slideOutTop, ease-in);
-      }
-      &.#{$b} {
-        @include animation(slideOutBottom, ease-in);
-      }
-      &.#{$l} {
-        @include animation(slideOutLeft, ease-in);
-      }
-      &.#{$r} {
-        @include animation(slideOutRight, ease-in);
-      }
-    }
+    @include slide();
   }
 }
 
@@ -1653,6 +1631,184 @@ $effect19: #{$cb}-push;
       &.#{$r} {
         @include animation(pushOutRightContainer, ease-out);
       }
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect20}
+ ----------------------------
+ */
+@mixin contentscaleIn() {
+  transition: transform;
+}
+@mixin contentscaleOut() {
+  transform: scale(.8);
+}
+@keyframes contentscaleInContainer {
+  from {
+    @include contentscaleIn();
+  }
+  to {
+    @include contentscaleOut();
+  }
+}
+@keyframes contentscaleOutContainer {
+  from {
+    @include contentscaleOut();
+  }
+  to {
+    @include contentscaleIn();
+  }
+}
+.#{$effect20} {
+  &.#{$overlay} {
+    @include slide();
+  }
+  &.#{$container} {
+    &.#{$open} {
+      @include animation(contentscaleInContainer, ease-in);
+    }
+    &.#{$close} {
+      @include animation(contentscaleOutContainer, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect21}
+ ----------------------------
+ */
+@keyframes swellOpen {
+  0% {
+    opacity: 0;
+    transform: translate3d(calc(-100vw - 50%), 0, 0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate3d(100px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes swellClose {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate3d(-100px, 0, 0) scale3d(1.1, 1.1, 1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(calc(100vw + 50%), 0, 0)
+  }
+}
+.#{$effect21} {
+  &.#{$content} {
+    opacity: 0;
+
+    &.#{$open} {
+      @include animation(swellOpen, ease-in);
+    }
+    &.#{$close} {
+      @include animation(swellClose, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect22}
+ ----------------------------
+ */
+@keyframes rotatedownOpen {
+  0% {
+    opacity: 0;
+    transform: rotate3d(0, 0, 1, -45deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+}
+@keyframes rotatedownClose {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate3d(0, 0, 1, 45deg);
+  }
+}
+@keyframes rotatedownElem {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -150px, 0) rotate3d(0, 0, 1, -20deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, 0deg);
+  }
+}
+.#{$effect22} {
+  &.#{$content} {
+    opacity: 0;
+    animation-timing-function: cubic-bezier(.7, 0, .3, 1);
+    transform-origin: -150% 50%;
+    &.#{$open} {
+      @include animation(rotatedownOpen, ease-in);
+    }
+    &.#{$close} {
+      @include animation(rotatedownClose, ease-out);
+    }
+  }
+}
+
+/*
+ ----------------------------
+ #{$effect23}
+ ----------------------------
+ */
+@keyframes flashOpen {
+  0% {
+    opacity: 0;
+    transform: translate3d(-400px, 0, 0)
+    scale3d(1.4, 0, 1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+  }
+}
+@keyframes flashClose {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+  }
+  20% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-400px, 0, 0) scale3d(1.4, 0, 1);
+  }
+}
+.#{$effect23} {
+  &.#{$content} {
+    opacity: 0;
+    animation-timing-function: cubic-bezier(.7, 0, .3, 1);
+    &.#{$open} {
+      @include animation(flashOpen, ease-in);
+    }
+    &.#{$close} {
+      @include animation(flashClose, ease-out);
     }
   }
 }

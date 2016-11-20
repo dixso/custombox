@@ -8,10 +8,10 @@ module Custombox {
   const positionValues: Array<string> = ['top', 'right', 'bottom', 'left'];
 
   // Effects
-  const animationValues: Array<string> = ['slide', 'blur', 'flip', 'rotate', 'letmein', 'makeway', 'slip', 'corner', 'slidetogether', 'push'];
-  const containerValues: Array<string> = ['blur', 'makeway', 'slip', 'push'];
-  const overlayValues: Array<string> = ['letmein', 'makeway', 'slip', 'corner', 'slidetogether', 'door', 'push'];
-  const together: Array<string> = ['corner', 'slidetogether', 'scale', 'door', 'push'];
+  const animationValues: Array<string> = ['slide', 'blur', 'flip', 'rotate', 'letmein', 'makeway', 'slip', 'corner', 'slidetogether', 'push', 'contentscale'];
+  const containerValues: Array<string> = ['blur', 'makeway', 'slip', 'push', 'contentscale'];
+  const overlayValues: Array<string> = ['letmein', 'makeway', 'slip', 'corner', 'slidetogether', 'door', 'push', 'contentscale'];
+  const together: Array<string> = ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale'];
   const perspective: Array<string> = ['letmein', 'makeway', 'slip'];
 
   class Defaults {
@@ -32,7 +32,7 @@ module Custombox {
       this.defaults.container = null;
 
       // Content
-      this.defaults.speed = 400;
+      this.defaults.speed = 1000;
       this.defaults.width = null;
       this.defaults.animation = {
         from: 'top',
