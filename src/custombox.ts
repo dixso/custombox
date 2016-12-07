@@ -21,10 +21,25 @@ module Custombox {
     }
   }
 
+  class Scroll {
+    private position: number;
+
+    constructor() {
+      this.position = document.documentElement && document.documentElement.scrollTop || document.body && document.body.scrollTop || 0;
+      document.documentElement.classList.add(`${CB}-perspective`);
+    }
+
+    // Public methods
+    remove(): void {
+      document.documentElement.classList.remove(`${CB}-perspective`);
+      window.scrollTo(0, this.position);
+    }
+  }
+
   class DefaultSchema implements OptionsSchema {
     overlay = {
       color: '#000',
-      opacity: .5,
+      opacity: .48,
       close: true,
       escKey: true,
       speedIn: 300,
@@ -44,6 +59,7 @@ module Custombox {
       effect: 'fadein',
       speedIn: 300,
       speedOut: 300,
+      delay: 150,
       fullscreen: false,
       onOpen: null,
       onComplete: null,
@@ -105,12 +121,10 @@ module Custombox {
           break;
         default:
           this.element.classList.add(OPEN);
-          break
+          break;
       }
 
-      return new Promise((resolve: Function) => {
-        this.listener().then(()=> resolve());
-      });
+      return new Promise((resolve: Function) => this.listener().then(() => resolve()));
     }
 
     remove(): void {
@@ -135,21 +149,6 @@ module Custombox {
       }
 
       this.element.classList.add(`${CB}-${this.options.content[action]}`);
-    }
-  }
-
-  class Scroll {
-    position: number;
-
-    constructor() {
-      this.position = document.documentElement && document.documentElement.scrollTop || document.body && document.body.scrollTop || 0;
-      document.documentElement.classList.add(`${CB}-perspective`);
-    }
-
-    // Public methods
-    remove(): void {
-      document.documentElement.classList.remove(`${CB}-perspective`);
-      window.scrollTo(0, this.position);
     }
   }
 
@@ -181,10 +180,10 @@ module Custombox {
 
           // Initialization
           this.element.classList.add(`${CB}-${this.options.content.effect}`, OPEN);
-          break
+          break;
       }
 
-      return new Promise((resolve: Function) => this.listener().then(()=> resolve()));
+      return new Promise((resolve: Function) => this.listener().then(() => resolve()));
     }
 
     remove(): void {
@@ -214,7 +213,7 @@ module Custombox {
         this.element.style.animationDuration = `${this.options.overlay.speedIn}ms`;
         this.toggleAnimation();
       } else {
-        sheet.insertRule(`.${CB}-overlay { animation: CloseFade ${this.options.overlay.speedIn}ms; }`, 0);
+        sheet.insertRule(`.${CB}-overlay { animation: CloseFade ${this.options.overlay.speedOut}ms; }`, 0);
         sheet.insertRule(`.${OPEN}.${CB}-overlay { animation: OpenFade ${this.options.overlay.speedIn}ms; opacity: ${this.options.overlay.opacity} }`, 0);
         sheet.insertRule(`@keyframes OpenFade { from {opacity: 0} to {opacity: ${this.options.overlay.opacity}} }`, 0);
         sheet.insertRule(`@keyframes CloseFade { from {opacity: ${this.options.overlay.opacity}} to {opacity: 0} }`, 0);
@@ -247,12 +246,10 @@ module Custombox {
       this.element = document.createElement('div');
       this.element.style.animationDuration = `${this.options.content.speedIn}ms`;
 
-      let delay: number = 0;
-      if (this.options.overlay.active && !Snippet.check(together, this.options.content.effect)) {
-        delay = this.options.overlay.speedIn / 2;
+      if (!Snippet.check(together, this.options.content.effect)) {
+        this.element.style.animationDelay = `${this.options.content.delay}ms`;
       }
 
-      this.element.style.animationDelay = `${delay}ms`;
       this.element.classList.add(`${CB}-content`);
 
       // Check fullscreen
@@ -310,25 +307,22 @@ module Custombox {
     bind(method: string): Promise<Event> {
       switch (method) {
         case CLOSE:
-          return new Promise((resolve: Function) => {
-            this.element.style.animationDelay = '0ms';
-            this.element.classList.remove(OPEN);
-            this.element.classList.add(CLOSE);
-            this.setAnimation('animateTo');
-            this.listener().then(()=> resolve());
-          });
+          this.element.style.animationDelay = '0ms';
+          this.element.style.animationDuration = `${this.options.content.speedOut}ms`;
+          this.element.classList.remove(OPEN);
+          this.element.classList.add(CLOSE);
+          this.setAnimation('animateTo');
+          break;
         default:
           // Append
           document.body.appendChild(this.element);
 
           // Initialization
-          this.element.classList.add(`${CB}-${this.options.content.effect}`);
-
-          return new Promise((resolve: Function) => {
-            this.element.classList.add(OPEN);
-            this.listener().then(()=> resolve());
-          });
+          this.element.classList.add(`${CB}-${this.options.content.effect}`, OPEN);
+          break;
       }
+
+      return new Promise((resolve: Function) => this.listener().then(()=> resolve()));
     }
 
     remove(): void {
@@ -398,7 +392,8 @@ module Custombox {
 
           // Overlay
           if (this.options.overlay.active) {
-            this.overlay.bind(OPEN);
+            this.dispatchEvent('overlay.onOpen');
+            this.overlay.bind(OPEN).then(() => this.dispatchEvent('overlay.onComplete'));
           }
 
           // Container
@@ -407,10 +402,10 @@ module Custombox {
           }
 
           // Content
-          this.content.bind(OPEN).then(() => this.dispatchEvent('complete'));
+          this.content.bind(OPEN).then(() => this.dispatchEvent('content.onComplete'));
 
           // Dispatch event
-          this.dispatchEvent('open');
+          this.dispatchEvent('content.onOpen');
 
           // Listeners
           this.listeners();
@@ -426,17 +421,26 @@ module Custombox {
       ];
 
       if (this.options.overlay.active) {
-        close.push(this.overlay.bind(CLOSE).then(() => {
-          if (this.scroll) {
-            this.scroll.remove();
-          }
+        close.push(
+          this.overlay
+            .bind(CLOSE)
+            .then(() => {
+              if (this.scroll) {
+                this.scroll.remove();
+              }
 
-          this.overlay.remove();
-        }));
+              this.overlay.remove();
+              this.dispatchEvent('overlay.onClose');
+            })
+        );
       }
 
       if (this.container) {
-        close.push(this.container.bind(CLOSE).then(() => this.container.remove()));
+        close.push(
+          this.container
+            .bind(CLOSE)
+            .then(() => this.container.remove())
+        );
       }
 
       Promise
@@ -446,17 +450,19 @@ module Custombox {
             document.removeEventListener('keydown', this.action, true);
           }
 
-          this.dispatchEvent('close');
+          this.dispatchEvent('content.onClose');
         });
     }
 
     // Private methods
     private dispatchEvent(type: string): void {
       const event: Event = new Event(`${CB}:${type}`);
+      const action: any = Object.create(this.options);
+
       document.dispatchEvent(event);
 
       try {
-        this.options[type].call();
+        type.split('.').reduce((a, b) => a[b], action).call();
       } catch (e) {}
     }
 
@@ -465,9 +471,11 @@ module Custombox {
         document.addEventListener('keydown', this.action, true);
       }
 
-      if (this.options.overlay.active) {
-        this.overlay.element.addEventListener('click', () => this.close(), true);
-      }
+      this.content.element.addEventListener('click', (event: Event) => {
+        if (event.target === this.content.element) {
+          this.close();
+        }
+      }, true);
     }
   }
 }

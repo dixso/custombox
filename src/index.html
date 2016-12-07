@@ -10,28 +10,18 @@
             margin: 0;
             padding: 0;
         }
+        .foo {
+          box-shadow: 0 11px 15px -7px rgba(0, 0, 0, .2), 0 24px 38px 3px rgba(0, 0, 0, .14), 0 9px 46px 8px rgba(0, 0, 0, .12);
+          padding: 24px;
+        }
     </style>
-    <script>
-      const modal =
-        new Custombox.modal({
-          overlay: {
-            active: false
-          },
-          content: {
-            effect: 'fadein',
-            target: 'ajax.html',
-            positionX: 'center',
-            positionY: 'center',
-          },
-        });
-    </script>
 </head>
 <body>
 
     <!--<div id="paco" class="custombox-content custombox-x-center custombox-y-center custombox-fadein custombox-open">LOLO</div>-->
 
     Un <div>div</div>
-    <div id="test" style="background: #fc5e5e; border: #fc5e5e solid 1px;">
+    <div id="test">
         <a href="javascript:void(0);" onclick="dynamicModal()">Open new modal</a>
         julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>
     </div>
@@ -65,7 +55,28 @@
     ulsa<br>
     ulsa<br>
     <script>
-      document.addEventListener("DOMContentLoaded", () =>  modal.open());
+      document.addEventListener("DOMContentLoaded", () =>  {
+        new Custombox.modal({
+//          overlay: {
+//            speedIn: 10000,
+//            speedOut: 3000,
+//            onOpen: () => console.info('onOpen'),
+//            onComplete: () => console.info('onComplete'),
+//            onClose: () => console.info('onClose')
+//          },
+          content: {
+            effect: 'fall',
+            target: 'ajax.html',
+            width: '600px',
+//            positionX: 'center',
+//            positionY: 'center',
+//            speedOut: 3000,
+//            onOpen: () => console.log('onOpen'),
+//            onComplete: () => console.log('onComplete'),
+//            onClose: () => console.log('onClose')
+          },
+        }).open()
+      });
       document.addEventListener("custombox:close", () =>  console.log('close'));
     </script>
 </body>
