@@ -1,33 +1,35 @@
-interface OverlayConfig {
-  overlay: boolean;
-  overlaySpeed: number;
-  overlayColor: string;
-  overlayOpacity: number;
-  overlayClose: boolean;
-}
-
-interface ContentConfig {
-  speed: number;
-  effect: string;
-  width: string;
-  fullscreen: boolean;
-  animation: {
-    from: string;
-    to: string;
-  };
-  position: {
-    x: string;
-    y: string;
-  };
-  open: Function;
-  complete: Function;
-  close: Function;
-}
-
-interface ContainerConfig {
+export interface OptionsSchema {
+  overlay: Overlay;
+  content: Content;
   container: string;
 }
 
-export interface Options extends OverlayConfig, ContentConfig, ContainerConfig {
+interface Overlay extends Speed, Callback {
+  color: string;
+  opacity: number;
+  close: boolean;
+  escKey: boolean;
+  active: boolean;
+}
+
+interface Content extends Speed, Callback {
   target: string;
+  animateFrom: string;
+  animateTo: string;
+  positionX: string;
+  positionY: string;
+  width: string;
+  effect: string;
+  fullscreen: boolean;
+}
+
+interface Speed {
+  speedIn: number;
+  speedOut: number;
+}
+
+interface Callback {
+  onOpen: Function;
+  onComplete: Function;
+  onClose: Function;
 }

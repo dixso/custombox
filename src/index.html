@@ -12,52 +12,61 @@
         }
     </style>
     <script>
-      var effects = ['fadein', 'slide'];
-      var animation = ['top', 'right', 'bottom', 'left'];
-
       const modal =
         new Custombox.modal({
-          target: '#test',
-          effect: effects[Math.floor(Math.random() * effects.length)],
-          animation: {
-              from: animation[Math.floor(Math.random() * animation.length)],
-              to: animation[Math.floor(Math.random() * animation.length)]
+          overlay: {
+            active: false
           },
-            position: {
-                x: 'center',
-                y: 'center'
-            },
-            width: '400px',
+          content: {
+            effect: 'fadein',
+            target: 'ajax.html',
+            positionX: 'center',
+            positionY: 'center',
+          },
         });
-      var modals = [];
     </script>
 </head>
 <body>
-Un <div>div</div>
 
-<div id="test" style="background: #fc5e5e; border: #fc5e5e solid 1px; border: #F0F solid 2px">
-    <a href="javascript:void(0);" onclick="dynamicModal()">Open new modal</a>
-    julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>
-</div>
-<script>
-  document.addEventListener("DOMContentLoaded", () =>  modal.open());
-  document.addEventListener("custombox:close", () =>  console.log('close'));
+    <!--<div id="paco" class="custombox-content custombox-x-center custombox-y-center custombox-fadein custombox-open">LOLO</div>-->
 
-  function dynamicModal(action) {
-    if (!action) {
-      var custom = new Custombox.modal({
-        target: 'ajax.html',
-        effect: effects[Math.floor(Math.random() * effects.length)],
-        animation: [animation[Math.floor(Math.random() * animation.length)], animation[Math.floor(Math.random() * animation.length)]]
-      });
-
-      custom.open();
-      modals.push(custom);
-    } else {
-      modals[modals.length - 1].close();
-      modals.splice(modals.length - 1, 1);
-    }
-  }
-</script>
+    Un <div>div</div>
+    <div id="test" style="background: #fc5e5e; border: #fc5e5e solid 1px;">
+        <a href="javascript:void(0);" onclick="dynamicModal()">Open new modal</a>
+        julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>
+    </div>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    ulsa<br>
+    <script>
+      document.addEventListener("DOMContentLoaded", () =>  modal.open());
+      document.addEventListener("custombox:close", () =>  console.log('close'));
+    </script>
 </body>
 </html>

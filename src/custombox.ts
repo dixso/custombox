@@ -1,10 +1,11 @@
-import { Options } from './model';
+import { OptionsSchema } from './model';
 
 module Custombox {
   // Values
   const CB: string = 'custombox';
-  const O: string = `${CB}-open`;
-  const C: string = `${CB}-close`;
+  const OPEN: string = `${CB}-open`;
+  const CLOSE: string = `${CB}-close`;
+  const FROM: string = 'animateFrom';
   const positionValues: Array<string> = ['top', 'right', 'bottom', 'left'];
 
   // Effects
@@ -14,79 +15,80 @@ module Custombox {
   const together: Array<string> = ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale'];
   const perspective: Array<string> = ['letmein', 'makeway', 'slip'];
 
-  class Defaults {
-    private defaults: Options;
-
-    constructor(private options: Options) {
-      this.defaults = <Options>{};
-      this.defaults.target = null;
-
-      // Overlay
-      this.defaults.overlay = true;
-      this.defaults.overlaySpeed = 300;
-      this.defaults.overlayColor = '#000';
-      this.defaults.overlayOpacity = .5;
-      this.defaults.overlayClose = true;
-
-      // Container
-      this.defaults.container = null;
-
-      // Content
-      this.defaults.speed = 1000;
-      this.defaults.width = null;
-      this.defaults.animation = {
-        from: 'top',
-        to: 'top'
-      };
-      this.defaults.position = {
-        x: 'center',
-        y: 'center',
-      };
+  class Snippet {
+    static check(values: Array<string>, match: string): boolean {
+      return values.indexOf(match) > -1;
     }
+  }
 
-    // Public methods
-    assign(): Options {
-      return Object.assign(this.defaults, this.options);
+  class DefaultSchema implements OptionsSchema {
+    overlay = {
+      color: '#000',
+      opacity: .5,
+      close: true,
+      escKey: true,
+      speedIn: 300,
+      speedOut: 300,
+      onOpen: null,
+      onComplete: null,
+      onClose: null,
+      active: true,
+    };
+    content = {
+      target: null,
+      animateFrom: 'top',
+      animateTo: 'top',
+      positionX: 'center',
+      positionY: 'center',
+      width: null,
+      effect: 'fadein',
+      speedIn: 300,
+      speedOut: 300,
+      fullscreen: false,
+      onOpen: null,
+      onComplete: null,
+      onClose: null,
+    };
+    container = null;
+  }
+
+  class Options extends DefaultSchema {
+    constructor(options: OptionsSchema) {
+      super();
+
+      Object.keys(this).forEach((key: string) => {
+        if (options[key]) {
+          Object.assign(this[key], options[key]);
+        }
+      });
     }
   }
 
   class Container {
     element: HTMLElement;
 
-    constructor(private options: Options) {
+    constructor(private options: OptionsSchema) {
       if (document.readyState === 'loading') {
         throw new Error(`You need to instantiate Custombox when the document is fully loaded.`);
       }
 
-      let selector: any = document.querySelector(this.options.container);
+      const selector: any = document.querySelector(this.options.container);
       if (selector) {
         this.element = selector;
         this.addSimpleClass();
-      } else {
-        let scopes: NodeListOf<Element> = document.body.querySelectorAll(':scope > *');
-        let create: boolean = true;
+      } else if (!document.querySelector(`${CB}-container`)) {
+        this.element = document.createElement('div');
+        this.addSimpleClass();
 
-        for (let i = 0, t = scopes.length; i < t; i++) {
-          if (scopes[i].classList.contains(`${CB}-container`)) {
-            create = false;
-            break;
-          }
+        while (document.body.firstChild) {
+          this.element.appendChild(document.body.firstChild);
         }
-
-        if (create) {
-          this.element = document.createElement('div');
-          this.addSimpleClass();
-
-          while (document.body.firstChild) {
-            this.element.appendChild(document.body.firstChild);
-          }
-          document.body.appendChild(this.element);
-        }
+        document.body.appendChild(this.element);
       }
 
-      this.element.style.animationDuration = `${this.options.speed}ms`;
+      this.element.style.animationDuration = `${this.options.content.speedIn}ms`;
 
-      if (animationValues.indexOf(this.options.effect) > -1) {
+      if (Snippet.check(animationValues, this.options.content.effect)) {
         this.setAnimation();
       }
     }
@@ -94,15 +96,15 @@ module Custombox {
     // Public methods
     bind(method: string): Promise<Event> {
       switch (method) {
-        case C:
-          if (animationValues.indexOf(this.options.effect) > -1) {
-            this.setAnimation('to');
+        case CLOSE:
+          if (Snippet.check(animationValues, this.options.content.effect)) {
+            this.setAnimation('animateTo');
           }
-          this.element.classList.add(C);
-          this.element.classList.remove(O);
+          this.element.classList.add(CLOSE);
+          this.element.classList.remove(OPEN);
           break;
         default:
-          this.element.classList.add(O);
+          this.element.classList.add(OPEN);
           break
       }
 
@@ -112,7 +114,7 @@ module Custombox {
     }
 
     remove(): void {
-      this.element.classList.remove(C, `${CB}-${this.options.effect}`);
+      this.element.classList.remove(CLOSE, `${CB}-${this.options.content.effect}`);
       this.element.style.removeProperty('animation-duration');
     }
 
@@ -122,17 +124,17 @@ module Custombox {
     }
 
     private addSimpleClass(): void {
-      this.element.classList.add(`${CB}-container`, `${CB}-${this.options.effect}`);
+      this.element.classList.add(`${CB}-container`, `${CB}-${this.options.content.effect}`);
     }
 
-    private setAnimation(action: string = 'from'): void {
+    private setAnimation(action: string = FROM): void {
       for (let i = 0, t = positionValues.length; i < t; i++) {
         if (this.element.classList.contains(`${CB}-${positionValues[i]}`)) {
           this.element.classList.remove(`${CB}-${positionValues[i]}`);
         }
       }
 
-      this.element.classList.add(`${CB}-${this.options.animation[action]}`);
+      this.element.classList.add(`${CB}-${this.options.content[action]}`);
     }
   }
 
@@ -156,9 +158,9 @@ module Custombox {
 
     private style: HTMLStyleElement;
 
-    constructor(private options: Options) {
+    constructor(private options: OptionsSchema) {
       this.element = document.createElement('div');
-      this.element.style.backgroundColor = this.options.overlayColor;
+      this.element.style.backgroundColor = this.options.overlay.color;
       this.element.classList.add(`${CB}-overlay`);
       this.setAnimation();
     }
@@ -166,26 +168,23 @@ module Custombox {
     // Public methods
     bind(method: string): Promise<Event> {
       switch (method) {
-        case C:
-          if (overlayValues.indexOf(this.options.effect) > -1) {
-            this.toggleAnimation('to');
+        case CLOSE:
+          if (Snippet.check(overlayValues, this.options.content.effect)) {
+            this.toggleAnimation('animateTo');
           }
-          this.element.classList.add(C);
-          this.element.classList.remove(O);
+          this.element.classList.add(CLOSE);
+          this.element.classList.remove(OPEN);
           break;
         default:
           // Append
           document.body.appendChild(this.element);
 
           // Initialization
-          this.element.classList.add(`${CB}-${this.options.effect}`, O);
+          this.element.classList.add(`${CB}-${this.options.content.effect}`, OPEN);
           break
       }
 
-      return new Promise((resolve: Function) => {
-
-        this.listener().then(()=> resolve());
-      });
+      return new Promise((resolve: Function) => this.listener().then(()=> resolve()));
     }
 
     remove(): void {
@@ -210,55 +209,60 @@ module Custombox {
 
     private setAnimation(): void {
       let sheet: any = this.createSheet();
-      if (overlayValues.indexOf(this.options.effect) > -1) {
-        this.element.style.opacity = this.options.overlayOpacity.toString();
-        this.element.style.animationDuration = `${this.options.overlaySpeed}ms`;
+      if (Snippet.check(overlayValues, this.options.content.effect)) {
+        this.element.style.opacity = this.options.overlay.opacity.toString();
+        this.element.style.animationDuration = `${this.options.overlay.speedIn}ms`;
         this.toggleAnimation();
       } else {
-        sheet.insertRule(`.${CB}-overlay { animation: CloseFade ${this.options.overlaySpeed}ms; }`, 0);
-        sheet.insertRule(`.${O}.${CB}-overlay { animation: OpenFade ${this.options.overlaySpeed}ms; opacity: ${this.options.overlayOpacity} }`, 0);
-        sheet.insertRule(`@keyframes OpenFade { from {opacity: 0} to {opacity: ${this.options.overlayOpacity}} }`, 0);
-        sheet.insertRule(`@keyframes CloseFade { from {opacity: ${this.options.overlayOpacity}} to {opacity: 0} }`, 0);
+        sheet.insertRule(`.${CB}-overlay { animation: CloseFade ${this.options.overlay.speedIn}ms; }`, 0);
+        sheet.insertRule(`.${OPEN}.${CB}-overlay { animation: OpenFade ${this.options.overlay.speedIn}ms; opacity: ${this.options.overlay.opacity} }`, 0);
+        sheet.insertRule(`@keyframes OpenFade { from {opacity: 0} to {opacity: ${this.options.overlay.opacity}} }`, 0);
+        sheet.insertRule(`@keyframes CloseFade { from {opacity: ${this.options.overlay.opacity}} to {opacity: 0} }`, 0);
       }
 
-      if (together.indexOf(this.options.effect) > -1) {
-        let duration: number;
-        if (together.indexOf(this.options.effect) === -1) {
-          duration = this.options.overlaySpeed;
-        } else {
-          duration = this.options.speed;
+      if (Snippet.check(together, this.options.content.effect)) {
+        let duration: number = this.options.overlay.speedIn;
+        if (Snippet.check(together, this.options.content.effect)) {
+          duration = this.options.content.speedIn;
         }
 
         this.element.style.animationDuration = `${duration}ms`;
       }
     }
 
-    private toggleAnimation(action: string = 'from'): void {
+    private toggleAnimation(action: string = FROM): void {
       for (let i = 0, t = positionValues.length; i < t; i++) {
         if (this.element.classList.contains(`${CB}-${positionValues[i]}`)) {
           this.element.classList.remove(`${CB}-${positionValues[i]}`);
         }
       }
-      this.element.classList.add(`${CB}-${this.options.animation[action]}`);
+      this.element.classList.add(`${CB}-${this.options.content[action]}`);
     }
   }
 
   class Content {
     element: HTMLElement;
 
-    constructor(private options: Options, delay: number) {
+    constructor(private options: OptionsSchema) {
       this.element = document.createElement('div');
-      this.element.style.animationDuration = `${this.options.speed}ms`;
+      this.element.style.animationDuration = `${this.options.content.speedIn}ms`;
+
+      let delay: number = 0;
+      if (this.options.overlay.active && !Snippet.check(together, this.options.content.effect)) {
+        delay = this.options.overlay.speedIn / 2;
+      }
+
       this.element.style.animationDelay = `${delay}ms`;
       this.element.classList.add(`${CB}-content`);
 
-      if (this.options.fullscreen) {
+      // Check fullscreen
+      if (this.options.content.fullscreen) {
         this.element.classList.add(`${CB}-fullscreen`);
       } else {
         this.setPosition();
       }
 
-      if (animationValues.indexOf(this.options.effect) > -1) {
+      if (Snippet.check(animationValues, this.options.content.effect)) {
         this.setAnimation();
       }
     }
@@ -266,7 +270,7 @@ module Custombox {
     // Public methods
     fetch(target: string, width: string): Promise<any> {
       return new Promise((resolve: Function, reject: Function) => {
-        let selector: Element = document.querySelector(target);
+        const selector: Element = document.querySelector(target);
 
         if (selector) {
           let element: HTMLElement = <HTMLElement>selector.cloneNode(true);
@@ -279,10 +283,9 @@ module Custombox {
           this.element.appendChild(element);
           resolve();
         } else if (target.charAt(0) !== '#' && target.charAt(0) !== '.') {
-          let url: string = target;
-          let req: XMLHttpRequest = new XMLHttpRequest();
+          const req: XMLHttpRequest = new XMLHttpRequest();
 
-          req.open('GET', url);
+          req.open('GET', target);
           req.onload = () => {
             if (req.status === 200) {
               this.element.insertAdjacentHTML('beforeend', req.response);
@@ -306,12 +309,12 @@ module Custombox {
 
     bind(method: string): Promise<Event> {
       switch (method) {
-        case C:
+        case CLOSE:
           return new Promise((resolve: Function) => {
             this.element.style.animationDelay = '0ms';
-            this.element.classList.remove(O);
-            this.element.classList.add(C);
-            this.setAnimation('to');
+            this.element.classList.remove(OPEN);
+            this.element.classList.add(CLOSE);
+            this.setAnimation('animateTo');
             this.listener().then(()=> resolve());
           });
         default:
@@ -319,10 +322,10 @@ module Custombox {
           document.body.appendChild(this.element);
 
           // Initialization
-          this.element.classList.add(`${CB}-${this.options.effect}`);
+          this.element.classList.add(`${CB}-${this.options.content.effect}`);
 
           return new Promise((resolve: Function) => {
-            this.element.classList.add(O);
+            this.element.classList.add(OPEN);
             this.listener().then(()=> resolve());
           });
       }
@@ -340,79 +343,74 @@ module Custombox {
     }
 
     private setPosition(): void {
-      for (let key of Object.keys(this.options.position)) {
-        this.element.classList.add(`${CB}-${key}-${this.options.position[key]}`);
-      }
+      this.element.classList.add(`${CB}-x-${this.options.content.positionX}`, `${CB}-y-${this.options.content.positionY}`);
     }
 
-    private setAnimation(action: string = 'from'): void {
+    private setAnimation(action: string = FROM): void {
       for (let i = 0, t = positionValues.length; i < t; i++) {
         if (this.element.classList.contains(`${CB}-${positionValues[i]}`)) {
           this.element.classList.remove(`${CB}-${positionValues[i]}`);
         }
       }
 
-      this.element.classList.add(`${CB}-${this.options.animation[action]}`);
+      this.element.classList.add(`${CB}-${this.options.content[action]}`);
     }
   }
 
   export class modal {
-    private options: Options;
+    private options: OptionsSchema;
     private container: Container;
     private content: Content;
     private overlay: Overlay;
     private scroll: Scroll;
+    private action: EventListenerOrEventListenerObject = (event: KeyboardEvent) => {
+      if (event.keyCode === 27) {
+        this.close();
+      }
+    };
 
-    constructor(options: Options) {
-      let defaults: Defaults = new Defaults(options);
-      this.options = defaults.assign();
+    constructor(options: OptionsSchema) {
+      this.options = new Options(options);
 
       // Create container
-      if (containerValues.indexOf(this.options.effect) > -1) {
+      if (Snippet.check(containerValues, this.options.content.effect)) {
         this.container = new Container(this.options);
       }
 
       // Create overlay
-      let delay: number = 0;
-      if (this.options.overlay) {
+      if (this.options.overlay.active) {
         this.overlay = new Overlay(this.options);
-        if (together.indexOf(this.options.effect) === -1) {
-          delay = this.options.overlaySpeed / 2;
-        }
       }
 
       // Create content
-      this.content = new Content(this.options, delay);
+      this.content = new Content(this.options);
     }
 
     // Public methods
     open(): void {
-      let win = window.innerHeight;
-      let body = document.body.offsetHeight;
-      let total = body - win;
       this.content
-        .fetch(this.options.target, this.options.width)
+        .fetch(this.options.content.target, this.options.content.width)
         .then(() => {
           // Scroll
-          if (perspective.indexOf(this.options.effect) > -1) {
+          if (Snippet.check(perspective, this.options.content.effect)) {
             this.scroll = new Scroll();
           }
 
           // Overlay
-          if (this.options.overlay) {
-            this.overlay.bind(O);
+          if (this.options.overlay.active) {
+            this.overlay.bind(OPEN);
           }
 
           // Container
           if (this.container) {
-            this.container.bind(O);
+            this.container.bind(OPEN);
           }
 
           // Content
-          this.content.bind(O).then(() => this.dispatchEvent('complete'));
+          this.content.bind(OPEN).then(() => this.dispatchEvent('complete'));
 
           // Dispatch event
-          this.dispatchEvent(O);
+          this.dispatchEvent('open');
 
           // Listeners
           this.listeners();
@@ -424,30 +422,37 @@ module Custombox {
 
     close(): void {
       let close: Promise<void>[] = [
-        this.content.bind(C).then(() => this.content.remove()),
+        this.content.bind(CLOSE).then(() => this.content.remove()),
       ];
 
-      if (this.options.overlay) {
-        close.push(this.overlay.bind(C).then(() => {
+      if (this.options.overlay.active) {
+        close.push(this.overlay.bind(CLOSE).then(() => {
           if (this.scroll) {
             this.scroll.remove();
           }
-          this.overlay.remove()
+
+          this.overlay.remove();
         }));
       }
 
       if (this.container) {
-        close.push(this.container.bind(C).then(() => this.container.remove()));
+        close.push(this.container.bind(CLOSE).then(() => this.container.remove()));
       }
 
       Promise
         .all(close)
-        .then(() => this.dispatchEvent(C));
+        .then(() => {
+          if (this.options.overlay.escKey) {
+            document.removeEventListener('keydown', this.action, true);
+          }
+
+          this.dispatchEvent('close');
+        });
     }
 
     // Private methods
     private dispatchEvent(type: string): void {
-      let event = new Event(`${CB}:${type}`);
+      const event: Event = new Event(`${CB}:${type}`);
       document.dispatchEvent(event);
 
       try {
@@ -456,13 +461,11 @@ module Custombox {
     }
 
     private listeners(): void {
-      document.addEventListener('keydown', (event: KeyboardEvent) => {
-        if (event.keyCode === 27) {
-          this.close();
-        }
-      }, true);
+      if (this.options.overlay.escKey) {
+        document.addEventListener('keydown', this.action, true);
+      }
 
-      if (this.options.overlay) {
+      if (this.options.overlay.active) {
         this.overlay.element.addEventListener('click', () => this.close(), true);
       }
     }

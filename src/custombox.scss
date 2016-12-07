@@ -83,7 +83,6 @@ $effect23: #{$cb}-flash;
   flex-wrap: nowrap;
   align-items: center;
   align-content: stretch;
-  pointer-events: none;
 }
 .#{$content} {
   > * {
