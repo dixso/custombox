@@ -120,6 +120,12 @@ $effect23: #{$cb}-flash;
   height: 100%;
   overflow: hidden;
 }
+.#{$perspective} {
+  .#{$container} {
+    overflow: hidden;
+    height: 100%;
+  }
+}
 
 /*
  ----------------------------
@@ -354,8 +360,6 @@ $effect23: #{$cb}-flash;
   }
 }
 .#{$effect4} {
-  perspective: 1300px;
-
   &.#{$content} {
     opacity: 0;
 
@@ -402,8 +406,6 @@ $effect23: #{$cb}-flash;
   }
 }
 .#{$effect5} {
-  perspective: 1300px;
-
   &.#{$content} {
     opacity: 0;
 
@@ -662,7 +664,6 @@ $effect23: #{$cb}-flash;
   }
 }
 .#{$effect7} {
-  perspective: 1300px;
   &.#{$content} {
     opacity: 0;
     &.#{$open} {
@@ -971,7 +972,6 @@ $effect23: #{$cb}-flash;
         @include animation(letmeinRightOverlay, ease-in);
       }
     }
-
     &.#{$close} {
       &.#{$t} {
         @include animation(letmeinOutTopOverlay, ease-out);
@@ -1178,7 +1178,6 @@ $effect23: #{$cb}-flash;
         @include animation(slipRightOverlay, ease-in-out);
       }
     }
-
     &.#{$close} {
       &.#{$t} {
         @include animation(slipOutTopOverlay, ease-in-out);
@@ -1194,34 +1193,34 @@ $effect23: #{$cb}-flash;
       }
     }
   }
-}
-.#{$container} {
-  &.#{$open} {
-    &.#{$t} {
-      @include animation(slipTopOverlay, ease-in-out);
+  &.#{$container} {
+    &.#{$open} {
+      &.#{$t} {
+        @include animation(slipTopOverlay, ease-in-out);
+      }
+      &.#{$b} {
+        @include animation(slipBottomOverlay, ease-in-out);
+      }
+      &.#{$l} {
+        @include animation(slipLeftOverlay, ease-in-out);
+      }
+      &.#{$r} {
+        @include animation(slipRightOverlay, ease-in-out);
+      }
     }
-    &.#{$b} {
-      @include animation(slipBottomOverlay, ease-in-out);
-    }
-    &.#{$l} {
-      @include animation(slipLeftOverlay, ease-in-out);
-    }
-    &.#{$r} {
-      @include animation(slipRightOverlay, ease-in-out);
-    }
-  }
-  &.#{$close} {
-    &.#{$t} {
-      @include animation(slipOutTopOverlay, ease-in-out);
-    }
-    &.#{$b} {
-      @include animation(slipOutBottomOverlay, ease-in-out);
-    }
-    &.#{$l} {
-      @include animation(slipOutLeftOverlay, ease-in-out);
-    }
-    &.#{$r} {
-      @include animation(slipOutRightOverlay, ease-in-out);
+    &.#{$close} {
+      &.#{$t} {
+        @include animation(slipOutTopOverlay, ease-in-out);
+      }
+      &.#{$b} {
+        @include animation(slipOutBottomOverlay, ease-in-out);
+      }
+      &.#{$l} {
+        @include animation(slipOutLeftOverlay, ease-in-out);
+      }
+      &.#{$r} {
+        @include animation(slipOutRightOverlay, ease-in-out);
+      }
     }
   }
 }

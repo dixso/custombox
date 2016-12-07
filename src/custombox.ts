@@ -13,7 +13,7 @@ module Custombox {
   const containerValues: Array<string> = ['blur', 'makeway', 'slip', 'push', 'contentscale'];
   const overlayValues: Array<string> = ['letmein', 'makeway', 'slip', 'corner', 'slidetogether', 'door', 'push', 'contentscale'];
   const together: Array<string> = ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale'];
-  const perspective: Array<string> = ['letmein', 'makeway', 'slip'];
+  const perspective: Array<string> = ['fall', 'sidefall', 'flip', 'sign', 'slit', 'letmein', 'makeway', 'slip'];
 
   class Snippet {
     static check(values: Array<string>, match: string): boolean {
