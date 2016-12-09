@@ -134,19 +134,14 @@ module Custombox {
 
     // Public methods
     bind(method: string): Promise<Event> {
-      switch (method) {
-        case CLOSE:
-          if (Snippet.check(animationValues, this.options.content.effect)) {
-            this.setAnimation('animateTo');
-          }
-          this.element.classList.add(CLOSE);
-          this.element.classList.remove(OPEN);
-          break;
-        default:
-          this.element.classList.add(OPEN);
-          break;
+      if (method === 'close') {
+        if (Snippet.check(animationValues, this.options.content.effect)) {
+          this.setAnimation('animateTo');
+        }
+        this.element.classList.remove(OPEN);
       }
 
+      this.element.classList.add(method);
       return new Promise((resolve: Function) => this.listener().then(() => resolve()));
     }
 
@@ -283,7 +278,7 @@ module Custombox {
       if (this.options.content.fullscreen) {
         this.element.classList.add(`${CB}-fullscreen`);
       } else {
-        this.setPosition();
+        this.element.classList.add(`${CB}-x-${this.options.content.positionX}`, `${CB}-y-${this.options.content.positionY}`);
       }
 
       if (Snippet.check(animationValues, this.options.content.effect)) {
@@ -361,10 +356,6 @@ module Custombox {
     // Private methods
     private listener(): Promise<Event> {
       return new Promise((resolve: Function) => this.element.addEventListener('animationend', () => resolve(), true));
-    }
-
-    private setPosition(): void {
-      this.element.classList.add(`${CB}-x-${this.options.content.positionX}`, `${CB}-y-${this.options.content.positionY}`);
     }
 
     private setAnimation(action: string = FROM): void {
