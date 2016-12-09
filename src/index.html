@@ -23,7 +23,8 @@
     Un <div>div</div>
     <div id="test">
         <a href="javascript:void(0);" onclick="dynamicModal()">Open new modal</a>
-        julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>julio<br>
+        <a href="javascript:void(0);" onclick="closea()">CLOSE</a><br>
+        julio<br>julio<br>julio<br>
     </div>
     ulsa<br>
     ulsa<br>
@@ -55,29 +56,34 @@
     ulsa<br>
     ulsa<br>
     <script>
-      document.addEventListener("DOMContentLoaded", () =>  {
+      document.addEventListener('DOMContentLoaded', () =>  {
         new Custombox.modal({
-//          overlay: {
-//            speedIn: 10000,
-//            speedOut: 3000,
-//            onOpen: () => console.info('onOpen'),
-//            onComplete: () => console.info('onComplete'),
-//            onClose: () => console.info('onClose')
-//          },
           content: {
-            effect: 'letmein',
-//            effect: 'makeway',
+            id: 'foo',
+            effect: 'fadein',
             target: 'ajax.html',
-//            positionX: 'center',
-//            positionY: 'center',
-//            speedOut: 3000,
-//            onOpen: () => console.log('onOpen'),
-//            onComplete: () => console.log('onComplete'),
-//            onClose: () => console.log('onClose')
           },
-        }).open()
+        }).open();
       });
+
       document.addEventListener("custombox:close", () =>  console.log('close'));
+
+      function lol() {
+        new Custombox.modal({
+          content: {
+            effect: 'slide',
+            target: 'ajax.html',
+          },
+        }).open();
+      }
+
+      function closea() {
+        Custombox.action.close();
+      }
+
+      function closeAll() {
+        Custombox.action.closeAll();
+      }
     </script>
 </body>
 </html>

@@ -15,6 +15,28 @@ module Custombox {
   const together: Array<string> = ['corner', 'slidetogether', 'scale', 'door', 'push', 'contentscale'];
   const perspective: Array<string> = ['fall', 'sidefall', 'flip', 'sign', 'slit', 'letmein', 'makeway', 'slip'];
 
+  export class action {
+    static close(id?: string): void {
+      const event: Event = new Event(`${CB}:close`);
+      let elements: NodeListOf<Element> = document.querySelectorAll(`.${CB}-content`);
+
+      if (id) {
+        elements = document.querySelectorAll(`#${CB}-${id}`);
+      }
+
+      elements[elements.length - 1].dispatchEvent(event);
+    }
+    static closeAll(): void {
+      const event: Event = new Event(`${CB}:close`);
+      const elements: NodeListOf<Element> = document.querySelectorAll(`.${CB}-content`);
+      const t = elements.length;
+
+      for (let i = 0; i < t; i++) {
+        elements[i].dispatchEvent(event);
+      }
+    }
+  }
+
   class Snippet {
     static check(values: Array<string>, match: string): boolean {
       return values.indexOf(match) > -1;
@@ -50,6 +72,7 @@ module Custombox {
       active: true,
     };
     content = {
+      id: null,
       target: null,
       animateFrom: 'top',
       animateTo: 'top',
@@ -246,6 +269,10 @@ module Custombox {
       this.element = document.createElement('div');
       this.element.style.animationDuration = `${this.options.content.speedIn}ms`;
 
+      if (this.options.content.id) {
+        this.element.setAttribute('id', `${CB}-${this.options.content.id}`);
+      }
+
       if (!Snippet.check(together, this.options.content.effect)) {
         this.element.style.animationDelay = `${this.options.content.delay}ms`;
       }
@@ -415,7 +442,7 @@ module Custombox {
         });
     }
 
-    close(): void {
+    private close(): void {
       let close: Promise<void>[] = [
         this.content.bind(CLOSE).then(() => this.content.remove()),
       ];
@@ -475,6 +502,10 @@ module Custombox {
         if (event.target === this.content.element) {
           this.close();
         }
+      }, true);
+
+      this.content.element.addEventListener(`${CB}:close`, () => {
+        this.close();
       }, true);
     }
   }

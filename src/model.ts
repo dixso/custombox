@@ -22,6 +22,7 @@ interface Content extends Speed, Callback {
   effect: string;
   fullscreen: boolean;
   delay: number;
+  id: string;
 }
 
 interface Speed {
