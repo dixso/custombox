@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es5",
     "module": "commonjs",
     "noImplicitAny": false,
-    "removeComments": true,
-    "preserveConstEnums": true,
-    "sourceMap": true
+    "target": "ES6",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "types" : [
+      "jasmine"
+    ]
   },
   "compileOnSave": true,
   "include": [

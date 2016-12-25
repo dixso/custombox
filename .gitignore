@@ -1,6 +1,7 @@
-.idea
-node_modules/
-.DS_Store
 src/*.css
 src/*.map
 src/*.js
+.idea
+.DS_Store
+node_modules/
+coverage/

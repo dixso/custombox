@@ -4,7 +4,7 @@
   "description": "Window modal effects with transitions CSS3",
   "main": "Gruntfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "karma start karma.conf.js",
     "start": "grunt browserSync"
   },
   "repository": {
@@ -22,9 +22,17 @@
   "homepage": "http://dixso.github.io/custombox/",
   "devDependencies": {
     "@types/core-js": "^0.9.34",
+    "@types/jasmine": "^2.5.38",
     "grunt": "^1.0.1",
     "grunt-browser-sync": "^2.2.0",
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.3.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-cli": "^1.0.1",
+    "karma-jasmine": "^1.1.0",
+    "karma-typescript": "^2.1.5",
     "matchdep": "^1.0.1",
-    "time-grunt": "^1.4.0"
+    "time-grunt": "^1.4.0",
+    "typescript": "^2.1.4"
   }
 }

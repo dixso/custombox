@@ -17,9 +17,6 @@
     </style>
 </head>
 <body>
-
-    <!--<div id="paco" class="custombox-content custombox-x-center custombox-y-center custombox-fadein custombox-open">LOLO</div>-->
-
     Un <div>div</div>
     <div id="test">
         <a href="javascript:void(0);" onclick="dynamicModal()">Open new modal</a>
@@ -79,7 +76,7 @@
       }
 
       function closea() {
-        Custombox.action.close();
+        Custombox.action.close('foo');
       }
 
       function closeAll() {

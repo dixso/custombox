@@ -1,6 +1,42 @@
-import { OptionsSchema } from './model';
+namespace Custombox {
+  interface OptionsSchema {
+    overlay: OverlaySchema;
+    content: ContentSchema;
+    container: string;
+  }
 
-module Custombox {
+  interface OverlaySchema extends Speed, Callback {
+    color: string;
+    opacity: number;
+    close: boolean;
+    escKey: boolean;
+    active: boolean;
+  }
+
+  interface ContentSchema extends Speed, Callback {
+    target: string;
+    animateFrom: string;
+    animateTo: string;
+    positionX: string;
+    positionY: string;
+    width: string;
+    effect: string;
+    fullscreen: boolean;
+    delay: number;
+    id: string;
+  }
+
+  interface Speed {
+    speedIn: number;
+    speedOut: number;
+  }
+
+  interface Callback {
+    onOpen: Function;
+    onComplete: Function;
+    onClose: Function;
+  }
+
   // Values
   const CB: string = 'custombox';
   const OPEN: string = `${CB}-open`;
@@ -26,6 +62,7 @@ module Custombox {
 
       elements[elements.length - 1].dispatchEvent(event);
     }
+
     static closeAll(): void {
       const event: Event = new Event(`${CB}:close`);
       const elements: NodeListOf<Element> = document.querySelectorAll(`.${CB}-content`);
