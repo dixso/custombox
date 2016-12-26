@@ -4,8 +4,9 @@
   "description": "Window modal effects with transitions CSS3",
   "main": "Gruntfile.js",
   "scripts": {
-    "test": "karma start karma.conf.js",
-    "start": "grunt browserSync"
+    "start": "grunt browserSync",
+    "test": "karma start karma.conf.js --single-run",
+    "watch:test": "karma start karma.conf.js"
   },
   "repository": {
     "type": "git",
