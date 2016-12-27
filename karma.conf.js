@@ -5,15 +5,22 @@ module.exports = function(config) {
 
     files: [
       {
+        pattern: 'https://cdnjs.cloudflare.com/ajax/libs/jasmine-ajax/3.3.1/mock-ajax.min.js'
+      },
+      {
+        pattern: 'src/*.scss'
+      },
+      {
         pattern: 'src/*.ts'
       }
     ],
 
     preprocessors: {
-      '**/*.ts': ['karma-typescript']
+      'src/*.ts': ['karma-typescript'],
+      'src/*.scss': ['scss'],
     },
 
-    reporters: ['dots', 'karma-typescript'],
+    reporters: ['mocha', 'karma-typescript'],
 
     coverageReporter: {
       type: 'lcov',

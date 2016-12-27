@@ -58,9 +58,13 @@
           content: {
             id: 'foo',
             fullscreen: true,
-            effect: 'fadein',
+            effect: 'slidea',
             target: 'ajax.html',
           },
+          overlay: {
+            color: '#F00',
+            opacity: 0.2
+          }
         }).open();
       });
 
@@ -76,11 +80,11 @@
       }
 
       function closea() {
-        Custombox.action.close('foo');
+        Custombox.modal.close('foo');
       }
 
       function closeAll() {
-        Custombox.action.closeAll();
+        Custombox.modal.closeAll();
       }
     </script>
 </body>
