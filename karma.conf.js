@@ -13,7 +13,7 @@ module.exports = function(config) {
       '**/*.ts': ['karma-typescript']
     },
 
-    reporters: ['progress', 'karma-typescript'],
+    reporters: ['dots', 'karma-typescript'],
 
     coverageReporter: {
       type: 'lcov',
