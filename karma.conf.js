@@ -1,40 +1,31 @@
 module.exports = function(config) {
-  config.set({
+  let configuration = {
 
-    frameworks: ["jasmine", "karma-typescript"],
+    frameworks: ['jasmine', 'karma-typescript'],
 
     files: [
       {
-        pattern: "src/*.ts"
+        pattern: 'src/*.ts'
       }
     ],
 
     preprocessors: {
-      "**/*.ts": ["karma-typescript"]
+      '**/*.ts': ['karma-typescript']
     },
 
-    reporters: ["progress", "karma-typescript"],
+    reporters: ['progress', 'karma-typescript'],
 
-    // Uncomment below if you want the default html
-    // coverage report + a summary on the console
-    /*
-     karmaTypescriptConfig: {
-     reports:
-     {
-     "html": "coverage",
-     "text-summary": "" // destination "" will redirect output to the console
-     }
-     },
-     //*/
+    coverageReporter: {
+      type: 'lcov',
+      dir: 'coverage/'
+    },
 
-    // Uncomment below if you want to disable code coverage
-    // instrumentation during debugging of tests
-    /*
-     karmaTypescriptConfig: {
-     disableCodeCoverageInstrumentation: true
-     },
-     //*/
+    browsers: ['Chrome']
+  };
 
-    browsers: ["Chrome"]
-  });
+  if (process.env.TRAVIS){
+    configuration.reporters.push('coverage', 'coveralls');
+  }
+
+  config.set(configuration);
 };
