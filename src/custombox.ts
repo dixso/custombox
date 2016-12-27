@@ -2,7 +2,7 @@ namespace Custombox {
   interface OptionsSchema {
     overlay: OverlaySchema;
     content: ContentSchema;
-    container: string;
+    container: ContainerSchema;
   }
 
   interface OverlaySchema extends Speed, Callback {
@@ -24,6 +24,10 @@ namespace Custombox {
     fullscreen: boolean;
     delay: number;
     id: string;
+  }
+
+  interface ContainerSchema {
+    target: string;
   }
 
   interface Speed {
@@ -102,7 +106,9 @@ namespace Custombox {
       onComplete: null,
       onClose: null,
     };
-    container = null;
+    container = {
+      target: null
+    };
   }
 
   class Options extends DefaultSchema {
@@ -125,7 +131,7 @@ namespace Custombox {
         throw new Error(`You need to instantiate Custombox when the document is fully loaded.`);
       }
 
-      const selector: any = document.querySelector(this.options.container);
+      const selector: any = document.querySelector(this.options.container.target);
       if (selector) {
         this.element = selector;
         this.addSimpleClass();

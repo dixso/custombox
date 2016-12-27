@@ -620,4 +620,88 @@ describe('Custombox', () => {
       }, 1000);
     });
   });
+
+  describe('Container', () => {
+    let originalTimeout;
+    beforeEach(() => {
+      originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+    });
+
+    beforeEach(() => {
+      for (let i = 1; i < 3; i++) {
+        let div = document.createElement('div');
+        div.innerHTML = `Lorem ipmsum (${i}) ...`;
+        div.setAttribute('id', `foo-${i}`);
+        document.body.appendChild(div);
+      }
+
+      let container = document.createElement('div');
+      container.setAttribute('id', 'container');
+      while (document.body.firstChild) {
+        container.appendChild(document.body.firstChild);
+      }
+      document.body.appendChild(container);
+    });
+
+    beforeEach(() => {
+      (jasmine as any).Ajax.install();
+    });
+
+    afterEach(()=> {
+      for (let i = 1; i < 3; i++) {
+        let elem = document.getElementById(`foo-${i}`);
+        elem.parentNode.removeChild(elem);
+      }
+
+      // custombox-content
+      let contents = document.querySelectorAll('.custombox-content');
+      for (let i = 0, t = contents.length; i < t; i++) {
+        contents[i].parentNode.removeChild(contents[i]);
+      }
+
+      // custombox-overlay
+      let overlays = document.querySelectorAll('.custombox-overlay');
+      for (let i = 0, t = overlays.length; i < t; i++) {
+        overlays[i].parentNode.removeChild(overlays[i]);
+      }
+
+      delete Custombox;
+
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+
+      (jasmine as any).Ajax.uninstall();
+    });
+
+    it('should have put a container selector', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'makeway',
+          target: '#foo-1',
+        },
+        container: {
+          target: '#container'
+        }
+      }).open();
+
+      setTimeout(() => {
+        expect(hasElement('#container.custombox-container')).toBe(true);
+        done();
+      }, 200);
+    });
+
+    it('should have put a container automatically', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'makeway',
+          target: '#foo-1',
+        },
+      }).open();
+
+      setTimeout(() => {
+        expect(hasElement('.custombox-container')).toBe(true);
+        done();
+      }, 200);
+    });
+  });
 });
