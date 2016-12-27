@@ -69,7 +69,7 @@ describe('Custombox', () => {
     });
 
     setTimeout(() => {
-      Custombox.action.close();
+      Custombox.modal.close();
       expect(haveElement('.custombox-open')).toBe(false);
       expect(haveElement('.custombox-close')).toBe(true);
       done();
@@ -92,7 +92,7 @@ describe('Custombox', () => {
 
     setTimeout(() => {
       expect(haveElement(`#custombox-${ID}`)).toBe(true);
-      Custombox.action.close(ID);
+      Custombox.modal.close(ID);
       expect(haveElement('.custombox-close')).toBe(true);
       done();
     }, 200);
