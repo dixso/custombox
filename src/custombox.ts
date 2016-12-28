@@ -309,17 +309,17 @@ namespace Custombox {
     // Public methods
     fetch(target: string, width: string): Promise<any> {
       return new Promise((resolve: Function, reject: Function) => {
-        const selector: Element = document.querySelector(target);
+        // Youtube
+        const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        let match = target.match(regExp);
 
-        if (selector) {
-          let element: HTMLElement = <HTMLElement>selector.cloneNode(true);
-          element.removeAttribute('id');
+        if (match && match[2].length == 11) {
+          let frame = document.createElement('iframe');
+          frame.setAttribute('src', `https://www.youtube.com/embed/${match[2]}`);
+          frame.setAttribute('frameborder', '0');
+          frame.setAttribute('allowfullscreen', '');
+          this.element.appendChild(frame);
 
-          if (width) {
-            element.style.flexBasis = width;
-          }
-
-          this.element.appendChild(element);
           resolve();
         } else if (target.charAt(0) !== '#' && target.charAt(0) !== '.') {
           const req: XMLHttpRequest = new XMLHttpRequest();
@@ -333,15 +333,32 @@ namespace Custombox {
                 let child: any = this.element.firstChild;
                 child.style.flexBasis = width;
               }
+
               resolve();
             } else {
               reject(new Error(req.statusText));
             }
           };
+
           req.onerror = () => reject(new Error('Network error'));
           req.send();
         } else {
-          reject(new Error(`The element doesn't exist`));
+          // Selector
+          const selector: Element = document.querySelector(target);
+          if (selector) {
+            let element: HTMLElement = <HTMLElement>selector.cloneNode(true);
+            element.removeAttribute('id');
+
+            if (width) {
+              element.style.flexBasis = width;
+            }
+
+            this.element.appendChild(element);
+
+            resolve();
+          } else {
+            reject(new Error(`The element doesn't exist`));
+          }
         }
       });
     }

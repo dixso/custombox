@@ -457,7 +457,23 @@ describe('Custombox', () => {
       }, 200);
     });
 
-    it('should have open from AJAX', (done) => {
+    it('should open from AJAX', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: 'https://youtu.be/clW7aV0vVAY',
+        },
+      }).open();
+
+      setTimeout(() => {
+        expect(hasElement('.custombox-content > iframe')).toBe(true);
+        let frame = document.querySelector('.custombox-content > iframe');
+        expect(frame.getAttribute('src')).toEqual('https://www.youtube.com/embed/clW7aV0vVAY');
+        done();
+      }, 200);
+    });
+
+    it('should open from youtube', (done) => {
       new (Custombox as any).modal({
         content: {
           effect: 'fadein',
