@@ -1,33 +1,32 @@
 {
   "name": "custombox",
-  "version": "4.0.0-alpha.1",
-  "description": "Window modal effects with transitions CSS3",
-  "main": "Gruntfile.js",
-  "scripts": {
-    "start": "grunt browserSync",
-    "test": "npm run lint && karma start karma.conf.js --single-run",
-    "watch:test": "karma start karma.conf.js",
-    "lint": "npm run tslint \"src/**/*.ts\"",
-    "tslint": "tslint"
+  "description": "Modal dialog effects with transitions CSS3",
+  "version": "3.0.2",
+  "author": {
+    "name": "Julio de la Calle",
+    "email": "juliodlcp@gmail.com",
+    "url": "https://www.linkedin.com/in/juliodelacalle"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://dixso@github.com/dixso/custombox.git"
-  },
-  "keywords": [
-    "css3"
-  ],
-  "author": "Julio de la Calle <juliodlcp@gmail.com>",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dixso/custombox/issues"
   },
-  "homepage": "http://dixso.github.io/custombox/",
   "devDependencies": {
     "@types/core-js": "^0.9.34",
     "@types/jasmine": "^2.5.38",
+    "babel-polyfill": "^6.20.0",
+    "babel-preset-es2015": "^6.18.0",
+    "custom-event-polyfill": "^0.3.0",
     "grunt": "^1.0.1",
+    "grunt-autoprefixer": "^3.0.4",
+    "grunt-babel": "^6.0.0",
+    "grunt-banner": "^0.6.0",
     "grunt-browser-sync": "^2.2.0",
+    "grunt-bump": "^0.8.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-cssmin": "^1.0.2",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-fixpack": "^0.1.0",
     "jasmine-core": "^2.5.2",
     "karma": "^1.3.0",
     "karma-chrome-launcher": "^2.0.0",
@@ -38,9 +37,34 @@
     "karma-scss-preprocessor": "^2.0.0",
     "karma-typescript": "^2.1.5",
     "matchdep": "^1.0.1",
-    "node-sass": "^4.1.1",
+    "node-sass": "^3.13.1",
     "time-grunt": "^1.4.0",
     "tslint": "^4.2.0",
     "typescript": "^2.1.4"
+  },
+  "homepage": "https://dixso.github.io/custombox/",
+  "keywords": [
+    "animations",
+    "css3",
+    "dialog",
+    "flexbox",
+    "lightbox",
+    "modal",
+    "popup",
+    "responsive",
+    "window"
+  ],
+  "license": "MIT",
+  "main": "./dist/custombox.min.js",
+  "repository": {
+    "type": "git",
+    "url": "https://dixso@github.com/dixso/custombox.git"
+  },
+  "scripts": {
+    "lint": "npm run tslint \"src/**/*.ts\"",
+    "start": "grunt browserSync",
+    "test": "npm run lint && karma start karma.conf.js --single-run",
+    "tslint": "tslint",
+    "watch:test": "karma start karma.conf.js"
   }
 }
