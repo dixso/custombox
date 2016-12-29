@@ -1,7 +1,7 @@
 {
   "name": "custombox",
   "description": "Modal dialog effects with transitions CSS3",
-  "version": "3.0.2",
+  "version": "4.0.0-rc.0",
   "author": {
     "name": "Julio de la Calle",
     "email": "juliodlcp@gmail.com",
