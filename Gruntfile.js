@@ -102,7 +102,8 @@ module.exports = function(grunt) {
         commitFiles: ['package.json', 'bower.json', 'dist/custombox.min.js', 'dist/custombox.min.css'],
         tagName: '%VERSION%',
         prereleaseName: 'rc',
-        push: false,
+        pushTo: 'origin',
+        push: true,
       }
     },
     fixpack: {

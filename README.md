@@ -26,9 +26,11 @@ Alternatively, download the package and reference the JavaScript and CSS files m
 ```
 
 ## Basic usage
-    new Custombox.modal({
-      content: {
-        effect: 'fadein',
-        target: '#modal'
-      }
-    }).open();
+```js
+new Custombox.modal({
+  content: {
+    effect: 'fadein',
+    target: '#modal'
+  }
+}).open();
+```

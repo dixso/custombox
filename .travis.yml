@@ -3,26 +3,30 @@ dist: trusty
 addons:
   apt:
     sources:
-      - google-chrome
+    - google-chrome
     packages:
-      - google-chrome-stable
+    - google-chrome-stable
 language: node_js
 node_js:
-  - "7"
-
+- '7'
 cache:
   directories:
-    - node_modules
-
+  - node_modules
 before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - sleep 3
-
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- sleep 3
 matrix:
   fast_finish: true
-
 env:
   global:
-    - secure: oc86/M958dO1HlcqIzOQ8vFFZARAZlKwGdIwEQRKiH+UhYLyNZCI9Y64IbHKs7n+2CCh13II4kU+iSgdClXfOA6S9nDBYIzzxbEiNviAfJCWbn0kth6mZ3n4rMd5tOvcaIZwSIa6f3w8l5PBLOohcdb9/1YUPiD1KO+ioKXgMZPm/PeLL8CQbPn2oeW2unzhrypJDhYdb/KRYRCMGPtQVmAjx5UhMGBTfP26t8rWLueq+dSKNuCRK/xzXM+CW1/h/ZvARpSqKoJHKElWzmaOnRbcSOBo5Mxj4SkZM2jq80aWfXL6n8UdW2WyQsz9W/8yYAQs4f8rWRNWXxHeFDOpofEzLO89rbOFPriTQJJJwZLeXIbmBGEcGz8v+gJvbhFzh2MRZKpDHf3KEemagfaMSyGB04KrCKmYKXo0iTPJKwAKRqB7g6r+nFpdWw9/TjPfKKsrljW8NJ+qvyVaKRuva0O/K8FuzjDbnDNaxq4A9Lr9qdzDt0acUc3JyanlLHzDGorZWq2FYOCrU0Wpt1M2EvPN/aA3QJuCFaa1OxZvXpXyugxbAkCOfdLXDLrj8LpWDX9qrIsAnG3B2HDq6TDmb1TTw31oEN3NroclvE9YQiyl4KDOTjxJZYr/6J+jTN1KOcul/2Eg09djP4ePW4lR3Q3qlXrac63RhogC8xp0LL8
-    - COVERALLS_SERVICE_NAME=travis-ci
+  - secure: oc86/M958dO1HlcqIzOQ8vFFZARAZlKwGdIwEQRKiH+UhYLyNZCI9Y64IbHKs7n+2CCh13II4kU+iSgdClXfOA6S9nDBYIzzxbEiNviAfJCWbn0kth6mZ3n4rMd5tOvcaIZwSIa6f3w8l5PBLOohcdb9/1YUPiD1KO+ioKXgMZPm/PeLL8CQbPn2oeW2unzhrypJDhYdb/KRYRCMGPtQVmAjx5UhMGBTfP26t8rWLueq+dSKNuCRK/xzXM+CW1/h/ZvARpSqKoJHKElWzmaOnRbcSOBo5Mxj4SkZM2jq80aWfXL6n8UdW2WyQsz9W/8yYAQs4f8rWRNWXxHeFDOpofEzLO89rbOFPriTQJJJwZLeXIbmBGEcGz8v+gJvbhFzh2MRZKpDHf3KEemagfaMSyGB04KrCKmYKXo0iTPJKwAKRqB7g6r+nFpdWw9/TjPfKKsrljW8NJ+qvyVaKRuva0O/K8FuzjDbnDNaxq4A9Lr9qdzDt0acUc3JyanlLHzDGorZWq2FYOCrU0Wpt1M2EvPN/aA3QJuCFaa1OxZvXpXyugxbAkCOfdLXDLrj8LpWDX9qrIsAnG3B2HDq6TDmb1TTw31oEN3NroclvE9YQiyl4KDOTjxJZYr/6J+jTN1KOcul/2Eg09djP4ePW4lR3Q3qlXrac63RhogC8xp0LL8
+  - COVERALLS_SERVICE_NAME=travis-ci
+deploy:
+  provider: npm
+  email: juliodlcp@gmail.com
+  api_key:
+    secure: Knwfj81TL2QMiZQb9dt1X2SgJ/d+U4+5V3O3f7R7elgRnTmnK+OBFG3aunGPWP6QYBq46u0JY4x5/Y5bn7lwuiFb/6ORfs/VBlYNdGZHyWR0e8U5Rx0IXGSLUzeaAqaWfgw3orVqyc5v04FPMFrUMJMeKaog0Zk/tUgZJDHLXSKY4du9IamYk8NcxruY0J6mgSa57y4z8691luBerLiVTDlgwcjMwYXFi61YxUegd2M2JXbq+qnfbAOIbTCOo+GHg5R1HCeQ7eCkCnM+lhpR4BirA/n+LLpwgVQJfRC3C8dtmFpYEaaD+zwP6jJWuUNRhL4d+TOO+gDY0Nm042+hZQ4F/GOzSGlPR9Nrv7sSI1+I5WoA0QqISdGXnb0Wr2Hmz3MLnf+HScmpbVYULKmJ6VbCWaiueulZ0kBTbFHXLy3q/vqQdiH9cHVwHk1VvE+P+qpxaHUHqd6ugXLYAzzQQqisQMpLXdUViyHeRnJzSviVyUE+4Ol2JNZ3P2pLeGyPSc2kEogDbAo7j0tG3YWatC2HeZdb7XJSOSQxHoJDwxeGbpfB62IjFEpgj5Gm74xRuHEZ1X4Bm96VCAjOHfF3DzVzgR8J3UrpObca3ph+JR2nRn1i3akYbWyH0/yTO+nzKkfUTLoD2oDRM5tabd7x4I+dDfQnuVluixB5U71nhjY=
+  on:
+    tags: true
+    repo: dixso/custombox
