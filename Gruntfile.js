@@ -123,10 +123,32 @@ module.exports = function(grunt) {
     },
     fixpack: {
       dist: {
-        src: 'package.json',
+        src: ['package.json', 'bower.json'],
       },
     },
   });
 
   grunt.registerTask('dist', ['clean:start', 'babel:dist', 'uglify:dist', 'autoprefixer:dist', 'cssmin:dist', 'usebanner:dist', 'uglify:polyfill', 'concat:dist', 'clean:end']);
+
+  grunt.registerTask('bump', ['dist', 'update:bower', 'fixpack:dist']);
+
+  grunt.registerTask('update:bower', () => {
+    const files = ['bower.json'];
+    const pkg = grunt.file.readJSON('package.json');
+    const replace = ['version', 'description', 'name', 'homepage', 'license', 'author', 'repository'];
+
+    for (let e = 0, te = files.length; e < te; e ++) {
+      let project = grunt.file.readJSON(files[e]);
+      if ( !grunt.file.exists(files[e]) ) {
+        grunt.log.error(`file ${files[e]} not found`);
+        return true;
+      }
+
+      for (let i = 0, t = replace.length; i < t; i++) {
+        project[replace[i]] = pkg[replace[i]];
+      }
+
+      grunt.file.write(files[e], JSON.stringify(project, null, 2));
+    }
+  });
 };
