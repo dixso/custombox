@@ -3,6 +3,7 @@ namespace Custombox {
     overlay: OverlaySchema;
     content: ContentSchema;
     container: ContainerSchema;
+    loader: LoaderSchema;
   }
 
   interface OverlaySchema extends Speed, Callback {
@@ -28,6 +29,11 @@ namespace Custombox {
 
   interface ContainerSchema {
     target: string;
+  }
+
+  interface LoaderSchema {
+    active: boolean;
+    color: string;
   }
 
   interface Speed {
@@ -109,6 +115,10 @@ namespace Custombox {
     container = {
       target: null
     };
+    loader = {
+      active: true,
+      color: '#000'
+    };
   }
 
   class Options extends DefaultSchema {
@@ -120,6 +130,22 @@ namespace Custombox {
           Object.assign(this[key], options[key]);
         }
       });
+    }
+  }
+
+  class Loader {
+    element: HTMLElement;
+
+    constructor(private options: OptionsSchema) {
+      this.element = document.createElement('div');
+      this.element.classList.add(`${CB}-loader`);
+      this.element.style.borderTopColor = this.options.loader.color;
+      document.body.appendChild(this.element);
+    }
+
+    // Public methods
+    destroy(): void {
+      this.element.parentElement.removeChild(this.element);
     }
   }
 
@@ -412,6 +438,7 @@ namespace Custombox {
     private content: Content;
     private overlay: Overlay;
     private scroll: Scroll;
+    private loader: Loader;
     private action: EventListenerOrEventListenerObject = (event: KeyboardEvent) => {
       if (event.keyCode === 27) {
         this._close();
@@ -420,6 +447,11 @@ namespace Custombox {
 
     constructor(options: OptionsSchema) {
       this.options = new Options(options);
+
+      // Create loader
+      if (this.options.loader.active) {
+        this.loader = new Loader(this.options);
+      }
 
       // Create container
       if (Snippet.check(containerValues, this.options.content.effect)) {
@@ -448,7 +480,17 @@ namespace Custombox {
           // Overlay
           if (this.options.overlay.active) {
             this.dispatchEvent('overlay.onOpen');
-            this.overlay.bind(OPEN).then(() => this.dispatchEvent('overlay.onComplete'));
+            this.overlay
+              .bind(OPEN)
+              .then(() => {
+                this.dispatchEvent('overlay.onComplete');
+                if (this.options.loader.active) {
+                  this.loader.destroy();
+                }
+              }
+            );
+          } else if (this.options.loader.active) {
+            this.loader.destroy();
           }
 
           // Container

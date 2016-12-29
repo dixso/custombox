@@ -37,6 +37,12 @@ describe('Custombox', () => {
         overlays[i].parentNode.removeChild(overlays[i]);
       }
 
+      // custombox-loader
+      let loaders = document.querySelectorAll('.custombox-loader');
+      for (let i = 0, t = loaders.length; i < t; i++) {
+        loaders[i].parentNode.removeChild(loaders[i]);
+      }
+
       delete Custombox;
 
       jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
@@ -212,6 +218,12 @@ describe('Custombox', () => {
       let overlays = document.querySelectorAll('.custombox-overlay');
       for (let i = 0, t = overlays.length; i < t; i++) {
         overlays[i].parentNode.removeChild(overlays[i]);
+      }
+
+      // custombox-loader
+      let loaders = document.querySelectorAll('.custombox-loader');
+      for (let i = 0, t = loaders.length; i < t; i++) {
+        loaders[i].parentNode.removeChild(loaders[i]);
       }
 
       delete Custombox;
@@ -431,6 +443,12 @@ describe('Custombox', () => {
       let overlays = document.querySelectorAll('.custombox-overlay');
       for (let i = 0, t = overlays.length; i < t; i++) {
         overlays[i].parentNode.removeChild(overlays[i]);
+      }
+
+      // custombox-loader
+      let loaders = document.querySelectorAll('.custombox-loader');
+      for (let i = 0, t = loaders.length; i < t; i++) {
+        loaders[i].parentNode.removeChild(loaders[i]);
       }
 
       delete Custombox;
@@ -682,6 +700,12 @@ describe('Custombox', () => {
         overlays[i].parentNode.removeChild(overlays[i]);
       }
 
+      // custombox-loader
+      let loaders = document.querySelectorAll('.custombox-loader');
+      for (let i = 0, t = loaders.length; i < t; i++) {
+        loaders[i].parentNode.removeChild(loaders[i]);
+      }
+
       delete Custombox;
 
       jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
@@ -718,6 +742,123 @@ describe('Custombox', () => {
         expect(hasElement('.custombox-container')).toBe(true);
         done();
       }, 200);
+    });
+  });
+
+  describe('Loader', () => {
+    let originalTimeout;
+    beforeEach(() => {
+      originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+    });
+
+    beforeEach(() => {
+      for (let i = 1; i < 3; i++) {
+        let div = document.createElement('div');
+        div.innerHTML = `Lorem ipmsum (${i}) ...`;
+        div.setAttribute('id', `foo-${i}`);
+        document.body.appendChild(div);
+      }
+    });
+
+    afterEach(()=> {
+      for (let i = 1; i < 3; i++) {
+        let elem = document.getElementById(`foo-${i}`);
+        elem.parentNode.removeChild(elem);
+      }
+
+      // custombox-content
+      let contents = document.querySelectorAll('.custombox-content');
+      for (let i = 0, t = contents.length; i < t; i++) {
+        contents[i].parentNode.removeChild(contents[i]);
+      }
+
+      // custombox-overlay
+      let overlays = document.querySelectorAll('.custombox-overlay');
+      for (let i = 0, t = overlays.length; i < t; i++) {
+        overlays[i].parentNode.removeChild(overlays[i]);
+      }
+
+      // custombox-loader
+      let loaders = document.querySelectorAll('.custombox-loader');
+      for (let i = 0, t = loaders.length; i < t; i++) {
+        loaders[i].parentNode.removeChild(loaders[i]);
+      }
+
+      delete Custombox;
+
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+    });
+
+    it('should show loader', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: '#foo-1',
+        },
+        loader: {
+          color: '#F00'
+        }
+      }).open();
+
+      setTimeout(() => {
+        expect(hasElement('.custombox-loader')).toBe(true);
+        let loader: any = document.querySelector('.custombox-loader');
+        expect(loader.style.borderTopColor).toEqual('rgb(255, 0, 0)');
+        done();
+      }, 200);
+    });
+
+    it('should show loader when the overlay is disabled', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: '#foo-1',
+        },
+        overlay: {
+          active: false
+        },
+        loader: {
+          active: true
+        }
+      });
+
+      setTimeout(() => {
+        expect(hasElement('.custombox-loader')).toBe(true);
+        done();
+      }, 200);
+    });
+
+    it(`shouldn't show loader`, (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: '#foo-1',
+        },
+        loader: {
+          active: false
+        }
+      }).open();
+
+      setTimeout(() => {
+        expect(hasElement('.custombox-loader')).toBe(false);
+        done();
+      }, 200);
+    });
+
+    it('should remove loader when the overlay is completed', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: '#foo-1',
+        },
+      }).open();
+
+      setTimeout(() => {
+        Custombox.modal.close();
+        expect(hasElement('.custombox-loader')).toBe(false);
+        done();
+      }, 500);
     });
   });
 });

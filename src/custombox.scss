@@ -4,6 +4,7 @@ $overlay: #{$cb}-overlay;
 $content: #{$cb}-content;
 $container: #{$cb}-container;
 $perspective: #{$cb}-perspective;
+$index: 9997;
 
 // Actions
 $open: #{$cb}-open;
@@ -64,7 +65,6 @@ $effect23: #{$cb}-flash;
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: 9999;
 }
 
 .#{$content},
@@ -72,12 +72,14 @@ $effect23: #{$cb}-flash;
   @include fixed();
 }
 .#{$overlay} {
+  z-index: $index;
   opacity: 0;
   transition-delay: 0s;
   transition-timing-function: linear;
   transition-property: opacity;
 }
 .#{$content} {
+  z-index: $index + 2;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -1809,4 +1811,30 @@ $effect23: #{$cb}-flash;
       @include animation(flashClose, ease-out);
     }
   }
+}
+
+/*
+ ----------------------------
+ Loader
+ ----------------------------
+ */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.#{$cb}-loader {
+  border: #999 solid 5px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1.5s linear infinite;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin: -25px 0 0 -25px;
+  z-index: $index + 1;
 }
