@@ -56,9 +56,6 @@ module.exports = function(grunt) {
     },
     concat: {
       dist: {
-        options: {
-          sourceMap: true,
-        },
         src: ['dist/custombox.min.js', './node_modules/babel-polyfill/dist/polyfill.min.js', 'dist/built/custom-event-polyfill.min.js'],
         dest: 'dist/custombox.min.js',
       },
@@ -82,9 +79,6 @@ module.exports = function(grunt) {
     },
     cssmin: {
       dist: {
-        options: {
-          sourceMap: true
-        },
         files: {
           'dist/custombox.min.css': ['dist/built/custombox.css']
         }
@@ -104,21 +98,11 @@ module.exports = function(grunt) {
     },
     bump: {
       options: {
-        files: ['package.json'],
-        updateConfigs: [],
-        commit: true,
-        commitMessage: 'Release v%VERSION%',
-        commitFiles: ['package.json'],
-        createTag: true,
-        tagName: 'v%VERSION%',
-        tagMessage: 'Version %VERSION%',
-        push: true,
-        pushTo: 'upstream',
-        gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
-        globalReplace: false,
-        prereleaseName: false,
-        metadata: '',
-        regExp: false
+        files: ['package.json', 'bower.json'],
+        commitFiles: ['package.json', 'bower.json', 'dist/custombox.min.js', 'dist/custombox.min.css'],
+        tagName: '%VERSION%',
+        prereleaseName: 'rc',
+        push: false,
       }
     },
     fixpack: {
@@ -128,9 +112,8 @@ module.exports = function(grunt) {
     },
   });
 
-  grunt.registerTask('dist', ['clean:start', 'babel:dist', 'uglify:dist', 'autoprefixer:dist', 'cssmin:dist', 'usebanner:dist', 'uglify:polyfill', 'concat:dist', 'clean:end']);
-
-  grunt.registerTask('bump', ['dist', 'update:bower', 'fixpack:dist']);
+  let target = grunt.option('target') ? `:${grunt.option('target')}` : '';
+  grunt.registerTask('release', ['clean:start', 'babel:dist', 'uglify:dist', 'autoprefixer:dist', 'cssmin:dist', 'usebanner:dist', 'uglify:polyfill', 'concat:dist', 'clean:end', 'update:bower', 'fixpack:dist', `bump${target}`]);
 
   grunt.registerTask('update:bower', () => {
     const files = ['bower.json'];
@@ -139,7 +122,7 @@ module.exports = function(grunt) {
 
     for (let e = 0, te = files.length; e < te; e ++) {
       let project = grunt.file.readJSON(files[e]);
-      if ( !grunt.file.exists(files[e]) ) {
+      if (!grunt.file.exists(files[e])) {
         grunt.log.error(`file ${files[e]} not found`);
         return true;
       }
