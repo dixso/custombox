@@ -6,8 +6,8 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    banner: '/*\n *  <%= pkg.name %> v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-    ' *  <%= pkg.description %>\n' +
+    banner: '/*\n *  <%= pkg.name %> - <%= pkg.description %>\n' +
+    ' *  version: <%= pkg.version %>\n' +
     ' *  http://dixso.github.io/custombox/\n' +
     ' *  (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %> - @dixso9\n' +
     ' *\n' +
@@ -98,8 +98,8 @@ module.exports = function(grunt) {
     },
     bump: {
       options: {
-        files: ['package.json', 'bower.json'],
-        commitFiles: ['package.json', 'bower.json', 'dist/custombox.min.js', 'dist/custombox.min.css'],
+        files: ['package.json', 'bower.json', 'dist/*'],
+        commitFiles: ['package.json', 'bower.json', 'dist/*'],
         tagName: '%VERSION%',
         prereleaseName: 'rc',
         pushTo: 'origin',
