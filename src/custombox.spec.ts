@@ -874,5 +874,19 @@ describe('Custombox', () => {
         done();
       }, 500);
     });
+
+    it('should remove loader when fail the target', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: '#foo-1-fail',
+        },
+      }).open();
+
+      setTimeout(() => {
+        expect(hasElement('.custombox-loader')).toBe(false);
+        done();
+      }, 500);
+    });
   });
 });

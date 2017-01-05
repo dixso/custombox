@@ -513,6 +513,9 @@ namespace Custombox {
           this.listeners();
         })
         .catch((error: Error) => {
+          if (this.options.loader.active) {
+            this.loader.destroy();
+          }
           throw error;
         });
     }
