@@ -419,6 +419,7 @@ describe('Custombox', () => {
         let div = document.createElement('div');
         div.innerHTML = `Lorem ipmsum (${i}) ...`;
         div.setAttribute('id', `foo-${i}`);
+        div.style.display = 'none';
         document.body.appendChild(div);
       }
     });
@@ -479,22 +480,6 @@ describe('Custombox', () => {
       new (Custombox as any).modal({
         content: {
           effect: 'fadein',
-          target: 'https://youtu.be/clW7aV0vVAY',
-        },
-      }).open();
-
-      setTimeout(() => {
-        expect(hasElement('.custombox-content > iframe')).toBe(true);
-        let frame = document.querySelector('.custombox-content > iframe');
-        expect(frame.getAttribute('src')).toEqual('https://www.youtube.com/embed/clW7aV0vVAY');
-        done();
-      }, 200);
-    });
-
-    it('should open from youtube', (done) => {
-      new (Custombox as any).modal({
-        content: {
-          effect: 'fadein',
           target: 'foo.html',
         },
       }).open();
@@ -503,7 +488,7 @@ describe('Custombox', () => {
         (jasmine as any).Ajax.requests.mostRecent().respondWith({
           status: 200,
           contentType: 'text/html',
-          responseText: 'awesome content'
+          response: '<div>awesome content</div>'
         });
 
         setTimeout(() => {
@@ -513,6 +498,22 @@ describe('Custombox', () => {
           expect(text).toEqual('awesome content');
           done();
         }, 400);
+      }, 200);
+    });
+
+    it('should open from youtube', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: 'https://youtu.be/clW7aV0vVAY',
+        },
+      }).open();
+
+      setTimeout(() => {
+        expect(hasElement('.custombox-content > iframe')).toBe(true);
+        let frame = document.querySelector('.custombox-content > iframe');
+        expect(frame.getAttribute('src')).toEqual('https://www.youtube.com/embed/clW7aV0vVAY');
+        done();
       }, 200);
     });
 
@@ -652,6 +653,21 @@ describe('Custombox', () => {
         expect(state).toBe(true);
         done();
       }, 1000);
+    });
+
+    it('should remove the property of display:none', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: '#foo-1'
+        },
+      }).open();
+
+      setTimeout(() => {
+        let custom: any = document.querySelector('.custombox-content > div');
+        expect(custom.getAttribute('style')).toEqual('display: block;');
+        done();
+      }, 200);
     });
   });
 

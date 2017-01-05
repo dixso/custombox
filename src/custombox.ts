@@ -354,9 +354,16 @@ namespace Custombox {
           req.onload = () => {
             if (req.status === 200) {
               this.element.insertAdjacentHTML('beforeend', req.response);
+              let child: any = this.element.firstChild;
+
+              // Set visible
+              try {
+                child.style.display = 'block';
+              } catch (e) {
+                reject(new Error('The ajax response need a wrapper element'));
+              }
 
               if (width) {
-                let child: any = this.element.firstChild;
                 child.style.flexBasis = width;
               }
 
@@ -375,6 +382,10 @@ namespace Custombox {
             let element: HTMLElement = <HTMLElement>selector.cloneNode(true);
             element.removeAttribute('id');
 
+            // Set visible
+            element.style.display = 'block';
+
+            // Set width
             if (width) {
               element.style.flexBasis = width;
             }
