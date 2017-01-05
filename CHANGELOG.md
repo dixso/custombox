@@ -1,1 +1,0 @@
-All releases are described at https://github.com/dixso/custombox/releases
