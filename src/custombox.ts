@@ -2,7 +2,6 @@ namespace Custombox {
   interface OptionsSchema {
     overlay: OverlaySchema;
     content: ContentSchema;
-    container: ContainerSchema;
     loader: LoaderSchema;
   }
 
@@ -25,10 +24,7 @@ namespace Custombox {
     fullscreen: boolean;
     delay: number;
     id: string;
-  }
-
-  interface ContainerSchema {
-    target: string;
+    container: string;
   }
 
   interface LoaderSchema {
@@ -98,6 +94,7 @@ namespace Custombox {
     content = {
       id: null,
       target: null,
+      container: null,
       animateFrom: 'top',
       animateTo: 'top',
       positionX: 'center',
@@ -111,9 +108,6 @@ namespace Custombox {
       onOpen: null,
       onComplete: null,
       onClose: null,
-    };
-    container = {
-      target: null
     };
     loader = {
       active: true,
@@ -157,7 +151,7 @@ namespace Custombox {
         throw new Error(`You need to instantiate Custombox when the document is fully loaded.`);
       }
 
-      const selector: any = document.querySelector(this.options.container.target);
+      const selector: any = document.querySelector(this.options.content.container);
       if (selector) {
         this.element = selector;
         this.addSimpleClass();

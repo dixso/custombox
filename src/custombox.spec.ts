@@ -734,10 +734,8 @@ describe('Custombox', () => {
         content: {
           effect: 'makeway',
           target: '#foo-1',
+          container: '#container'
         },
-        container: {
-          target: '#container'
-        }
       }).open();
 
       setTimeout(() => {
