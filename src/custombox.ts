@@ -154,7 +154,7 @@ namespace Custombox {
 
     constructor(private options: OptionsSchema) {
       if (document.readyState === 'loading') {
-        throw new Error(`You need to instantiate Custombox when the document is fully loaded.`);
+        throw new Error('You need to instantiate Custombox when the document is fully loaded');
       }
 
       const selector: any = document.querySelector(this.options.content.container);
@@ -534,7 +534,11 @@ namespace Custombox {
         elements = document.querySelectorAll(`#${CB}-${id}`);
       }
 
-      elements[elements.length - 1].dispatchEvent(event);
+      try {
+        elements[elements.length - 1].dispatchEvent(event);
+      } catch (e) {
+        throw new Error('Custombox is not instantiated');
+      }
     }
 
     static closeAll(): void {

@@ -106,6 +106,10 @@ describe('Custombox', () => {
       }, 200);
     });
 
+    it('should have an exception when close', () => {
+      expect(() => Custombox.modal.close()).toThrowError('Custombox is not instantiated');
+    });
+
     it('should have closed by ID', (done) => {
       const ID: string = 'my-custom-id';
 
