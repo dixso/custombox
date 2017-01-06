@@ -811,14 +811,17 @@ describe('Custombox', () => {
           target: '#foo-1',
         },
         loader: {
-          color: '#F00'
+          color: '#F00',
+          background: '#FFF',
+          speed: 1500,
         }
       }).open();
 
       setTimeout(() => {
         expect(hasElement('.custombox-loader')).toBe(true);
         let loader: any = document.querySelector('.custombox-loader');
-        expect(loader.style.borderTopColor).toEqual('rgb(255, 0, 0)');
+        expect(loader.style.borderColor).toEqual('rgb(255, 0, 0) rgb(255, 255, 255) rgb(255, 255, 255)');
+        expect(loader.style.animationDuration).toEqual('1500ms');
         done();
       }, 200);
     });

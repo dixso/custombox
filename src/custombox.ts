@@ -30,6 +30,8 @@ namespace Custombox {
   interface LoaderSchema {
     active: boolean;
     color: string;
+    background: string;
+    speed: number;
   }
 
   interface Speed {
@@ -111,7 +113,9 @@ namespace Custombox {
     };
     loader = {
       active: true,
-      color: '#000'
+      color: '#FFF',
+      background: '#999',
+      speed: 1000,
     };
   }
 
@@ -133,7 +137,9 @@ namespace Custombox {
     constructor(private options: OptionsSchema) {
       this.element = document.createElement('div');
       this.element.classList.add(`${CB}-loader`);
+      this.element.style.borderColor = this.options.loader.background;
       this.element.style.borderTopColor = this.options.loader.color;
+      this.element.style.animationDuration = `${this.options.loader.speed}ms`;
       document.body.appendChild(this.element);
     }
 

@@ -1827,11 +1827,14 @@ $effect23: #{$cb}-flash;
   }
 }
 .#{$cb}-loader {
-  border: #999 solid 5px;
+  border-style: solid;
+  border-width: 5px;
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  animation: spin 1.5s linear infinite;
+  animation-name: spin;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
   position: fixed;
   top: 50%;
   left: 50%;
