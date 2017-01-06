@@ -411,6 +411,61 @@ describe('Custombox', () => {
         done();
       }, 200);
     });
+
+    it('should be called a open listener', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: '#foo-1',
+        },
+      }).open();
+
+      let eventSpy = jasmine.createSpy('event');
+      document.addEventListener('custombox:overlay:open', eventSpy);
+
+      setTimeout(() => {
+        expect(eventSpy).toHaveBeenCalled();
+        done();
+      }, 200);
+    });
+
+    it('should be called a complete listener', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: '#foo-1',
+        },
+      }).open();
+
+      let eventSpy = jasmine.createSpy('event');
+      document.addEventListener('custombox:overlay:complete', eventSpy);
+
+      setTimeout(() => {
+        expect(eventSpy).toHaveBeenCalled();
+        done();
+      }, 400);
+    });
+
+    it('should be called a close listener', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: '#foo-1',
+        },
+      }).open();
+
+      let eventSpy = jasmine.createSpy('event');
+      document.addEventListener('custombox:overlay:close', eventSpy);
+
+      setTimeout(() => {
+        Custombox.modal.close();
+      }, 500);
+
+      setTimeout(() => {
+        expect(eventSpy).toHaveBeenCalled();
+        done();
+      }, 1000);
+    });
   });
 
   describe('Content', () => {
@@ -674,6 +729,61 @@ describe('Custombox', () => {
         expect(custom.getAttribute('style')).toEqual('display: block;');
         done();
       }, 200);
+    });
+
+    it('should be called a open listener', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: '#foo-1',
+        },
+      }).open();
+
+      let eventSpy = jasmine.createSpy('event');
+      document.addEventListener('custombox:content:open', eventSpy);
+
+      setTimeout(() => {
+        expect(eventSpy).toHaveBeenCalled();
+        done();
+      }, 400);
+    });
+
+    it('should be called a complete listener', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: '#foo-1',
+        },
+      }).open();
+
+      let eventSpy = jasmine.createSpy('event');
+      document.addEventListener('custombox:content:complete', eventSpy);
+
+      setTimeout(() => {
+        expect(eventSpy).toHaveBeenCalled();
+        done();
+      }, 500);
+    });
+
+    it('should be called a close listener', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: '#foo-1',
+        },
+      }).open();
+
+      let eventSpy = jasmine.createSpy('event');
+      document.addEventListener('custombox:content:close', eventSpy);
+
+      setTimeout(() => {
+        Custombox.modal.close();
+      }, 500);
+
+      setTimeout(() => {
+        expect(eventSpy).toHaveBeenCalled();
+        done();
+      }, 1000);
     });
   });
 

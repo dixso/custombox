@@ -592,7 +592,8 @@ namespace Custombox {
 
     // Private methods
     private dispatchEvent(type: string): void {
-      const event: Event = new Event(`${CB}:${type}`);
+      const element: string = type.replace('.on', ':').toLowerCase();
+      const event: Event = new Event(`${CB}:${element}`);
       const action: any = Object.create(this.options);
 
       document.dispatchEvent(event);
