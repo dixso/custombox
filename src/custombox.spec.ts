@@ -890,6 +890,30 @@ describe('Custombox', () => {
         done();
       }, 200);
     });
+
+    it('should have overwrite an existing container automatically', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'makeway',
+          target: '#foo-1',
+        },
+      }).open();
+
+      setTimeout(()=> {
+        new (Custombox as any).modal({
+          content: {
+            effect: 'blur',
+            target: '#foo-2',
+          },
+        }).open();
+      }, 200);
+
+
+      setTimeout(() => {
+        expect(document.querySelectorAll('.custombox-container').length).toBe(1);
+        done();
+      }, 400);
+    });
   });
 
   describe('Loader', () => {

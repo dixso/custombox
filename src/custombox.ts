@@ -150,7 +150,7 @@ namespace Custombox {
   }
 
   class Container {
-    element: HTMLElement;
+    element: any;
 
     constructor(private options: OptionsSchema) {
       if (document.readyState === 'loading') {
@@ -160,17 +160,18 @@ namespace Custombox {
       const selector: any = document.querySelector(this.options.content.container);
       if (selector) {
         this.element = selector;
-        this.addSimpleClass();
-      } else if (!document.querySelector(`${CB}-container`)) {
+      } else if (!document.querySelector(`.${CB}-container`)) {
         this.element = document.createElement('div');
-        this.addSimpleClass();
 
         while (document.body.firstChild) {
           this.element.appendChild(document.body.firstChild);
         }
         document.body.appendChild(this.element);
+      } else if (document.querySelector(`.${CB}-container`)) {
+        this.element = document.querySelector(`.${CB}-container`);
       }
 
+      this.addSimpleClass();
       this.element.style.animationDuration = `${this.options.content.speedIn}ms`;
 
       if (Snippet.check(animationValues, this.options.content.effect)) {
@@ -180,7 +181,7 @@ namespace Custombox {
 
     // Public methods
     bind(method: string): Promise<Event> {
-      if (method === 'close') {
+      if (method === CLOSE) {
         if (Snippet.check(animationValues, this.options.content.effect)) {
           this.setAnimation('animateTo');
         }
