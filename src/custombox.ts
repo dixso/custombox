@@ -333,18 +333,38 @@ namespace Custombox {
     }
 
     // Public methods
-    fetch(target: string, width: string): Promise<any> {
+    fetch(target: string, width: string, fullscreen: boolean): Promise<any> {
       return new Promise((resolve: Function, reject: Function) => {
         // Youtube
         const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
         let match = target.match(regExp);
 
         if (match && match[2].length == 11) {
+          let element: any = document.createElement('div');
           let frame = document.createElement('iframe');
+
           frame.setAttribute('src', `https://www.youtube.com/embed/${match[2]}`);
           frame.setAttribute('frameborder', '0');
           frame.setAttribute('allowfullscreen', '');
-          this.element.appendChild(frame);
+          frame.setAttribute('width', '100%');
+          frame.setAttribute('height', '100%');
+          element.appendChild(frame);
+
+          if (!fullscreen) {
+            let w = 560;
+            let h = 315;
+
+            if (width) {
+              const natural: number = parseInt(width, 10);
+              h = Math.round(h * natural / w);
+              w = natural;
+            }
+
+            frame.setAttribute('width', `${w}px`);
+            frame.setAttribute('height', `${h}px`);
+          }
+
+          this.element.appendChild(element);
 
           resolve();
         } else if (target.charAt(0) !== '#' && target.charAt(0) !== '.') {
@@ -481,7 +501,7 @@ namespace Custombox {
     // Public methods
     open(): void {
       this.content
-        .fetch(this.options.content.target, this.options.content.width)
+        .fetch(this.options.content.target, this.options.content.width, this.options.content.fullscreen)
         .then(() => {
           // Scroll
           if (Snippet.check(perspective, this.options.content.effect)) {

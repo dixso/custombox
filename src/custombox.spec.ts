@@ -571,9 +571,26 @@ describe('Custombox', () => {
       }).open();
 
       setTimeout(() => {
-        expect(hasElement('.custombox-content > iframe')).toBe(true);
-        let frame = document.querySelector('.custombox-content > iframe');
+        expect(hasElement('.custombox-content iframe')).toBe(true);
+        let frame = document.querySelector('.custombox-content iframe');
         expect(frame.getAttribute('src')).toEqual('https://www.youtube.com/embed/clW7aV0vVAY');
+        done();
+      }, 200);
+    });
+
+    it('should open from youtube with a specific size', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          width: '600px',
+          target: 'https://youtu.be/clW7aV0vVAY',
+        },
+      }).open();
+
+      setTimeout(() => {
+        let frame: any = document.querySelector('.custombox-content > div');
+        expect(frame.offsetWidth).toEqual(600);
+        expect(frame.offsetHeight).toEqual(342);
         done();
       }, 200);
     });
