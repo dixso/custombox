@@ -326,8 +326,10 @@ describe('Custombox', () => {
         event.which = event.keyCode = 27;
         document.dispatchEvent(event);
 
-        expect(hasElement('.custombox-close')).toBe(false);
-        done();
+        setTimeout(() => {
+          expect(hasElement('.custombox-close')).toBe(false);
+          done();
+        }, 500);
       }, 200);
     });
 

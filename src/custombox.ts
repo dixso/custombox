@@ -452,7 +452,7 @@ namespace Custombox {
     private loader: Loader;
     private action: EventListenerOrEventListenerObject = (event: KeyboardEvent) => {
       if (event.keyCode === 27) {
-        this._close();
+        Custombox.modal.close();
       }
     }
 
