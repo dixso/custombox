@@ -319,10 +319,8 @@ describe('Custombox', () => {
         content: {
           effect: 'fadein',
           target: '#foo-1',
-        },
-        overlay: {
           escKey: false
-        }
+        },
       }).open();
 
       setTimeout(() => {
