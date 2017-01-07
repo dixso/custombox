@@ -900,9 +900,9 @@ $effect23: #{$cb}-flash;
   transform: scale(1);
   opacity: 1;
 }
-@mixin letmeinOverlayAction($transform) {
+@mixin letmeinOverlayAction($transform, $origin: 50% 0) {
   transform: $transform;
-  transform-origin: 50% 0;
+  transform-origin: $origin;
   transform-style: preserve-3d;
 }
 
@@ -947,7 +947,7 @@ $effect23: #{$cb}-flash;
 }
 @keyframes letmeinTopOverlay {
   to {
-    @include letmeinOverlayAction(rotateX(2deg));
+    @include letmeinOverlayAction(rotateX(2deg), 0 50%);
   }
 }
 @keyframes letmeinOutTopOverlay {
