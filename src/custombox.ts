@@ -50,6 +50,7 @@ namespace Custombox {
   const OPEN: string = `${CB}-open`;
   const CLOSE: string = `${CB}-close`;
   const FROM: string = 'animateFrom';
+  const BLOCK: string = 'block';
   const positionValues: Array<string> = ['top', 'right', 'bottom', 'left'];
 
   // Effects
@@ -144,6 +145,10 @@ namespace Custombox {
     }
 
     // Public methods
+    show(): void {
+      this.element.style.display = BLOCK;
+    }
+
     destroy(): void {
       this.element.parentElement.removeChild(this.element);
     }
@@ -334,11 +339,11 @@ namespace Custombox {
     }
 
     // Public methods
-    fetch(target: string, width: string, fullscreen: boolean): Promise<any> {
+    fetch(): Promise<any> {
       return new Promise((resolve: Function, reject: Function) => {
         // Youtube
         const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-        let match = target.match(regExp);
+        let match = this.options.content.target.match(regExp);
 
         if (match && match[2].length == 11) {
           let element: any = document.createElement('div');
@@ -351,12 +356,12 @@ namespace Custombox {
           frame.setAttribute('height', '100%');
           element.appendChild(frame);
 
-          if (!fullscreen) {
+          if (!this.options.content.fullscreen) {
             let w = 560;
             let h = 315;
 
-            if (width) {
-              const natural: number = parseInt(width, 10);
+            if (this.options.content.width) {
+              const natural: number = parseInt(this.options.content.width, 10);
               h = Math.round(h * natural / w);
               w = natural;
             }
@@ -368,10 +373,10 @@ namespace Custombox {
           this.element.appendChild(element);
 
           resolve();
-        } else if (target.charAt(0) !== '#' && target.charAt(0) !== '.') {
+        } else if (this.options.content.target.charAt(0) !== '#' && this.options.content.target.charAt(0) !== '.') {
           const req: XMLHttpRequest = new XMLHttpRequest();
 
-          req.open('GET', target);
+          req.open('GET', this.options.content.target);
           req.onload = () => {
             if (req.status === 200) {
               this.element.insertAdjacentHTML('beforeend', req.response);
@@ -379,13 +384,13 @@ namespace Custombox {
 
               // Set visible
               try {
-                child.style.display = 'block';
+                child.style.display = BLOCK;
               } catch (e) {
                 reject(new Error('The ajax response need a wrapper element'));
               }
 
-              if (width) {
-                child.style.flexBasis = width;
+              if (this.options.content.width) {
+                child.style.flexBasis = this.options.content.width;
               }
 
               resolve();
@@ -398,17 +403,17 @@ namespace Custombox {
           req.send();
         } else {
           // Selector
-          const selector: Element = document.querySelector(target);
+          const selector: Element = document.querySelector(this.options.content.target);
           if (selector) {
             let element: HTMLElement = <HTMLElement>selector.cloneNode(true);
             element.removeAttribute('id');
 
             // Set visible
-            element.style.display = 'block';
+            element.style.display = BLOCK;
 
             // Set width
-            if (width) {
-              element.style.flexBasis = width;
+            if (this.options.content.width) {
+              element.style.flexBasis = this.options.content.width;
             }
 
             this.element.appendChild(element);
@@ -501,8 +506,12 @@ namespace Custombox {
 
     // Public methods
     open(): void {
+      if (this.options.loader.active) {
+        this.loader.show();
+      }
+
       this.content
-        .fetch(this.options.content.target, this.options.content.width, this.options.content.fullscreen)
+        .fetch()
         .then(() => {
           // Scroll
           if (Snippet.check(perspective, this.options.content.effect)) {
