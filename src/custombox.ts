@@ -346,7 +346,7 @@ namespace Custombox {
         let match = this.options.content.target.match(regExp);
 
         if (match && match[2].length == 11) {
-          let element: any = document.createElement('div');
+          const element: any = document.createElement('div');
           let frame = document.createElement('iframe');
 
           frame.setAttribute('src', `https://www.youtube.com/embed/${match[2]}`);
@@ -357,11 +357,11 @@ namespace Custombox {
           element.appendChild(frame);
 
           if (!this.options.content.fullscreen) {
-            let w = 560;
-            let h = 315;
+            let w = window.innerWidth > 560 ? 560 : window.innerWidth;
+            let h = window.innerHeight > 315 ? 315 : window.innerHeight;
 
-            if (this.options.content.width) {
-              const natural: number = parseInt(this.options.content.width, 10);
+            const natural: number = parseInt(this.options.content.width, 10);
+            if (this.options.content.width && window.innerWidth > natural) {
               h = Math.round(h * natural / w);
               w = natural;
             }
