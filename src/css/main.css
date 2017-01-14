@@ -79,6 +79,9 @@
   display: block;
   margin-bottom: 10px;
 }
+.browser-support-content p {
+  text-align: center;
+}
 @media screen and (max-width: 767px) {
   .demo-modal-multiple-1 {
     width: 60%;
