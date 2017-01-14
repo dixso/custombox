@@ -2,6 +2,33 @@ function hasElement(element: string): boolean {
   return document.body.contains(document.querySelector(element));
 }
 
+function getAfterEach() {
+  for (let i = 1; i < 3; i++) {
+    let elem = document.getElementById(`foo-${i}`);
+    elem.parentNode.removeChild(elem);
+  }
+
+  // custombox-content
+  let contents = document.querySelectorAll('.custombox-content');
+  for (let i = 0, t = contents.length; i < t; i++) {
+    contents[i].parentNode.removeChild(contents[i]);
+  }
+
+  // custombox-overlay
+  let overlays = document.querySelectorAll('.custombox-overlay');
+  for (let i = 0, t = overlays.length; i < t; i++) {
+    overlays[i].parentNode.removeChild(overlays[i]);
+  }
+
+  // custombox-loader
+  let loaders = document.querySelectorAll('.custombox-loader');
+  for (let i = 0, t = loaders.length; i < t; i++) {
+    loaders[i].parentNode.removeChild(loaders[i]);
+  }
+
+  delete Custombox;
+}
+
 describe('Custombox', () => {
   describe('Methods', () => {
     let originalTimeout;
@@ -20,28 +47,7 @@ describe('Custombox', () => {
     });
 
     afterEach(()=> {
-      for (let i = 1; i < 3; i++) {
-        let elem = document.getElementById(`foo-${i}`);
-        elem.parentNode.removeChild(elem);
-      }
-
-      // custombox-content
-      let contents = document.querySelectorAll('.custombox-content');
-      for (let i = 0, t = contents.length; i < t; i++) {
-        contents[i].parentNode.removeChild(contents[i]);
-      }
-
-      // custombox-overlay
-      let overlays = document.querySelectorAll('.custombox-overlay');
-      for (let i = 0, t = overlays.length; i < t; i++) {
-        overlays[i].parentNode.removeChild(overlays[i]);
-      }
-
-      // custombox-loader
-      let loaders = document.querySelectorAll('.custombox-loader');
-      for (let i = 0, t = loaders.length; i < t; i++) {
-        loaders[i].parentNode.removeChild(loaders[i]);
-      }
+      getAfterEach();
 
       delete Custombox;
 
@@ -207,28 +213,7 @@ describe('Custombox', () => {
     });
 
     afterEach(()=> {
-      for (let i = 1; i < 3; i++) {
-        let elem = document.getElementById(`foo-${i}`);
-        elem.parentNode.removeChild(elem);
-      }
-
-      // custombox-content
-      let contents = document.querySelectorAll('.custombox-content');
-      for (let i = 0, t = contents.length; i < t; i++) {
-        contents[i].parentNode.removeChild(contents[i]);
-      }
-
-      // custombox-overlay
-      let overlays = document.querySelectorAll('.custombox-overlay');
-      for (let i = 0, t = overlays.length; i < t; i++) {
-        overlays[i].parentNode.removeChild(overlays[i]);
-      }
-
-      // custombox-loader
-      let loaders = document.querySelectorAll('.custombox-loader');
-      for (let i = 0, t = loaders.length; i < t; i++) {
-        loaders[i].parentNode.removeChild(loaders[i]);
-      }
+      getAfterEach();
 
       delete Custombox;
 
@@ -488,30 +473,7 @@ describe('Custombox', () => {
     });
 
     afterEach(()=> {
-      for (let i = 1; i < 3; i++) {
-        let elem = document.getElementById(`foo-${i}`);
-        elem.parentNode.removeChild(elem);
-      }
-
-      // custombox-content
-      let contents = document.querySelectorAll('.custombox-content');
-      for (let i = 0, t = contents.length; i < t; i++) {
-        contents[i].parentNode.removeChild(contents[i]);
-      }
-
-      // custombox-overlay
-      let overlays = document.querySelectorAll('.custombox-overlay');
-      for (let i = 0, t = overlays.length; i < t; i++) {
-        overlays[i].parentNode.removeChild(overlays[i]);
-      }
-
-      // custombox-loader
-      let loaders = document.querySelectorAll('.custombox-loader');
-      for (let i = 0, t = loaders.length; i < t; i++) {
-        loaders[i].parentNode.removeChild(loaders[i]);
-      }
-
-      delete Custombox;
+      getAfterEach();
 
       jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
 
@@ -800,6 +762,25 @@ describe('Custombox', () => {
         done();
       }, 1000);
     });
+
+    it('should remove perspective class', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fall',
+          target: '#foo-1',
+        }
+      }).open();
+
+      setTimeout(() => {
+        expect(document.documentElement.classList.contains('custombox-perspective')).toBe(true);
+        Custombox.modal.close();
+
+        setTimeout(() => {
+          expect(document.documentElement.classList.contains('custombox-perspective')).toBe(false);
+          done();
+        }, 750);
+      }, 500);
+    });
   });
 
   describe('Container', () => {
@@ -830,30 +811,7 @@ describe('Custombox', () => {
     });
 
     afterEach(()=> {
-      for (let i = 1; i < 3; i++) {
-        let elem = document.getElementById(`foo-${i}`);
-        elem.parentNode.removeChild(elem);
-      }
-
-      // custombox-content
-      let contents = document.querySelectorAll('.custombox-content');
-      for (let i = 0, t = contents.length; i < t; i++) {
-        contents[i].parentNode.removeChild(contents[i]);
-      }
-
-      // custombox-overlay
-      let overlays = document.querySelectorAll('.custombox-overlay');
-      for (let i = 0, t = overlays.length; i < t; i++) {
-        overlays[i].parentNode.removeChild(overlays[i]);
-      }
-
-      // custombox-loader
-      let loaders = document.querySelectorAll('.custombox-loader');
-      for (let i = 0, t = loaders.length; i < t; i++) {
-        loaders[i].parentNode.removeChild(loaders[i]);
-      }
-
-      delete Custombox;
+      getAfterEach();
 
       jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
 
@@ -905,7 +863,6 @@ describe('Custombox', () => {
           },
         }).open();
       }, 200);
-
 
       setTimeout(() => {
         expect(document.querySelectorAll('.custombox-container').length).toBe(1);

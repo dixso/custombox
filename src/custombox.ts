@@ -49,6 +49,7 @@ namespace Custombox {
   const CB: string = 'custombox';
   const OPEN: string = `${CB}-open`;
   const CLOSE: string = `${CB}-close`;
+  const LOCK: string = `${CB}-lock`;
   const FROM: string = 'animateFrom';
   const BLOCK: string = 'block';
   const positionValues: Array<string> = ['top', 'right', 'bottom', 'left'];
@@ -524,7 +525,10 @@ namespace Custombox {
           }
 
           // Content
-          this.content.bind(OPEN).then(() => this.dispatchEvent('content.onComplete'));
+          this.content.bind(OPEN).then(() => {
+            document.body.classList.add(LOCK);
+            this.dispatchEvent('content.onComplete');
+          });
 
           // Dispatch event
           this.dispatchEvent('content.onOpen');
@@ -622,6 +626,9 @@ namespace Custombox {
           }
 
           this.dispatchEvent('content.onClose');
+
+          // Remove lock
+          document.body.classList.remove(LOCK);
         });
     }
 
