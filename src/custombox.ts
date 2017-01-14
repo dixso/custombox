@@ -484,28 +484,12 @@ namespace Custombox {
 
     constructor(options: OptionsSchema) {
       this.options = new Options(options);
-
-      // Create loader
-      if (this.options.loader.active) {
-        this.loader = new Loader(this.options);
-      }
-
-      // Create container
-      if (Snippet.check(containerValues, this.options.content.effect)) {
-        this.container = new Container(this.options);
-      }
-
-      // Create overlay
-      if (this.options.overlay.active) {
-        this.overlay = new Overlay(this.options);
-      }
-
-      // Create content
-      this.content = new Content(this.options);
     }
 
     // Public methods
     open(): void {
+      this.build();
+
       if (this.options.loader.active) {
         this.loader.show();
       }
@@ -554,6 +538,27 @@ namespace Custombox {
           }
           throw error;
         });
+    }
+
+    // Private methods
+    build(): void {
+      // Create loader
+      if (this.options.loader.active) {
+        this.loader = new Loader(this.options);
+      }
+
+      // Create container
+      if (Snippet.check(containerValues, this.options.content.effect)) {
+        this.container = new Container(this.options);
+      }
+
+      // Create overlay
+      if (this.options.overlay.active) {
+        this.overlay = new Overlay(this.options);
+      }
+
+      // Create content
+      this.content = new Content(this.options);
     }
 
     static close(id?: string): void {

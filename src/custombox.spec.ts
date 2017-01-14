@@ -981,7 +981,7 @@ describe('Custombox', () => {
       }, 200);
     });
 
-    it('should show loader when the overlay is disabled', (done) => {
+    it('should show loader when the overlay is disabled', () => {
       new (Custombox as any).modal({
         content: {
           effect: 'fadein',
@@ -993,12 +993,9 @@ describe('Custombox', () => {
         loader: {
           active: true
         }
-      });
+      }).open();
 
-      setTimeout(() => {
-        expect(hasElement('.custombox-loader')).toBe(true);
-        done();
-      }, 200);
+      expect(hasElement('.custombox-loader')).toBe(true);
     });
 
     it(`shouldn't show loader`, (done) => {
