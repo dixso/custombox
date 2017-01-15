@@ -629,8 +629,7 @@ describe('Custombox', () => {
       }).open();
 
       setTimeout(() => {
-        let fullscreen = document.querySelector('.custombox-content');
-
+        const fullscreen = document.querySelector('.custombox-content').children[0];
         expect(hasElement('.custombox-fullscreen')).toBe(true);
         expect(fullscreen.clientWidth).toEqual(window.innerWidth - 16);
         expect(fullscreen.clientHeight).toEqual(window.innerHeight);
