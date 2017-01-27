@@ -566,7 +566,7 @@ namespace Custombox {
     }
 
     static close(id?: string): void {
-      const event: Event = new Event(`${CB}:close`);
+      const event: Event = new CustomEvent(`${CB}:close`);
       let elements: NodeListOf<Element> = document.querySelectorAll(`.${CB}-content`);
 
       if (id) {
@@ -581,7 +581,7 @@ namespace Custombox {
     }
 
     static closeAll(): void {
-      const event: Event = new Event(`${CB}:close`);
+      const event: Event = new CustomEvent(`${CB}:close`);
       const elements: NodeListOf<Element> = document.querySelectorAll(`.${CB}-content`);
       const t = elements.length;
 
@@ -635,7 +635,7 @@ namespace Custombox {
     // Private methods
     private dispatchEvent(type: string): void {
       const element: string = type.replace('.on', ':').toLowerCase();
-      const event: Event = new Event(`${CB}:${element}`);
+      const event: Event = new CustomEvent(`${CB}:${element}`);
       const action: any = Object.create(this.options);
 
       document.dispatchEvent(event);
