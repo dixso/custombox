@@ -6,13 +6,23 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    banner: '/*\n *  <%= pkg.name %> - <%= pkg.description %>\n' +
+    header: '/*\n *  <%= pkg.name %> - <%= pkg.description %>\n' +
     ' *  version: <%= pkg.version %>\n' +
     ' *  http://dixso.github.io/custombox/\n' +
     ' *  (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %> - @dixso9\n' +
+    ' *\n',
+
+    License: ' *  Under MIT License - http://opensource.org/licenses/MIT\n' + ' */\n',
+
+    banner: '<%= header %>' + '<%= License %>',
+
+    legacy: '<%= header %>' +
+    ' *  babel-polyfill - https://www.npmjs.com/package/babel-polyfill\n' +
+    ' *  babel-plugin-transform-object-assign - https://www.npmjs.com/package/babel-plugin-transform-object-assign\n' +
+    ' *  es6-promise - https://www.npmjs.com/package/es6-promise\n' +
+    ' *  custom-event-polyfill - https://www.npmjs.com/package/custom-event-polyfill\n' +
     ' *\n' +
-    ' *  Under MIT License - http://opensource.org/licenses/MIT\n' +
-    ' */\n',
+    '<%= License %>',
 
     browserSync: {
       bsFiles: {
@@ -48,13 +58,15 @@ module.exports = function(grunt) {
     },
     concat: {
       dist: {
+        options: {
+          stripBanners: true
+        },
         src: [
           './node_modules/babel-polyfill/dist/polyfill.min.js',
           './node_modules/custom-event-polyfill/custom-event-polyfill.js',
           './node_modules/es6-promise/dist/es6-promise.auto.min.js',
-          'dist/custombox.min.js',
         ],
-        dest: 'dist/custombox.min.js',
+        dest: 'dist/custombox.legacy.min.js',
       },
     },
     clean: {
@@ -89,13 +101,23 @@ module.exports = function(grunt) {
           linebreak: false,
         },
         files: {
-          src: ['dist/*']
+          src: ['dist/custombox.min.*']
+        }
+      },
+      legacy: {
+        options: {
+          position: 'top',
+          banner: '<%= legacy %>',
+          linebreak: false,
+        },
+        files: {
+          src: ['dist/custombox.legacy.*']
         }
       }
     },
     bump: {
       options: {
-        files: ['package.json', 'bower.json', 'dist/*'],
+        files: ['package.json', 'bower.json', 'dist/dist/custombox.min.*'],
         commitFiles: ['package.json', 'bower.json', 'dist/*'],
         tagName: '%VERSION%',
         prereleaseName: 'rc',
@@ -111,7 +133,7 @@ module.exports = function(grunt) {
   });
 
   let target = grunt.option('target') ? `:${grunt.option('target')}` : '';
-  grunt.registerTask('dist', ['clean:start', 'babel:dist', 'uglify:dist', 'autoprefixer:dist', 'cssmin:dist', 'usebanner:dist', 'concat:dist', 'clean:end']);
+  grunt.registerTask('dist', ['clean:start', 'babel:dist', 'uglify:dist', 'autoprefixer:dist', 'cssmin:dist', 'concat:dist', 'usebanner', 'clean:end']);
   grunt.registerTask('release', ['dist', 'update:bower', 'fixpack:dist', `bump${target}`]);
 
   grunt.registerTask('update:bower', () => {
