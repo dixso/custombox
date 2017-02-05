@@ -44,20 +44,16 @@ module.exports = function(grunt) {
         files: {
           'dist/custombox.min.js': ['dist/built/custombox.js']
         }
-      },
-      polyfill: {
-        options: {
-          mangle: false,
-          preserveComments: 'all',
-        },
-        files: {
-          'dist/built/custom-event-polyfill.min.js': ['./node_modules/custom-event-polyfill/custom-event-polyfill.js']
-        }
       }
     },
     concat: {
       dist: {
-        src: ['dist/custombox.min.js', './node_modules/babel-polyfill/dist/polyfill.min.js', 'dist/built/custom-event-polyfill.min.js'],
+        src: [
+          './node_modules/babel-polyfill/dist/polyfill.min.js',
+          './node_modules/custom-event-polyfill/custom-event-polyfill.js',
+          './node_modules/es6-promise/dist/es6-promise.auto.min.js',
+          'dist/custombox.min.js',
+        ],
         dest: 'dist/custombox.min.js',
       },
     },
@@ -115,7 +111,8 @@ module.exports = function(grunt) {
   });
 
   let target = grunt.option('target') ? `:${grunt.option('target')}` : '';
-  grunt.registerTask('release', ['clean:start', 'babel:dist', 'uglify:dist', 'autoprefixer:dist', 'cssmin:dist', 'usebanner:dist', 'uglify:polyfill', 'concat:dist', 'clean:end', 'update:bower', 'fixpack:dist', `bump${target}`]);
+  grunt.registerTask('dist', ['clean:start', 'babel:dist', 'uglify:dist', 'autoprefixer:dist', 'cssmin:dist', 'usebanner:dist', 'concat:dist', 'clean:end']);
+  grunt.registerTask('release', ['dist', 'update:bower', 'fixpack:dist', `bump${target}`]);
 
   grunt.registerTask('update:bower', () => {
     const files = ['bower.json'];
