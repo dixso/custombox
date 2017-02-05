@@ -31,7 +31,8 @@ module.exports = function(grunt) {
     babel: {
       dist: {
         options: {
-          presets: ['es2015']
+          presets: ['es2015'],
+          plugins: ['transform-object-assign']
         },
         files: {
           'dist/built/custombox.js': 'src/custombox.js'
