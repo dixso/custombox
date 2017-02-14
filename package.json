@@ -26,7 +26,7 @@
     "grunt-bump": "^0.8.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-cssmin": "^1.0.2",
+    "grunt-contrib-cssmin": "^2.0.0",
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-fixpack": "^0.1.0",
     "jasmine-core": "^2.5.2",
