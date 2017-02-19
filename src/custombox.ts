@@ -65,6 +65,32 @@ namespace Custombox {
     static check(values: Array<string>, match: string): boolean {
       return values.indexOf(match) > -1;
     }
+    
+    static isIE(): boolean {
+      const ua = window.navigator.userAgent;
+
+      const msie = ua.indexOf('MSIE ');
+      if (msie > 0) {
+        // IE 10 or older => return version number
+        return !isNaN(parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10));
+      }
+
+      const trident = ua.indexOf('Trident/');
+      if (trident > 0) {
+        // IE 11 => return version number
+        const rv = ua.indexOf('rv:');
+        return !isNaN(parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10));
+      }
+
+      const edge = ua.indexOf('Edge/');
+      if (edge > 0) {
+        // Edge (IE 12+) => return version number
+        return !isNaN(parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10));
+      }
+
+      // other browser
+      return false;
+    }
   }
 
   class Scroll {
@@ -199,17 +225,25 @@ namespace Custombox {
     }
 
     remove(): void {
-      this.element.classList.remove(CLOSE, `${CB}-${this.options.content.effect}`);
+      this.element.classList.remove(CLOSE);
+      this.element.classList.remove(`${CB}-${this.options.content.effect}`);
       this.element.style.removeProperty('animation-duration');
     }
 
     // Private methods
     private listener(): Promise<Event> {
-      return new Promise((resolve: Function) => this.element.addEventListener('animationend', () => resolve(), true));
+      return new Promise((resolve: Function) => {
+        if (!Snippet.isIE()) {
+          this.element.addEventListener('animationend', () => resolve(), true);
+        } else {
+          setTimeout(resolve, this.options.content.speedIn);
+        }
+      });
     }
 
     private addSimpleClass(): void {
-      this.element.classList.add(`${CB}-container`, `${CB}-${this.options.content.effect}`);
+      this.element.classList.add(`${CB}-container`);
+      this.element.classList.add(`${CB}-${this.options.content.effect}`);
     }
 
     private setAnimation(action: string = FROM): void {
@@ -250,7 +284,8 @@ namespace Custombox {
           document.body.appendChild(this.element);
 
           // Initialization
-          this.element.classList.add(`${CB}-${this.options.content.effect}`, OPEN);
+          this.element.classList.add(`${CB}-${this.options.content.effect}`);
+          this.element.classList.add(OPEN);
           break;
       }
 
@@ -274,7 +309,13 @@ namespace Custombox {
     }
 
     private listener(): Promise<Event> {
-      return new Promise((resolve: Function) => this.element.addEventListener('animationend', () => resolve(), true));
+      return new Promise((resolve: Function) => {
+        if (!Snippet.isIE()) {
+          this.element.addEventListener('animationend', () => resolve(), true);
+        } else {
+          setTimeout(resolve, this.options.overlay.speedIn);
+        }
+      });
     }
 
     private setAnimation(): void {
@@ -331,7 +372,8 @@ namespace Custombox {
       if (this.options.content.fullscreen) {
         this.element.classList.add(`${CB}-fullscreen`);
       } else {
-        this.element.classList.add(`${CB}-x-${this.options.content.positionX}`, `${CB}-y-${this.options.content.positionY}`);
+        this.element.classList.add(`${CB}-x-${this.options.content.positionX}`);
+        this.element.classList.add(`${CB}-y-${this.options.content.positionY}`);
       }
 
       if (Snippet.check(animationValues, this.options.content.effect)) {
@@ -441,7 +483,8 @@ namespace Custombox {
           document.body.appendChild(this.element);
 
           // Initialization
-          this.element.classList.add(`${CB}-${this.options.content.effect}`, OPEN);
+          this.element.classList.add(`${CB}-${this.options.content.effect}`);
+          this.element.classList.add(OPEN);
           break;
       }
 
@@ -456,7 +499,13 @@ namespace Custombox {
 
     // Private methods
     private listener(): Promise<Event> {
-      return new Promise((resolve: Function) => this.element.addEventListener('animationend', () => resolve(), true));
+      return new Promise((resolve: Function) => {
+        if (!Snippet.isIE()) {
+          this.element.addEventListener('animationend', () => resolve(), true);
+        } else {
+          setTimeout(resolve, this.options.content.speedIn);
+        }
+      });
     }
 
     private setAnimation(action: string = FROM): void {
