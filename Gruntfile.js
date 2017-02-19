@@ -117,7 +117,7 @@ module.exports = function(grunt) {
     },
     bump: {
       options: {
-        files: ['package.json', 'bower.json', 'dist/dist/custombox.min.*'],
+        files: ['package.json', 'bower.json', 'dist/custombox.*'],
         commitFiles: ['package.json', 'bower.json', 'dist/*'],
         tagName: '%VERSION%',
         prereleaseName: 'rc',
