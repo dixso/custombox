@@ -19,13 +19,12 @@
     <meta property="og:site_name" content="Custombox: Modal dialog with awesome effects">
     <meta property="og:image" content="http://dixso.github.io/custombox/src/img/thumbnail.png">
 
-    <meta name="twitter:card" content="Modal dialog with awesome effects">
-    <meta name="twitter:site" content="@dixso9">
-    <meta name="twitter:title" content="Custombox">
-    <meta name="twitter:description" content="Modal dialog with awesome effects">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:creator" content="@dixso9">
-    <meta name="twitter:image:src" content="http://dixso.github.io/custombox/src/img/thumbnail.png">
-    <meta name="twitter:player" content="">
+    <meta name="twitter:description" content="Modal dialog with awesome effects">
+    <meta name="twitter:title" content="Custombox">
+    <meta name="twitter:image" content="http://dixso.github.io/custombox/src/img/thumbnail.png">
+    <meta name="twitter:image:alt" content="Modal dialog with awesome effects">
 
     <title>Custombox - Modal dialog with awesome effects</title>
 
@@ -49,7 +48,6 @@
   </head>
 
   <body data-spy="scroll" data-target=".sidebar" data-offset="200">
-
     <header class="site-header sticky navbar-transparent">
 
       <!-- Top navbar & branding -->
@@ -230,8 +228,18 @@
                 </div>
               </li>
               <li>
-                <h5>Call the plugin when the body is on load:</h5>
-                <p>Here is the code which we used to draw above code tabs:</p>
+                <h5>Include the optional legacy file:</h5>
+                <p>The legacy file include all of polyfills necessary for the legacy browsers.</p>
+                <div class="code-snippet">
+                  <div class="code-preview">
+                    <div class="require-script">
+                      <p class="js"><code>&lt;script src="custombox.legacy.min.js"&gt;&lt;/script&gt;</code></p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <h5>Call the plugin when the body is load:</h5>
                 <pre class="line-numbers"><code class="language-javascript">
 // Instantiate new modal
 var modal = new Custombox.modal({
@@ -805,13 +813,12 @@ document.addEventListener('custombox:content:close', function() {
           <!-- Browser support -->
           <section class="browser-support-content">
             <h2 id="browser-support">Browser support</h2>
-            <p><img src="src/img/device_support.png"></p>
+            <p><img class="img-responsive" src="src/img/device_support.png"></p>
           </section>
           <!-- END Browser support -->
 
         </article>
         <!-- END Main content -->
-
       </div>
     </main>
 
