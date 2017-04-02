@@ -37,7 +37,7 @@
     "karma-jasmine": "^1.1.0",
     "karma-mocha-reporter": "^2.2.1",
     "karma-scss-preprocessor": "^2.0.0",
-    "karma-typescript": "^2.1.5",
+    "karma-typescript": "^3.0.0",
     "matchdep": "^1.0.1",
     "node-sass": "^4.1.1",
     "time-grunt": "^1.4.0",
