@@ -21,8 +21,13 @@ npm install custombox
 Alternatively, download the package and reference the JavaScript and CSS files manually:
 
 ```html
-<script src="dist/custombox.min.js"></script>
-<link rel="stylesheet" type="text/css" href="dist/custombox.min.css">
+<script src="custombox.min.js"></script>
+<link rel="stylesheet" type="text/css" href="custombox.min.css">
+```
+
+Optional legacy file for along for the older browsers.
+```html
+<script src="custombox.legacy.min.js"></script>
 ```
 
 ## Basic usage
