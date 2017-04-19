@@ -574,10 +574,8 @@ namespace Custombox {
           }
 
           // Content
-          this.content.bind(OPEN).then(() => {
-            document.body.classList.add(LOCK);
-            this.dispatchEvent('content.onComplete');
-          });
+          document.body.classList.add(LOCK);
+          this.content.bind(OPEN).then(() => this.dispatchEvent('content.onComplete'));
 
           // Dispatch event
           this.dispatchEvent('content.onOpen');
