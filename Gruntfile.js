@@ -54,6 +54,14 @@ module.exports = function(grunt) {
         files: {
           'dist/custombox.min.js': ['dist/built/custombox.js']
         }
+      },
+      legacy: {
+        options: {
+          mangle: false
+        },
+        files: {
+          'dist/custombox.legacy.min.js': ['dist/built/custombox.legacy.min.js']
+        }
       }
     },
     concat: {
@@ -66,7 +74,7 @@ module.exports = function(grunt) {
           './node_modules/custom-event-polyfill/custom-event-polyfill.js',
           './node_modules/es6-promise/dist/es6-promise.auto.min.js',
         ],
-        dest: 'dist/custombox.legacy.min.js',
+        dest: 'dist/built/custombox.legacy.min.js',
       },
     },
     clean: {
@@ -133,7 +141,7 @@ module.exports = function(grunt) {
   });
 
   let target = grunt.option('target') ? `:${grunt.option('target')}` : '';
-  grunt.registerTask('dist', ['clean:start', 'babel:dist', 'uglify:dist', 'autoprefixer:dist', 'cssmin:dist', 'concat:dist', 'usebanner', 'clean:end']);
+  grunt.registerTask('dist', ['clean:start', 'babel:dist', 'uglify:dist', 'autoprefixer:dist', 'cssmin:dist', 'concat:dist', 'uglify:legacy', 'usebanner', 'clean:end']);
   grunt.registerTask('release', ['dist', 'update:bower', 'fixpack:dist', `bump${target}`]);
 
   grunt.registerTask('update:bower', () => {
