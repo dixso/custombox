@@ -24,7 +24,7 @@ namespace Custombox {
     delay: number;
     id: string;
     container: string;
-    escKey: boolean;
+    close: boolean;
   }
 
   interface LoaderSchema {
@@ -137,7 +137,7 @@ namespace Custombox {
       onOpen: null,
       onComplete: null,
       onClose: null,
-      escKey: true,
+      close: true,
     };
     loader = {
       active: true,
@@ -668,7 +668,7 @@ namespace Custombox {
       Promise
         .all(close)
         .then(() => {
-          if (this.options.content.escKey) {
+          if (this.options.content.close) {
             document.removeEventListener('keydown', this.action, true);
           }
 
@@ -693,15 +693,17 @@ namespace Custombox {
     }
 
     private listeners(): void {
-      if (this.options.content.escKey) {
+      if (this.options.content.close) {
         document.addEventListener('keydown', this.action, true);
       }
 
-      this.content.element.addEventListener('click', (event: Event) => {
-        if (event.target === this.content.element) {
-          this._close();
-        }
-      }, true);
+      if (this.options.overlay.close) {
+        this.content.element.addEventListener('click', (event: Event) => {
+          if (event.target === this.content.element) {
+            this._close();
+          }
+        }, true);
+      }
 
       this.content.element.addEventListener(`${CB}:close`, () => {
         this._close();

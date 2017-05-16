@@ -25,8 +25,6 @@ function getAfterEach() {
   for (let i = 0, t = loaders.length; i < t; i++) {
     loaders[i].parentNode.removeChild(loaders[i]);
   }
-
-  delete Custombox;
 }
 
 describe('Custombox', () => {
@@ -48,8 +46,6 @@ describe('Custombox', () => {
 
     afterEach(()=> {
       getAfterEach();
-
-      delete Custombox;
 
       jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
     });
@@ -215,8 +211,6 @@ describe('Custombox', () => {
     afterEach(()=> {
       getAfterEach();
 
-      delete Custombox;
-
       jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
     });
 
@@ -304,7 +298,7 @@ describe('Custombox', () => {
         content: {
           effect: 'fadein',
           target: '#foo-1',
-          escKey: false
+          close: false
         },
       }).open();
 
@@ -312,6 +306,29 @@ describe('Custombox', () => {
         let event: any = new Event('keydown');
         event.which = event.keyCode = 27;
         document.dispatchEvent(event);
+
+        setTimeout(() => {
+          expect(hasElement('.custombox-close')).toBe(false);
+          done();
+        }, 500);
+      }, 200);
+    });
+
+    it('should not close on clicking the background', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'fadein',
+          target: '#foo-1',
+          close: false
+        },
+        overlay: {
+          close: false
+        }
+      }).open();
+
+      setTimeout(() => {
+        let overlay: any = document.querySelector('.custombox-overlay');
+        overlay.click();
 
         setTimeout(() => {
           expect(hasElement('.custombox-close')).toBe(false);
@@ -909,8 +926,6 @@ describe('Custombox', () => {
       for (let i = 0, t = loaders.length; i < t; i++) {
         loaders[i].parentNode.removeChild(loaders[i]);
       }
-
-      delete Custombox;
 
       jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
     });
