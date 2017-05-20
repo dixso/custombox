@@ -5,6 +5,7 @@ $content: #{$cb}-content;
 $container: #{$cb}-container;
 $perspective: #{$cb}-perspective;
 $lock: #{$cb}-lock;
+$reference: #{$cb}-reference;
 $index: 9997;
 
 // Actions
@@ -89,6 +90,9 @@ $effect23: #{$cb}-flash;
 }
 .#{$lock} {
   overflow: hidden;
+}
+.#{$reference} {
+  display: none;
 }
 .#{$content} {
   overflow-y: auto;

@@ -25,6 +25,12 @@ function getAfterEach() {
   for (let i = 0, t = loaders.length; i < t; i++) {
     loaders[i].parentNode.removeChild(loaders[i]);
   }
+
+  // custombox-reference
+  let reference = document.querySelectorAll('.custombox-reference');
+  for (let i = 0, t = reference.length; i < t; i++) {
+    reference[i].parentNode.removeChild(reference[i]);
+  }
 }
 
 describe('Custombox', () => {
@@ -298,7 +304,8 @@ describe('Custombox', () => {
         content: {
           effect: 'fadein',
           target: '#foo-1',
-          close: false
+          close: false,
+          clone: true
         },
       }).open();
 
@@ -885,6 +892,21 @@ describe('Custombox', () => {
         done();
       }, 400);
     });
+
+    it('should clone the element of the DOM', (done) => {
+      new (Custombox as any).modal({
+        content: {
+          effect: 'makeway',
+          target: '#foo-1',
+          clone: false,
+        },
+      }).open();
+
+      setTimeout(() => {
+        expect(document.querySelectorAll('.custombox-reference').length).toBe(1);
+        done();
+      }, 400);
+    });
   });
 
   describe('Loader', () => {
@@ -904,28 +926,7 @@ describe('Custombox', () => {
     });
 
     afterEach(()=> {
-      for (let i = 1; i < 3; i++) {
-        let elem = document.getElementById(`foo-${i}`);
-        elem.parentNode.removeChild(elem);
-      }
-
-      // custombox-content
-      let contents = document.querySelectorAll('.custombox-content');
-      for (let i = 0, t = contents.length; i < t; i++) {
-        contents[i].parentNode.removeChild(contents[i]);
-      }
-
-      // custombox-overlay
-      let overlays = document.querySelectorAll('.custombox-overlay');
-      for (let i = 0, t = overlays.length; i < t; i++) {
-        overlays[i].parentNode.removeChild(overlays[i]);
-      }
-
-      // custombox-loader
-      let loaders = document.querySelectorAll('.custombox-loader');
-      for (let i = 0, t = loaders.length; i < t; i++) {
-        loaders[i].parentNode.removeChild(loaders[i]);
-      }
+      getAfterEach();
 
       jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
     });
@@ -957,6 +958,7 @@ describe('Custombox', () => {
         content: {
           effect: 'fadein',
           target: '#foo-1',
+          clone: true,
         },
         overlay: {
           active: false

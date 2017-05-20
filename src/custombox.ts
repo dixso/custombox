@@ -21,6 +21,7 @@ namespace Custombox {
     width: string;
     effect: string;
     fullscreen: boolean;
+    clone: boolean;
     delay: number;
     id: string;
     container: string;
@@ -124,6 +125,7 @@ namespace Custombox {
       id: null,
       target: null,
       container: null,
+      clone: false,
       animateFrom: 'top',
       animateTo: 'top',
       positionX: 'center',
@@ -353,6 +355,7 @@ namespace Custombox {
 
   class Content {
     element: HTMLElement;
+    reference: HTMLElement;
 
     constructor(private options: OptionsSchema) {
       this.element = document.createElement('div');
@@ -446,20 +449,27 @@ namespace Custombox {
           req.send();
         } else {
           // Selector
-          const selector: Element = document.querySelector(this.options.content.target);
+          let selector = <HTMLElement>document.querySelector(this.options.content.target);
           if (selector) {
-            let element: HTMLElement = <HTMLElement>selector.cloneNode(true);
-            element.removeAttribute('id');
+            if (this.options.content.clone) {
+              selector = <HTMLElement>selector.cloneNode(true);
+              selector.removeAttribute('id');
+            } else {
+              this.reference = document.createElement('div');
+              this.reference.classList.add(`${CB}-reference`);
+              this.reference.setAttribute('style', selector.getAttribute('style'));
+              selector.parentNode.insertBefore(this.reference, selector.nextSibling);
+            }
 
             // Set visible
-            element.style.display = BLOCK;
+            selector.style.display = BLOCK;
 
             // Set width
             if (this.options.content.width) {
-              element.style.flexBasis = this.options.content.width;
+              selector.style.flexBasis = this.options.content.width;
             }
 
-            this.element.appendChild(element);
+            this.element.appendChild(selector);
 
             resolve();
           } else {
@@ -492,9 +502,17 @@ namespace Custombox {
     }
 
     remove(): void {
-      try {
-        this.element.parentNode.removeChild(this.element);
-      } catch (e) {}
+      const match = new RegExp('^[#|.]');
+      if (!this.options.content.clone && match.test(this.options.content.target)) {
+        const element = <HTMLElement>this.element.childNodes[0];
+        element.setAttribute('style', this.reference.getAttribute('style'));
+        this.reference.parentNode.insertBefore(this.element.childNodes[0], this.reference.nextSibling);
+        this.reference.parentNode.removeChild(this.reference);
+      } else  {
+        try {
+          this.element.parentNode.removeChild(this.element);
+        } catch (e) {}
+      }
     }
 
     // Private methods
