@@ -693,6 +693,17 @@ namespace Custombox {
     }
 
     private listeners(): void {
+      const AFM = window.getComputedStyle(this.content.element).getPropertyValue('animation-fill-mode');
+
+      document.addEventListener('fullscreenchange', () => {
+        const style = window.getComputedStyle(this.content.element);
+        if (style.getPropertyValue('animation-fill-mode') === AFM) {
+          this.content.element.style.animationFillMode = 'backwards';
+        } else {
+          this.content.element.style.animationFillMode = AFM;
+        }
+      }, true);
+
       if (this.options.content.close) {
         document.addEventListener('keydown', this.action, true);
       }

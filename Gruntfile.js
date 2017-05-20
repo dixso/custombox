@@ -21,6 +21,7 @@ module.exports = function(grunt) {
     ' *  babel-plugin-transform-object-assign - https://www.npmjs.com/package/babel-plugin-transform-object-assign\n' +
     ' *  es6-promise - https://www.npmjs.com/package/es6-promise\n' +
     ' *  custom-event-polyfill - https://www.npmjs.com/package/custom-event-polyfill\n' +
+    ' *  fullscreen-api-polyfill - https://www.npmjs.com/package/fullscreen-api-polyfill\n' +
     ' *\n' +
     '<%= License %>',
 
@@ -73,6 +74,7 @@ module.exports = function(grunt) {
           './node_modules/babel-polyfill/dist/polyfill.min.js',
           './node_modules/custom-event-polyfill/custom-event-polyfill.js',
           './node_modules/es6-promise/dist/es6-promise.auto.min.js',
+          './node_modules/fullscreen-api-polyfill/fullscreen-api-polyfill.min.js',
         ],
         dest: 'dist/built/custombox.legacy.min.js',
       },
