@@ -416,10 +416,16 @@ modal.open();
                           <td>Set the element (ID or Class) of the container page, if it does not exist, will be one created automatically depending on the effect.</td>
                         </tr>
                         <tr>
-                          <td>escKey</td>
+                          <td>close</td>
                           <td>boolean</td>
                           <td>true</td>
                           <td>Allows the user to close the modal when press <kbd>esc</kbd>.</td>
+                        </tr>
+                        <tr>
+                          <td>clone</td>
+                          <td>boolean</td>
+                          <td>false</td>
+                          <td>Clone the element of the DOM.</td>
                         </tr>
                         <tr>
                           <td>animateFrom</td>
@@ -507,7 +513,8 @@ new Custombox.modal({
     effect: 'fadein',
     id: null,
     container: null,
-    esckey: true,
+    close: true,
+    clone: false,
     animateFrom: 'top',
     animateTo: 'top',
     positionX: 'center',
