@@ -508,11 +508,11 @@ namespace Custombox {
         element.setAttribute('style', this.reference.getAttribute('style'));
         this.reference.parentNode.insertBefore(this.element.childNodes[0], this.reference.nextSibling);
         this.reference.parentNode.removeChild(this.reference);
-      } else  {
-        try {
-          this.element.parentNode.removeChild(this.element);
-        } catch (e) {}
       }
+      
+      try {
+        this.element.parentNode.removeChild(this.element);
+      } catch (e) {}
     }
 
     // Private methods
