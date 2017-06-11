@@ -191,7 +191,7 @@ namespace Custombox {
         throw new Error('You need to instantiate Custombox when the document is fully loaded');
       }
 
-      const selector: any = document.querySelector(this.options.content.container);
+      const selector: Element = document.querySelector(this.options.content.container);
       if (selector) {
         this.element = selector;
       } else if (!document.querySelector(`.${CB}-container`)) {
@@ -205,7 +205,8 @@ namespace Custombox {
         this.element = document.querySelector(`.${CB}-container`);
       }
 
-      this.addSimpleClass();
+      this.element.classList.add(`${CB}-container`);
+      this.element.classList.add(`${CB}-${this.options.content.effect}`);
       this.element.style.animationDuration = `${this.options.content.speedIn}ms`;
 
       if (Snippet.check(animationValues, this.options.content.effect)) {
@@ -230,6 +231,24 @@ namespace Custombox {
       this.element.classList.remove(CLOSE);
       this.element.classList.remove(`${CB}-${this.options.content.effect}`);
       this.element.style.removeProperty('animation-duration');
+
+      const elements: NodeListOf<Element> = document.querySelectorAll(`.${CB}-content`);
+      const container: Element = document.querySelector(this.options.content.container);
+      if (!elements.length) {
+        if (container) {
+          const classes = this.element.className.split(' ');
+          for (let i = 0, t = classes.length; i < t; i++) {
+            if (classes[i].startsWith(`${CB}-`)) {
+              this.element.classList.remove(classes[i]);
+            }
+          }
+        } else {
+          const container = document.querySelector(`.${CB}-container`);
+
+          while (container.firstChild) container.parentNode.insertBefore(container.firstChild, container);
+          container.parentNode.removeChild(container);
+        }
+      }
     }
 
     // Private methods
@@ -241,11 +260,6 @@ namespace Custombox {
           setTimeout(resolve, this.options.content.speedIn);
         }
       });
-    }
-
-    private addSimpleClass(): void {
-      this.element.classList.add(`${CB}-container`);
-      this.element.classList.add(`${CB}-${this.options.content.effect}`);
     }
 
     private setAnimation(action: string = FROM): void {
