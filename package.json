@@ -41,7 +41,7 @@
     "karma-mocha-reporter": "^2.2.1",
     "karma-scss-preprocessor": "^2.0.0",
     "karma-typescript": "^3.0.0",
-    "matchdep": "^1.0.1",
+    "matchdep": "^2.0.0",
     "node-sass": "^4.1.1",
     "time-grunt": "^1.4.0",
     "tslint": "^5.0.0",
