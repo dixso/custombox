@@ -15,7 +15,7 @@
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "custom-event-polyfill": "^0.3.0",
-    "es6-promise": "^4.1.0",
+    "es6-promise": "4.1.1",
     "fullscreen-api-polyfill": "^1.1.2"
   },
   "devDependencies": {
