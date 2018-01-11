@@ -44,7 +44,7 @@
     "matchdep": "^2.0.0",
     "node-sass": "^4.1.1",
     "time-grunt": "^1.4.0",
-    "tslint": "^5.0.0",
+    "tslint": "5.8.0",
     "typescript": "^2.1.4"
   },
   "homepage": "https://dixso.github.io/custombox/",
