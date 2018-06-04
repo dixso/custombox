@@ -21,7 +21,7 @@
   "devDependencies": {
     "@types/core-js": "^0.9.41",
     "@types/jasmine": "^2.5.38",
-    "grunt": "^1.0.1",
+    "grunt": "1.0.2",
     "grunt-autoprefixer": "^3.0.4",
     "grunt-babel": "^7.0.0",
     "grunt-banner": "^0.6.0",
