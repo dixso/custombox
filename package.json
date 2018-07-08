@@ -42,7 +42,7 @@
     "karma-scss-preprocessor": "^3.0.0",
     "karma-typescript": "^3.0.0",
     "matchdep": "^2.0.0",
-    "node-sass": "^4.1.1",
+    "node-sass": "^4.9.2",
     "time-grunt": "^1.4.0",
     "tslint": "^5.0.0",
     "typescript": "^2.1.4"
