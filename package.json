@@ -23,7 +23,7 @@
     "@types/jasmine": "^2.5.38",
     "grunt": "^1.0.1",
     "grunt-autoprefixer": "^3.0.4",
-    "grunt-babel": "^7.0.0",
+    "grunt-babel": "^8.0.0",
     "grunt-banner": "^0.6.0",
     "grunt-browser-sync": "^2.2.0",
     "grunt-bump": "^0.8.0",
