@@ -19,7 +19,7 @@
     "fullscreen-api-polyfill": "^1.1.2"
   },
   "devDependencies": {
-    "@types/core-js": "^0.9.41",
+    "@types/core-js": "^2.5.1",
     "@types/jasmine": "^2.5.38",
     "grunt": "^1.0.1",
     "grunt-autoprefixer": "^3.0.4",
