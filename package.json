@@ -34,7 +34,7 @@
     "grunt-fixpack": "^0.1.0",
     "jasmine-core": "^2.5.2",
     "karma": "^1.3.0",
-    "karma-chrome-launcher": "^2.0.0",
+    "karma-chrome-launcher": "^3.1.0",
     "karma-cli": "^1.0.1",
     "karma-coveralls": "^1.1.2",
     "karma-jasmine": "^1.1.0",
